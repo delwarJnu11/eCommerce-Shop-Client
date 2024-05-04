@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "@fontsource/raleway";
+
+@layer components {
+  .form-control {
+    @apply mb-6 space-y-2.5;
+  }
+  .auth-label {
+    @apply leading-[138%] lg:text-lg;
+  }
+  .auth-input {
+    @apply w-full rounded-md border border-[#CCCCCC]/[14%] bg-lighterDark  p-1.5 focus:outline-none lg:p-3;
+  }
+}
