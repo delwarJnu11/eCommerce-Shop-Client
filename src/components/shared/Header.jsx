@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaRegUserCircle, FaShoppingCart } from "react-icons/fa";
 import { HiSearch } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import Button from "./Button";
 const Header = () => {
   const { state, dispatch } = useUser();
   const navigate = useNavigate();
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
 
   // get user details
   useEffect(() => {
@@ -50,9 +51,11 @@ const Header = () => {
       toast.error(error.message);
     }
   };
+  //check loading state
   {
     state?.data?.loading && <p>Loading...</p>;
   }
+  //check error state
   {
     state?.data?.error && (
       <div className="text-rose-500 text-sm">{state?.error}</div>
@@ -87,15 +90,30 @@ const Header = () => {
               0
             </span>
           </div>
-          <div>
-            {user?.image ? (
-              <img
-                className="w-12 h-12 rounded-full"
-                src={user?.image}
-                alt={user?.name}
-              />
-            ) : (
-              <FaRegUserCircle size={35} />
+          <div className="relative flex justify-center">
+            <div onClick={() => setShowAdminPanel(!showAdminPanel)}>
+              {user?.image ? (
+                <img
+                  className="w-12 h-12 rounded-full"
+                  src={user?.image}
+                  alt={user?.name}
+                />
+              ) : (
+                <FaRegUserCircle size={35} />
+              )}
+            </div>
+            {showAdminPanel && (
+              <div className="absolute top-14 bg-slate-100 p-2 rounded-md shadow-md">
+                <nav>
+                  <Link
+                    className="whitespace-nowrap"
+                    to={"/admin-panel"}
+                    onClick={() => setShowAdminPanel(!showAdminPanel)}
+                  >
+                    Admin Panel
+                  </Link>
+                </nav>
+              </div>
             )}
           </div>
           <div>
