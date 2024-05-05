@@ -1,9 +1,63 @@
+import { useEffect } from "react";
 import { FaRegUserCircle, FaShoppingCart } from "react-icons/fa";
 import { HiSearch } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { actions } from "../../actions";
+import { api } from "../../api";
+import { useUser } from "../../hooks/useUser";
 import Button from "./Button";
 
 const Header = () => {
+  const { state, dispatch } = useUser();
+  const navigate = useNavigate();
+
+  // get user details
+  useEffect(() => {
+    const fetchUser = async () => {
+      dispatch({ type: actions.user.USER_DATA_FETCHING });
+      try {
+        const response = await api.get("/user-details", {
+          withCredentials: true,
+        });
+        if (response.status === 200) {
+          dispatch({
+            type: actions.user.USER_DATA_FETCHED,
+            data: response.data,
+          });
+        }
+      } catch (error) {
+        dispatch({
+          type: actions.user.USER_DATA_FETCHING_ERROR,
+          error: error.message,
+        });
+      }
+    };
+    fetchUser();
+  }, [dispatch]);
+  const user = state?.data?.data;
+
+  //handle logout
+  const handleLogout = async () => {
+    try {
+      const response = await api.get("/logout", { withCredentials: true });
+      if (response.status === 200) {
+        dispatch({ type: actions.user.USER_LOGGED_OUT, data: {} });
+        toast.success(response.data.message);
+        navigate("/login");
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  {
+    state?.data?.loading && <p>Loading...</p>;
+  }
+  {
+    state?.data?.error && (
+      <div className="text-rose-500 text-sm">{state?.error}</div>
+    );
+  }
   return (
     <header className="bg-white  shadow-md  w-full py-4 h-20">
       <div className="container mx-auto flex items-center justify-between h-full">
@@ -34,12 +88,24 @@ const Header = () => {
             </span>
           </div>
           <div>
-            <FaRegUserCircle size={35} />
+            {user?.image ? (
+              <img
+                className="w-12 h-12 rounded-full"
+                src={user?.image}
+                alt={user?.name}
+              />
+            ) : (
+              <FaRegUserCircle size={35} />
+            )}
           </div>
           <div>
-            <Link to={"/login"}>
-              <Button value={"Login"} />
-            </Link>
+            {user?._id ? (
+              <Button buttonAction={handleLogout} value={"Logout"} />
+            ) : (
+              <Link to={"/login"}>
+                <Button value={"Login"} />
+              </Link>
+            )}
           </div>
         </div>
       </div>

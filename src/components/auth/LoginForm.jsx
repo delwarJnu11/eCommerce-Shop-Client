@@ -1,18 +1,61 @@
+import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { actions } from "../../actions";
+import { useUser } from "../../hooks/useUser";
 import Button from "../shared/Button";
 import Field from "../shared/Field";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const { dispatch } = useUser();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm();
+
+  //handle user login
+  const handleLogin = async (formData) => {
+    const loginData = {
+      email: formData.email,
+      password: formData.password,
+    };
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/login",
+        loginData,
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.data.success) {
+        dispatch({
+          type: actions.user.USER_DATA_FETCHED,
+          data: response.data,
+        });
+        toast.success(response.data.message);
+        localStorage.setItem("token", response.data.token);
+        navigate("/");
+      }
+
+      if (response.data.error) {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      setError("root.random", {
+        type: "random",
+        message: error.message,
+      });
+    }
+  };
   return (
-    <form onSubmit={handleSubmit()}>
+    <form onSubmit={handleSubmit(handleLogin)}>
       <Field label={"Email"} error={errors.email}>
         <input
           {...register("email", {
