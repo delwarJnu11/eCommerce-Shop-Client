@@ -34,6 +34,7 @@ const LoginForm = () => {
           withCredentials: true,
         }
       );
+      console.log(response);
       if (response.data.success) {
         dispatch({
           type: actions.user.USER_DATA_FETCHED,
@@ -48,6 +49,7 @@ const LoginForm = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
+      toast.error(error.message);
       setError("root.random", {
         type: "random",
         message: error.message,
@@ -89,7 +91,7 @@ const LoginForm = () => {
         </div>
       </Field>
       <Field>
-        <Button value={"Login"} />
+        <Button value={"Login"} bg={"bg-red-500"} hoverBg={"bg-red-700"} />
       </Field>
     </form>
   );

@@ -1,8 +1,8 @@
-const Button = ({ value, buttonAction }) => {
+const Button = ({ value, buttonAction, bg, hoverBg }) => {
   return (
     <button
       onClick={buttonAction}
-      className="bg-red-600 text-white border-none focus-within:outline-none px-4 py-2 hover:bg-red-700 rounded-md"
+      className={`${bg} text-white border-none focus-within:outline-none px-4 py-2 hover:${hoverBg} rounded-md hover:scale-105 transition-all`}
     >
       {value}
     </button>

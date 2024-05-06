@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
 import { api } from "../../api";
+import { ROLE } from "../../constants";
 import { useUser } from "../../hooks/useUser";
 import Button from "./Button";
 
@@ -12,7 +13,6 @@ const Header = () => {
   const { state, dispatch } = useUser();
   const navigate = useNavigate();
   const [showAdminPanel, setShowAdminPanel] = useState(false);
-
   // get user details
   useEffect(() => {
     const fetchUser = async () => {
@@ -91,37 +91,50 @@ const Header = () => {
             </span>
           </div>
           <div className="relative flex justify-center">
-            <div onClick={() => setShowAdminPanel(!showAdminPanel)}>
-              {user?.image ? (
-                <img
-                  className="w-12 h-12 rounded-full"
-                  src={user?.image}
-                  alt={user?.name}
-                />
-              ) : (
-                <FaRegUserCircle size={35} />
-              )}
-            </div>
+            {user && (
+              <div onClick={() => setShowAdminPanel(!showAdminPanel)}>
+                {user?.image ? (
+                  <img
+                    className="w-12 h-12 rounded-full"
+                    src={user?.image}
+                    alt={user?.name}
+                  />
+                ) : (
+                  <FaRegUserCircle size={35} />
+                )}
+              </div>
+            )}
             {showAdminPanel && (
               <div className="absolute top-14 bg-slate-100 p-2 rounded-md shadow-md">
-                <nav>
-                  <Link
-                    className="whitespace-nowrap"
-                    to={"/admin-panel"}
-                    onClick={() => setShowAdminPanel(!showAdminPanel)}
-                  >
-                    Admin Panel
-                  </Link>
-                </nav>
+                {user?.role === ROLE.ADMIN && (
+                  <nav>
+                    <Link
+                      className="whitespace-nowrap"
+                      to={"/admin-panel"}
+                      onClick={() => setShowAdminPanel(!showAdminPanel)}
+                    >
+                      Admin Panel
+                    </Link>
+                  </nav>
+                )}
               </div>
             )}
           </div>
           <div>
             {user?._id ? (
-              <Button buttonAction={handleLogout} value={"Logout"} />
+              <Button
+                buttonAction={handleLogout}
+                value={"Logout"}
+                bg={"bg-red-500"}
+                hoverBg={"bg-red-700"}
+              />
             ) : (
               <Link to={"/login"}>
-                <Button value={"Login"} />
+                <Button
+                  value={"Login"}
+                  bg={"bg-red-500"}
+                  hoverBg={"ng-red-700"}
+                />
               </Link>
             )}
           </div>

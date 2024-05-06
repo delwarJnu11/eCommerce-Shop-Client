@@ -2,6 +2,7 @@ import { actions } from "../actions";
 
 export const initailState = {
   data: {},
+  users: [],
   loading: true,
   error: null,
 };
@@ -33,6 +34,13 @@ export const userDetailsReducer = (state, action) => {
         loading: false,
         error: null,
         data: action.data,
+      };
+    case actions.user.ALL_USER_DATA_FETCHED:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        users: action.data,
       };
 
     default:

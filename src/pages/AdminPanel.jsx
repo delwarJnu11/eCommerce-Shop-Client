@@ -1,9 +1,19 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { ROLE } from "../constants";
 import { useUser } from "../hooks/useUser";
 
 const AdminPanel = () => {
   const { state } = useUser();
+  const navigate = useNavigate();
   const user = state?.data?.data;
+
+  useEffect(() => {
+    if (user?.role !== ROLE.ADMIN) {
+      navigate("/");
+    }
+  }, [user?.role, navigate]);
+
   return (
     <div className="min-h-[calc(100vh-120px)] pt-2 md:flex hidden">
       <aside className="bg-white min-h-full  w-full  max-w-60 border-r-2 shadow-sm">

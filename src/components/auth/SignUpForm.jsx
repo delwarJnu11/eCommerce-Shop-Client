@@ -34,7 +34,6 @@ const SignUpForm = ({ image }) => {
         type: "notMatched",
         message: "Password does not match.",
       });
-      return;
     } else {
       setError("confirmPassword", null);
     }
@@ -141,7 +140,7 @@ const SignUpForm = ({ image }) => {
       </Field>
       <p className="text-red-500 my-2">{errors?.root?.random?.message}</p>
       <Field>
-        <Button value={"Register"} />
+        <Button value={"Register"} bg={"bg-red-500"} hoverBg={"bg-red-700"} />
       </Field>
     </form>
   );
