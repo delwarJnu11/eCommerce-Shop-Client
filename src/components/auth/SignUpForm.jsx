@@ -43,7 +43,6 @@ const SignUpForm = ({ image }) => {
         "http://localhost:8000/api/register",
         data
       );
-      console.log(response);
       if (response.status === 201) {
         if (response.data.success) {
           toast.success(response.data.message);
