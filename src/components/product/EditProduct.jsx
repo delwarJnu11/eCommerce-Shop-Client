@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
@@ -9,14 +9,27 @@ import Button from "../shared/Button";
 import Field from "../shared/Field";
 import ProductImageUpload from "./ProductImageUpload";
 
-const ProductUploadModal = ({ onClose }) => {
+const EditProduct = ({ product, onClose }) => {
   const [imageUrls, setImageUrls] = useState([]);
   const { dispatch } = useProduct();
+
+  useEffect(() => {
+    setImageUrls(product.productImages);
+  }, [product.productImages]);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      productName: product.productName,
+      brandName: product.brandName,
+      categoryName: product.categoryName,
+      price: product.price,
+      sellingPrice: product.sellingPrice,
+      description: product.description,
+    },
+  });
 
   const getProductImageUrls = (imageUrl) => {
     setImageUrls([...imageUrls, imageUrl]);
@@ -25,9 +38,14 @@ const ProductUploadModal = ({ onClose }) => {
     formData.productImages = imageUrls;
     dispatch({ type: actions.product.PRODUCT_DATA_FETCHING });
     try {
-      const response = await api.post("/upload-product", formData, {
-        withCredentials: true,
-      });
+      const response = await api.put(
+        `/product/${product._id}/update`,
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response);
       if (response.data.success) {
         dispatch({
           type: actions.product.ALL_PRODUCTS_DATA_FETCHED,
@@ -41,7 +59,6 @@ const ProductUploadModal = ({ onClose }) => {
         type: actions.product.PRODUCT_DATA_FETCHING_ERROR,
         error: error.message,
       });
-      toast.error(error.message);
     }
   };
 
@@ -49,7 +66,7 @@ const ProductUploadModal = ({ onClose }) => {
     <div className="fixed inset-0 z-50 overflow-auto bg-gray-900 bg-opacity-50 flex justify-center items-center">
       <div className="bg-white rounded-lg p-8 w-[40%] mx-auto max-h-[80%] overflow-y-scroll">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-semibold">Upload Product</h2>
+          <h2 className="text-2xl font-semibold">Update Product</h2>
           <button
             className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md text-white focus:outline-none"
             onClick={onClose}
@@ -144,7 +161,7 @@ const ProductUploadModal = ({ onClose }) => {
               ></textarea>
             </Field>
             <Button
-              value={"Upload Product"}
+              value={"Update Product"}
               bg={"bg-green-600"}
               hoverBg={"bg-green-800"}
             />
@@ -154,5 +171,4 @@ const ProductUploadModal = ({ onClose }) => {
     </div>
   );
 };
-
-export default ProductUploadModal;
+export default EditProduct;

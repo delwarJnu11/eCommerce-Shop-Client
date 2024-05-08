@@ -34,7 +34,7 @@ export const productReducer = (state, action) => {
         ...state,
         loading: false,
         error: null,
-        products: [...state.products, action.data],
+        products: action.data,
       };
 
     default:

@@ -42,7 +42,7 @@ const AdminPanel = () => {
         </div>
       </aside>
 
-      <main className="w-full h-full p-2">
+      <main className="container mx-auto bg-gray-300 p-4">
         <Outlet />
       </main>
     </div>

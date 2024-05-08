@@ -34,7 +34,6 @@ const LoginForm = () => {
           withCredentials: true,
         }
       );
-      console.log(response);
       if (response.data.success) {
         dispatch({
           type: actions.user.USER_DATA_FETCHED,

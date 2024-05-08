@@ -6,7 +6,7 @@ export const ROLE = {
 export const productCategory = [
   { id: 1, label: "Airpod", value: "airpod" },
   { id: 2, label: "Camera", value: "camera" },
-  { id: 3, label: "Earphone", value: "earohones" },
+  { id: 3, label: "Earphone", value: "earphone" },
   { id: 4, label: "Mobile", value: "mobile" },
   { id: 5, label: "Mouse", value: "mouse" },
   { id: 6, label: "Printer", value: "printer" },
