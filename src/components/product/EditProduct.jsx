@@ -45,7 +45,6 @@ const EditProduct = ({ product, onClose }) => {
           withCredentials: true,
         }
       );
-      console.log(response);
       if (response.data.success) {
         dispatch({
           type: actions.product.ALL_PRODUCTS_DATA_FETCHED,

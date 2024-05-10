@@ -3,8 +3,10 @@ import { actions } from "../actions";
 export const initialState = {
   loading: false,
   error: null,
-  products: [],
   product: {},
+  products: [],
+  categories: [],
+  productsByCategory: {},
 };
 
 export const productReducer = (state, action) => {
@@ -35,6 +37,23 @@ export const productReducer = (state, action) => {
         loading: false,
         error: null,
         products: action.data,
+      };
+    case actions.product.ALL_CATEGORIES_DATA_FETCHED:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        categories: action.data,
+      };
+    case actions.product.PRODUCTS_BY_CATEGORY_DATA_FETCHED:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        productsByCategory: {
+          ...state.productsByCategory,
+          [action.category]: action.data,
+        },
       };
 
     default:

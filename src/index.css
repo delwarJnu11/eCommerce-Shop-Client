@@ -14,3 +14,36 @@
     @apply w-full rounded-md border border-[#CCCCCC]/[14%] bg-lighterDark  p-1.5 focus:outline-none lg:p-3;
   }
 }
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Category Loader */
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.blink-animation {
+  animation: blink 1s infinite;
+}
+
+.carousel-container,
+.carousel-item {
+  transform: translateZ(0);
+}
+
+.carousel-item {
+  transition-timing-function: ease-in-out;
+  transition-duration: 0.3s;
+}
+.carousel-item img {
+  image-rendering: -webkit-optimize-contrast;
+}

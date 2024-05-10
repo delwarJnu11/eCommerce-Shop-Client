@@ -62,7 +62,7 @@ const Header = () => {
     );
   }
   return (
-    <header className="bg-white  shadow-md  w-full py-4 h-20">
+    <header className="bg-white  shadow-md  w-full py-4 h-20 fixed z-40">
       <div className="container mx-auto flex items-center justify-between h-full">
         <div>
           <Link to={"/"} className="text-lg lg:text-2xl font-bold">

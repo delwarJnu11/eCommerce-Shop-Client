@@ -9,7 +9,7 @@ const ProductCard = ({ product }) => {
     setShowEditModal(false);
   };
   return (
-    <div className="rounded overflow-hidden relative group bg-white shadow-lg cursor-pointer hover:scale-105 transition-all">
+    <div className="rounded overflow-hidden relative group bg-white shadow-lg cursor-pointer">
       <div className="w-32 h-32 flex justify-center items-center mx-auto  p-3">
         <img
           src={product.productImages[0]}
