@@ -1,6 +1,4 @@
 import { useEffect } from "react";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
@@ -9,25 +7,11 @@ import { useProduct } from "../../hooks/useProduct";
 import ProductCardLoader from "../loader/ProductCardLoader";
 import CategorizedProductCard from "../product/CategorizedProductCard";
 
-const responsive = {
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 4,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 3,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-  },
-};
-
-const CategorizedProducts = ({ productCategory, heading }) => {
+const RelatedProducts = ({ productId, productCategory, heading }) => {
   const { state, dispatch } = useProduct();
   const navigate = useNavigate();
   const loadingList = new Array(4).fill(null);
+
   useEffect(() => {
     const fetchProductsByCategory = async () => {
       dispatch({ type: actions.product.PRODUCT_DATA_FETCHING });
@@ -65,39 +49,28 @@ const CategorizedProducts = ({ productCategory, heading }) => {
   };
   return (
     <div className="my-6">
-      <h2 className="text-md md:text-[22px] text-gray-700 font-semibold block">
+      <h2 className="text-md md:text-[22px] text-gray-700 font-semibold block my-4">
         {heading}
       </h2>
-      <Carousel
-        responsive={responsive}
-        infinite={true}
-        keyBoardControl={true}
-        customTransition="transform 500ms ease-in-out"
-        containerClass="carousel-container"
-        removeArrowOnDeviceType={["tablet", "mobile"]}
-        dotListClass="custom-dot-list-style"
-        itemClass="carousel-item-padding-40-px"
-        rewindWithAnimation={true}
-        // autoPlay={true}
-        // autoPlaySpeed={5000}
-        className="my-4"
-      >
+      <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {state?.loading
           ? loadingList.map((el, index) => <ProductCardLoader key={index} />)
           : Object.keys(state.productsByCategory).map(
               (category) =>
                 category === productCategory &&
-                state?.productsByCategory[productCategory]?.map((product) => (
-                  <CategorizedProductCard
-                    key={product._id}
-                    product={product}
-                    productDetails={handleProductDetails}
-                  />
-                ))
+                state?.productsByCategory[productCategory]
+                  ?.filter((product) => product._id !== productId)
+                  ?.map((product) => (
+                    <CategorizedProductCard
+                      key={product._id}
+                      product={product}
+                      productDetails={handleProductDetails}
+                    />
+                  ))
             )}
-      </Carousel>
+      </div>
     </div>
   );
 };
 
-export default CategorizedProducts;
+export default RelatedProducts;

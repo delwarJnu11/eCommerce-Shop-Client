@@ -5,12 +5,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
 import { api } from "../../api";
+import Logo from "../../assets/logo.jpg";
 import { ROLE } from "../../constants";
+import { useCart } from "../../hooks/useCart";
 import { useUser } from "../../hooks/useUser";
 import Button from "./Button";
 
 const Header = () => {
   const { state, dispatch } = useUser();
+  const { state: cartState } = useCart();
   const navigate = useNavigate();
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   // get user details
@@ -64,11 +67,16 @@ const Header = () => {
   return (
     <header className="bg-white  shadow-md  w-full py-4 h-20 fixed z-40">
       <div className="container mx-auto flex items-center justify-between h-full">
-        <div>
-          <Link to={"/"} className="text-lg lg:text-2xl font-bold">
-            E-SHOP
-          </Link>
-        </div>
+        <Link
+          to={"/"}
+          className="w-20 h-20 md:w-20 md:h-20 rounded-full overflow-hidden flex items-center justify-center"
+        >
+          <img
+            src={Logo}
+            alt=""
+            className="h-full object-scale-down mix-blend-multiply"
+          />
+        </Link>
         <div className="hidden md:flex items-center justify-center">
           <input
             className="px-2 py-2 border-gray-300 w-full focus-within:outline-none focus-within:shadow-md"
@@ -82,14 +90,19 @@ const Header = () => {
           </div>
         </div>
         <div className="flex justify-center items-center gap-8">
-          <div className="flex items-center justify-center relative">
-            <span>
-              <FaShoppingCart size={35} />
-            </span>
-            <span className="w-8 h-8 text-sm text-white rounded-full bg-orange-600 p-2 flex items-center justify-center absolute -top-5 -right-5">
-              0
-            </span>
-          </div>
+          {user?._id && (
+            <Link
+              to={"/cart"}
+              className="flex items-center justify-center relative"
+            >
+              <span>
+                <FaShoppingCart size={35} />
+              </span>
+              <span className="w-8 h-8 text-sm text-white rounded-full bg-orange-600 p-2 flex items-center justify-center absolute -top-5 -right-5">
+                {cartState?.cart?.length}
+              </span>
+            </Link>
+          )}
           <div className="relative flex justify-center">
             {user && (
               <div onClick={() => setShowAdminPanel(!showAdminPanel)}>

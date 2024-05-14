@@ -1,8 +1,46 @@
+import { useEffect } from "react";
 import Banner from "../components/home/Banner";
 import CategorizedProducts from "../components/home/CategorizedProducts";
 import CategoryList from "../components/home/CategoryList";
+import useFetchCartProducts from "../hooks/useFetchCartProducts";
 
 const Home = () => {
+  const { fetchCartProducts } = useFetchCartProducts();
+
+  // const memoizedFetchCartProducts = useCallback(() => {
+  //   fetchCartProducts();
+  // }, [fetchCartProducts]);
+
+  useEffect(() => {
+    fetchCartProducts();
+  }, []);
+
+  // useEffect(() => {
+  // const fetchCartData = async () => {
+  //   dispatch({ type: actions.cart.CART_DATA_FETCHING });
+  //   try {
+  //     const response = await api.get("/cart-products", {
+  //       withCredentials: true,
+  //     });
+  //     if (response.data.success) {
+  //       dispatch({
+  //         type: actions.cart.CART_DATA_FETCHED,
+  //         data: response.data.cart,
+  //       });
+  //     }
+  //     if (response.data.error) {
+  //       toast.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     dispatch({
+  //       type: actions.cart.CART_DATA_FETCHING_ERROR,
+  //       error: error.response.data.message,
+  //     });
+  //   }
+  // };
+  // fetchCartData();
+  // }, [dispatch]);
+
   return (
     <div className="container mx-auto py-4">
       <CategoryList />
@@ -14,10 +52,6 @@ const Home = () => {
         heading="Camera & Tripod's"
       />
       <CategorizedProducts productCategory="television" heading="Television" />
-      <CategorizedProducts
-        productCategory="camera"
-        heading="Camera & Tripod's"
-      />
       <CategorizedProducts productCategory="earphone" heading="Earphones" />
       <CategorizedProducts productCategory="watch" heading="Watches" />
       <CategorizedProducts productCategory="trimmer" heading="Trimmers" />

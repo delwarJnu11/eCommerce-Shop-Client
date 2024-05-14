@@ -1,7 +1,36 @@
 import { FaShoppingCart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { api } from "../../api";
+import useFetchCartProducts from "../../hooks/useFetchCartProducts";
 import { convertNumberToBDT } from "../../utils/convertNumberToBDT";
 
 const CategorizedProductCard = ({ product, productDetails }) => {
+  const navigate = useNavigate();
+  const { fetchCartProducts } = useFetchCartProducts();
+
+  // handle Add to Cart
+  const handleAddToCart = async (productId) => {
+    try {
+      const response = await api.post(
+        "/product/add-to-cart",
+        { productId },
+        { withCredentials: true }
+      );
+      if (response.data.success) {
+        fetchCartProducts();
+        toast.success(response.data.message);
+      }
+
+      if (response.data.error) {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+      navigate("/login");
+    }
+  };
+
   return (
     <div
       className="mx-2 cursor-pointer"
@@ -30,7 +59,10 @@ const CategorizedProductCard = ({ product, productDetails }) => {
               {convertNumberToBDT(product.price)}
             </p>
           </div>
-          <button className="mt-4 bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-800 focus:outline-none">
+          <button
+            className="mt-4 bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-800 focus:outline-none"
+            onClick={() => handleAddToCart(product?._id)}
+          >
             <FaShoppingCart className="inline-block mr-2" />
             Add to Cart
           </button>

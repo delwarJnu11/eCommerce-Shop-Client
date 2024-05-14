@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import AdminPanel from "../pages/AdminPanel";
+import Cart from "../pages/Cart";
 import CategoriesProducts from "../pages/CategoriesProducts";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
       {
         path: "/sign-up",
         element: <SignUp />,
+      },
+      {
+        path: "/cart",
+        element: <Cart />,
       },
       {
         path: "/products/category/:categoryName",
