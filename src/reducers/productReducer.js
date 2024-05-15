@@ -7,6 +7,7 @@ export const initialState = {
   products: [],
   categories: [],
   productsByCategory: {},
+  searchProducts: [],
 };
 
 export const productReducer = (state, action) => {
@@ -54,6 +55,13 @@ export const productReducer = (state, action) => {
           ...state.productsByCategory,
           [action.category]: action.data,
         },
+      };
+    case actions.product.SEARCH_PRODUCTS_DATA_FETCHED:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        searchProducts: action.data,
       };
 
     default:

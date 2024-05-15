@@ -42,6 +42,7 @@ const AllUsers = () => {
 
   //handle User Modal
   const handleUserModal = (user) => {
+    console.log(user);
     setUserToUpdate(user);
     setShowModal(true);
   };

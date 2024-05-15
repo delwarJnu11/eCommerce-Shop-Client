@@ -25,7 +25,7 @@ const useFetchCartProducts = () => {
     } catch (error) {
       dispatch({
         type: actions.cart.CART_DATA_FETCHING_ERROR,
-        error: "An error occurred while fetching cart products",
+        error: error.message,
       });
     }
   };

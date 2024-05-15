@@ -6,6 +6,7 @@ import CategoriesProducts from "../pages/CategoriesProducts";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import ProductDetails from "../pages/ProductDetails";
+import SearchProducts from "../pages/SearchProducts";
 import SignUp from "../pages/SignUp";
 import AllProducts from "../pages/admin/AllProducts";
 import AllUsers from "../pages/admin/AllUsers";
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
       {
         path: "/cart",
         element: <Cart />,
+      },
+      {
+        path: "/search",
+        element: <SearchProducts />,
       },
       {
         path: "/products/category/:categoryName",

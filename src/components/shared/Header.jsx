@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaRegUserCircle, FaShoppingCart } from "react-icons/fa";
 import { HiSearch } from "react-icons/hi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
 import { api } from "../../api";
@@ -16,6 +16,11 @@ const Header = () => {
   const { state: cartState } = useCart();
   const navigate = useNavigate();
   const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const searchInput = useLocation();
+  const URLSearch = new URLSearchParams(searchInput?.search);
+  const searchQuery = URLSearch.getAll("q");
+  const [search, setSearch] = useState(searchQuery);
+
   // get user details
   useEffect(() => {
     const fetchUser = async () => {
@@ -54,6 +59,16 @@ const Header = () => {
       toast.error(error.message);
     }
   };
+
+  //handle change
+  const handleSearch = (e) => {
+    const { value } = e.target;
+    setSearch(value);
+    if (search) {
+      navigate(`/search?q=${search}`);
+    }
+  };
+
   //check loading state
   {
     state?.data?.loading && <p>Loading...</p>;
@@ -84,6 +99,8 @@ const Header = () => {
             name="search"
             id="search"
             placeholder="search products..."
+            value={search}
+            onChange={handleSearch}
           />
           <div className="bg-orange-600 h-9 w-12 rounded-tr-full rounded-br-full flex items-center justify-center -ml-1">
             <HiSearch size={25} color="white" />
@@ -123,7 +140,7 @@ const Header = () => {
                   <nav>
                     <Link
                       className="whitespace-nowrap"
-                      to={"/admin-panel"}
+                      to={"/admin-panel/products"}
                       onClick={() => setShowAdminPanel(!showAdminPanel)}
                     >
                       Admin Panel

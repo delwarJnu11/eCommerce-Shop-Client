@@ -82,7 +82,7 @@ const CategorizedProducts = ({ productCategory, heading }) => {
         // autoPlaySpeed={5000}
         className="my-4"
       >
-        {state?.loading
+        {state?.loading === true
           ? loadingList.map((el, index) => <ProductCardLoader key={index} />)
           : Object.keys(state.productsByCategory).map(
               (category) =>
