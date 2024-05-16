@@ -6,10 +6,12 @@ import { api } from "../../api";
 import { useProduct } from "../../hooks/useProduct";
 import ProductCardLoader from "../loader/ProductCardLoader";
 import CategorizedProductCard from "../product/CategorizedProductCard";
+import useFetchCartProducts from "../../hooks/useFetchCartProducts";
 
 const RelatedProducts = ({ productId, productCategory, heading }) => {
   const { state, dispatch } = useProduct();
   const navigate = useNavigate();
+  const { fetchCartProducts } = useFetchCartProducts();
   const loadingList = new Array(4).fill(null);
 
   useEffect(() => {
@@ -47,6 +49,29 @@ const RelatedProducts = ({ productId, productCategory, heading }) => {
       });
     }
   };
+
+  // handle Add to Cart
+  const handleAddToCart = async (productId) => {
+    try {
+      const response = await api.post(
+        "/product/add-to-cart",
+        { productId },
+        { withCredentials: true }
+      );
+      if (response.data.success) {
+        fetchCartProducts();
+        toast.success(response.data.message);
+      }
+
+      if (response.data.error) {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+      navigate("/login");
+    }
+  };
+
   return (
     <div className="my-6">
       <h2 className="text-md md:text-[22px] text-gray-700 font-semibold block my-4">
@@ -65,6 +90,7 @@ const RelatedProducts = ({ productId, productCategory, heading }) => {
                       key={product._id}
                       product={product}
                       productDetails={handleProductDetails}
+                      onAddCart={handleAddToCart}
                     />
                   ))
             )}

@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { actions } from "../actions";
 import { api } from "../api";
 import CategorizedProductCard from "../components/product/CategorizedProductCard";
+import useFetchCartProducts from "../hooks/useFetchCartProducts";
 import { useProduct } from "../hooks/useProduct";
 
 const CategoriesProducts = () => {
@@ -11,6 +12,8 @@ const CategoriesProducts = () => {
   const params = useParams();
   const { state, dispatch } = useProduct();
   const navigate = useNavigate();
+  const { fetchCartProducts } = useFetchCartProducts();
+
   useEffect(() => {
     const fetchProductsByCategory = async () => {
       dispatch({ type: actions.product.PRODUCT_DATA_FETCHING });
@@ -75,6 +78,28 @@ const CategoriesProducts = () => {
     }
   };
 
+  // handle Add to Cart
+  const handleAddToCart = async (productId) => {
+    try {
+      const response = await api.post(
+        "/product/add-to-cart",
+        { productId },
+        { withCredentials: true }
+      );
+      if (response.data.success) {
+        await fetchCartProducts();
+        toast.success(response.data.message);
+      }
+
+      if (response.data.error) {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+      navigate("/login");
+    }
+  };
+
   // Function to sort products by price
   const sortProductsByPrice = (products, sortOrder) => {
     return products.sort((a, b) => {
@@ -122,6 +147,7 @@ const CategoriesProducts = () => {
                 key={product._id}
                 product={product}
                 productDetails={handleProductDetails}
+                onAddCart={handleAddToCart}
               />
             ))
         )}
@@ -130,8 +156,3 @@ const CategoriesProducts = () => {
   );
 };
 export default CategoriesProducts;
-
-// Object.keys(state.productsByCategory).map(
-//           (category) =>
-//             category === params.categoryName &&
-//             sortProductsByPrice(state?.productsByCategory[params.categoryName], sortValue)

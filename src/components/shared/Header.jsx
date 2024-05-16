@@ -20,6 +20,12 @@ const Header = () => {
   const URLSearch = new URLSearchParams(searchInput?.search);
   const searchQuery = URLSearch.getAll("q");
   const [search, setSearch] = useState(searchQuery);
+  const [cartLength, setCartLength] = useState(cartState?.cart.length);
+
+  // Update cart length when cart state changes
+  useEffect(() => {
+    setCartLength(cartState?.cart.length);
+  }, [cartState?.cart.length]);
 
   // get user details
   useEffect(() => {
@@ -44,6 +50,7 @@ const Header = () => {
     };
     fetchUser();
   }, [dispatch]);
+
   const user = state?.data?.data;
 
   //handle logout
@@ -116,7 +123,7 @@ const Header = () => {
                 <FaShoppingCart size={35} />
               </span>
               <span className="w-8 h-8 text-sm text-white rounded-full bg-orange-600 p-2 flex items-center justify-center absolute -top-5 -right-5">
-                {cartState?.cart?.length}
+                {cartLength}
               </span>
             </Link>
           )}

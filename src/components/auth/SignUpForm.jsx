@@ -34,29 +34,28 @@ const SignUpForm = ({ image }) => {
         type: "notMatched",
         message: "Password does not match.",
       });
+      return;
     } else {
-      setError("confirmPassword", null);
-    }
-
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/api/register",
-        data
-      );
-      if (response.status === 201) {
-        if (response.data.success) {
-          toast.success(response.data.message);
-          navigate("/login");
+      try {
+        const response = await axios.post(
+          "http://localhost:8000/api/register",
+          data
+        );
+        if (response.status === 201) {
+          if (response.data.success) {
+            toast.success(response.data.message);
+            navigate("/login");
+          }
         }
+        if (response.data.error) {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        setError("root.random", {
+          type: "random",
+          message: error.message,
+        });
       }
-      if (response.data.error) {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      setError("root.random", {
-        type: "random",
-        message: error.message,
-      });
     }
   };
   return (

@@ -1,23 +1,26 @@
 import { useEffect, useState } from "react";
 import { FaCartPlus } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../actions";
 import { api } from "../api";
 import ProductDetailsLoader from "../components/loader/ProductDetailsLoader";
 import RelatedProducts from "../components/product/RelatedProducts";
+import useFetchCartProducts from "../hooks/useFetchCartProducts";
 import { useProduct } from "../hooks/useProduct";
 import { convertNumberToBDT } from "../utils/convertNumberToBDT";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const { state, dispatch } = useProduct();
+  const { fetchCartProducts } = useFetchCartProducts();
   const [displayImage, setDisplayImage] = useState("");
   const [zoomImageCoordinate, setZoomImageCoordinate] = useState({
     x: 0,
     y: 0,
   });
   const [zoomImage, setZoomImage] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSingleProduct = async () => {
@@ -30,6 +33,7 @@ const ProductDetails = () => {
             data: response?.data?.product,
           });
           setDisplayImage(response?.data?.product?.productImages[0]);
+          fetchCartProducts();
         }
         if (response?.data?.error) {
           toast.error(response.data.message);
@@ -61,6 +65,28 @@ const ProductDetails = () => {
 
   const handleLeaveImageZoom = () => {
     setZoomImage(false);
+  };
+
+  // handle Add to Cart
+  const handleAddToCart = async (productId) => {
+    try {
+      const response = await api.post(
+        "/product/add-to-cart",
+        { productId },
+        { withCredentials: true }
+      );
+      if (response.data.success) {
+        fetchCartProducts();
+        toast.success(response.data.message);
+      }
+
+      if (response.data.error) {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+      navigate("/login");
+    }
   };
 
   //if error exists
@@ -116,10 +142,10 @@ const ProductDetails = () => {
               {product.brandName}
             </p>
             <div className="flex items-center gap-2">
-              <pn className="text-2xl font-semibold text-orange-600">
+              <p className="text-2xl font-semibold text-orange-600">
                 <span className="text-3xl font-bold">৳</span>
                 {convertNumberToBDT(product.sellingPrice)}
-              </pn>
+              </p>
               <span className="text-md text-slate-500 line-through">
                 ৳{convertNumberToBDT(product.price)}
               </span>
@@ -129,7 +155,10 @@ const ProductDetails = () => {
               <button className="bg-transparent border border-orange-600 text-base text-black md:text-md px-4 py-2 rounded-lg shadow-lg mt-2 hover:bg-orange-600 hover:text-white">
                 Buy Now
               </button>
-              <button className="bg-orange-600 text-base text-white md:text-md px-4 py-2 rounded-lg shadow-lg mt-2 flex justify-center items-center gap-2 hover:border hover:border-orange-600 hover:bg-transparent hover:text-black">
+              <button
+                className="bg-orange-600 text-base text-white md:text-md px-4 py-2 rounded-lg shadow-lg mt-2 flex justify-center items-center gap-2 hover:border hover:border-orange-600 hover:bg-transparent hover:text-black"
+                onClick={() => handleAddToCart(product._id)}
+              >
                 <FaCartPlus />
                 Add to Cart
               </button>
@@ -138,7 +167,7 @@ const ProductDetails = () => {
             {zoomImage && (
               <div className="hidden lg:block absolute min-w-[600px] overflow-hidden min-h-[420px] bg-white p-4 right-[20px] top-0">
                 <div
-                  className="w-full h-full min-h-[420px] min-w-[600px] mix-blend-multiply scale-125 p-4"
+                  className="w-full h-full min-h-[420px] min-w-[600px] mix-blend-multiply scale-125 p-4 object-scale-down"
                   style={{
                     background: `url(${displayImage})`,
                     backgroundRepeat: "no-repeat",

@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { api } from "../../api";
 import { convertNumberToBDT } from "../../utils/convertNumberToBDT";
 
-const CartProductCard = ({ product, fetchCartProducts }) => {
+const CartProductCard = ({ product, fetchCartProducts, onDelete }) => {
   //handle update product quantity
   const handleProductQty = async (id, qty) => {
     try {
@@ -24,23 +24,6 @@ const CartProductCard = ({ product, fetchCartProducts }) => {
     }
   };
 
-  //handle delete cart product
-  const handleDeleteCartProduct = async (id) => {
-    try {
-      const response = await api.delete(`/delete-cart-product/${id}`, {
-        withCredentials: true,
-      });
-      if (response.data.success) {
-        toast.success(response.data.message);
-        fetchCartProducts();
-      }
-      if (response.data.error) {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      toast.error(error.response.data.message);
-    }
-  };
   return (
     <div className="flex flex-col md:flex-row bg-white shadow-md rounded-lg p-4 mb-4">
       {/* Left side (image) */}
@@ -64,7 +47,7 @@ const CartProductCard = ({ product, fetchCartProducts }) => {
           <div
             className="cursor-pointer text-red-500 p-2 rounded-full hover:bg-red-600 hover:text-white hover:transition-all hover:scale-105"
             title="Delete"
-            onClick={() => handleDeleteCartProduct(product?._id)}
+            onClick={() => onDelete(product?._id)}
           >
             <MdDelete size={25} />
           </div>

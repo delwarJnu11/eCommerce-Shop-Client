@@ -36,7 +36,7 @@ const CategoryList = () => {
 
   return (
     <div className="flex items-center gap-4 justify-between overflow-scroll scrollbar-none">
-      {state?.loading
+      {state?.loading === true
         ? categoryLoading.map((el, index) => (
             <div
               className="h-16 w-16 md:w-20 md:h-20 rounded-full overflow-hidden bg-slate-200 animate-pulse blink-animation"

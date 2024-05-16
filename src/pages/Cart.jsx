@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { api } from "../api";
 import CartLoader from "../components/loader/CartLoader";
 import CartProductCard from "../components/product/CartProductCard";
 import { useCart } from "../hooks/useCart";
@@ -10,20 +11,31 @@ import { convertNumberToBDT } from "../utils/convertNumberToBDT";
 const Cart = () => {
   const { state } = useCart();
   const { state: user } = useUser();
-  console.log(user);
-  const navigate = useNavigate();
   const { fetchCartProducts } = useFetchCartProducts();
-  useEffect(() => {
-    if (user?.data?.data?._id) {
-      fetchCartProducts();
-    } else {
-      navigate("/login");
-    }
-  }, [user?.data?.data?._id, navigate]);
 
-  if (state?.error) {
-    console.error(state?.error);
-  }
+  useEffect(() => {
+    if (user?.data?.data?._id && state?.cart?.length) {
+      fetchCartProducts();
+    }
+  }, [user?.data?.data?._id, state?.cart?.length]);
+
+  const handleDeleteCartProduct = async (id) => {
+    try {
+      const response = await api.delete(`/delete-cart-product/${id}`, {
+        withCredentials: true,
+      });
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        await fetchCartProducts();
+      }
+      if (response.data.error) {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
 
   //calculate total product quantity added in the cart
   const totalQty = state?.cart?.reduce((prev, curr) => prev + curr.quantity, 0);
@@ -34,19 +46,28 @@ const Cart = () => {
   );
   const stateLaoding = new Array(state?.cart?.length).fill(null);
 
+  {
+    state?.loading &&
+      stateLaoding.map((el, index) => <CartLoader key={index} />);
+  }
+
   return (
     <div className="container mx-auto py-6 flex flex-col md:flex-row gap-4">
       <div className="w-full md:w-4/6 md:order-1">
-        {state.loading === true
-          ? stateLaoding.map((el, index) => <CartLoader key={index} />)
-          : state?.cart &&
-            state?.cart?.map((product) => (
-              <CartProductCard
-                key={product?._id}
-                product={product}
-                fetchCartProducts={fetchCartProducts}
-              />
-            ))}
+        {state?.cart?.length > 0 ? (
+          state?.cart?.map((product) => (
+            <CartProductCard
+              key={product?._id}
+              product={product}
+              fetchCartProducts={fetchCartProducts}
+              onDelete={handleDeleteCartProduct}
+            />
+          ))
+        ) : (
+          <div>
+            <p>No Products in the cart</p>
+          </div>
+        )}
       </div>
       <div className="w-full md:w-2/6 md:order-2 sm:order-1 sm:w-full overflow-hidden">
         <h2 className="bg-orange-600 text-white rounded p-2">Summary</h2>

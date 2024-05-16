@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
 import { api } from "../../api";
+import useFetchCartProducts from "../../hooks/useFetchCartProducts";
 import { useProduct } from "../../hooks/useProduct";
 import ProductCardLoader from "../loader/ProductCardLoader";
 import CategorizedProductCard from "../product/CategorizedProductCard";
@@ -28,6 +29,8 @@ const CategorizedProducts = ({ productCategory, heading }) => {
   const { state, dispatch } = useProduct();
   const navigate = useNavigate();
   const loadingList = new Array(4).fill(null);
+  const { fetchCartProducts } = useFetchCartProducts();
+
   useEffect(() => {
     const fetchProductsByCategory = async () => {
       dispatch({ type: actions.product.PRODUCT_DATA_FETCHING });
@@ -53,6 +56,29 @@ const CategorizedProducts = ({ productCategory, heading }) => {
     fetchProductsByCategory();
   }, [dispatch, productCategory]);
 
+  // handle Add to Cart
+  const handleAddToCart = async (productId) => {
+    try {
+      const response = await api.post(
+        "/product/add-to-cart",
+        { productId },
+        { withCredentials: true }
+      );
+      if (response.data.success) {
+        fetchCartProducts();
+        toast.success(response.data.message);
+      }
+
+      if (response.data.error) {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+      navigate("/login");
+    }
+  };
+
+  //handle product details page
   const handleProductDetails = (e, id) => {
     if (!e.target.closest("button")) {
       navigate(`/products/${productCategory}/${id}`);
@@ -92,6 +118,7 @@ const CategorizedProducts = ({ productCategory, heading }) => {
                     key={product._id}
                     product={product}
                     productDetails={handleProductDetails}
+                    onAddCart={handleAddToCart}
                   />
                 ))
             )}

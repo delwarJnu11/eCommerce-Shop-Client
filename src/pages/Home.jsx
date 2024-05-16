@@ -8,7 +8,7 @@ import CategoryList from "../components/home/CategoryList";
 import { useCart } from "../hooks/useCart";
 
 const Home = () => {
-  const { dispatch } = useCart();
+  const { state, dispatch } = useCart();
 
   useEffect(() => {
     const fetchCartData = async () => {
@@ -33,31 +33,41 @@ const Home = () => {
         });
       }
     };
-    fetchCartData();
-  }, [dispatch]);
+    if (state?.cart?.length) {
+      fetchCartData();
+    }
+  }, [dispatch, state?.cart?.length]);
 
   return (
     <div className="container mx-auto py-4">
-      <CategoryList />
-      <Banner />
-      <CategorizedProducts productCategory="airpod" heading="Top Airpodes" />
-      <CategorizedProducts productCategory="mobile" heading="Mobile Phones" />
-      <CategorizedProducts
-        productCategory="camera"
-        heading="Camera & Tripod's"
-      />
-      <CategorizedProducts productCategory="television" heading="Television" />
-      <CategorizedProducts productCategory="earphone" heading="Earphones" />
-      <CategorizedProducts productCategory="watch" heading="Watches" />
-      <CategorizedProducts productCategory="trimmer" heading="Trimmers" />
-      <CategorizedProducts productCategory="speaker" heading="Speakers" />
-      <CategorizedProducts productCategory="mouse" heading="Mouse" />
-      <CategorizedProducts productCategory="printer" heading="Printers" />
-      <CategorizedProducts
-        productCategory="refrigerator"
-        heading="Refrigerators"
-      />
-      <CategorizedProducts productCategory="processor" heading="Processor's" />
+      <>
+        <CategoryList />
+        <Banner />
+        <CategorizedProducts productCategory="airpod" heading="Top Airpodes" />
+        <CategorizedProducts productCategory="mobile" heading="Mobile Phones" />
+        <CategorizedProducts
+          productCategory="camera"
+          heading="Camera & Tripod's"
+        />
+        <CategorizedProducts
+          productCategory="television"
+          heading="Television"
+        />
+        <CategorizedProducts productCategory="earphone" heading="Earphones" />
+        <CategorizedProducts productCategory="watch" heading="Watches" />
+        <CategorizedProducts productCategory="trimmer" heading="Trimmers" />
+        <CategorizedProducts productCategory="speaker" heading="Speakers" />
+        <CategorizedProducts productCategory="mouse" heading="Mouse" />
+        <CategorizedProducts productCategory="printer" heading="Printers" />
+        <CategorizedProducts
+          productCategory="refrigerator"
+          heading="Refrigerators"
+        />
+        <CategorizedProducts
+          productCategory="processor"
+          heading="Processor's"
+        />
+      </>
     </div>
   );
 };
