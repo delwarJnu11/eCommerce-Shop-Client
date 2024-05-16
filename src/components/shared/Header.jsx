@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaRegUserCircle, FaShoppingCart } from "react-icons/fa";
+import { FaMoon, FaRegUserCircle, FaShoppingCart, FaSun } from "react-icons/fa";
 import { HiSearch } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -8,6 +8,7 @@ import { api } from "../../api";
 import Logo from "../../assets/logo.jpg";
 import { ROLE } from "../../constants";
 import { useCart } from "../../hooks/useCart";
+import { useTheme } from "../../hooks/useTheme";
 import { useUser } from "../../hooks/useUser";
 import Button from "./Button";
 
@@ -21,6 +22,9 @@ const Header = () => {
   const searchQuery = URLSearch.getAll("q");
   const [search, setSearch] = useState(searchQuery);
   const [cartLength, setCartLength] = useState(cartState?.cart.length);
+
+  //dark mode
+  const { darkMode, setDarkMode } = useTheme();
 
   // Update cart length when cart state changes
   useEffect(() => {
@@ -87,7 +91,11 @@ const Header = () => {
     );
   }
   return (
-    <header className="bg-white  shadow-md  w-full py-4 h-20 fixed z-40">
+    <header
+      className={`${
+        darkMode ? "" : "bg-white  shadow-md  w-full py-4 h-20 fixed z-40"
+      }`}
+    >
       <div className="container mx-auto flex items-center justify-between h-full">
         <Link
           to={"/"}
@@ -109,7 +117,7 @@ const Header = () => {
             value={search}
             onChange={handleSearch}
           />
-          <div className="bg-orange-600 h-9 w-12 rounded-tr-full rounded-br-full flex items-center justify-center -ml-1">
+          <div className="bg-orange-600 h-9 w-12 rounded-tr-full rounded-br-full flex items-center justify-center -ml-1 py-5">
             <HiSearch size={25} color="white" />
           </div>
         </div>
@@ -174,6 +182,14 @@ const Header = () => {
                 />
               </Link>
             )}
+          </div>
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              setDarkMode(!darkMode);
+            }}
+          >
+            {darkMode ? <FaSun color="red" /> : <FaMoon color="red" />}
           </div>
         </div>
       </div>

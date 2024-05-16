@@ -3,8 +3,11 @@ import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 import { api } from "../../api";
 import { convertNumberToBDT } from "../../utils/convertNumberToBDT";
+import { useTheme } from "../../hooks/useTheme";
 
 const CartProductCard = ({ product, fetchCartProducts, onDelete }) => {
+  const { darkMode } = useTheme();
+
   //handle update product quantity
   const handleProductQty = async (id, qty) => {
     try {
@@ -25,7 +28,13 @@ const CartProductCard = ({ product, fetchCartProducts, onDelete }) => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row bg-white shadow-md rounded-lg p-4 mb-4">
+    <div
+      className={`${
+        darkMode
+          ? ""
+          : "flex flex-col md:flex-row bg-white shadow-md rounded-lg p-4 mb-4"
+      }`}
+    >
       {/* Left side (image) */}
       <div className="md:w-1/3 h-40 mb-4 md:mb-0 md:mr-4 relative">
         <img

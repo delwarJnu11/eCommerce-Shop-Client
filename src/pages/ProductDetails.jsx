@@ -8,9 +8,11 @@ import ProductDetailsLoader from "../components/loader/ProductDetailsLoader";
 import RelatedProducts from "../components/product/RelatedProducts";
 import useFetchCartProducts from "../hooks/useFetchCartProducts";
 import { useProduct } from "../hooks/useProduct";
+import { useTheme } from "../hooks/useTheme";
 import { convertNumberToBDT } from "../utils/convertNumberToBDT";
 
 const ProductDetails = () => {
+  const { darkMode } = useTheme();
   const { id } = useParams();
   const { state, dispatch } = useProduct();
   const { fetchCartProducts } = useFetchCartProducts();
@@ -105,9 +107,9 @@ const ProductDetails = () => {
       {state?.loading === true ? (
         <ProductDetailsLoader loadingStateImages={loadingStateImages} />
       ) : (
-        <div className="container mx-auto flex gap-3 overflow-hidden py-6">
+        <div className="container mx-auto flex gap-6 overflow-hidden py-6">
           {/* image section */}
-          <div className="w-[50%] flex sm:flex-col md:flex-row gap-2 overflow-hidden">
+          <div className="w-[50%] flex sm:flex-col md:flex-row gap-4 overflow-hidden">
             <div className="w-1/6 md:h-[350px] flex flex-col">
               {product?.productImages?.map((image) => (
                 <div
@@ -123,10 +125,14 @@ const ProductDetails = () => {
                 </div>
               ))}
             </div>
-            <div className="w-full md:max-h-[350px] flex justify-center items-center p-4 cursor-pointer">
+            <div
+              className={`w-full md:max-h-[350px] flex justify-center items-center p-4 cursor-pointer`}
+            >
               <img
                 src={displayImage}
-                className="max-h-[350px] w-full object-scale-down mix-blend-multiply p-4"
+                className={`${
+                  darkMode ? "bg-white" : ""
+                } max-h-[350px] w-full object-scale-down p-4 rounded-md`}
                 alt="product image"
                 onMouseMove={handleZoomImage}
                 onMouseLeave={handleLeaveImageZoom}
@@ -135,10 +141,18 @@ const ProductDetails = () => {
           </div>
           {/* product details */}
           <div className="w-[50%] flex flex-col gap-2 relative">
-            <h2 className="text-2xl font-semibold text-gray-700 text-ellipsis line-clamp-2">
+            <h2
+              className={`${
+                darkMode ? "text-white" : ""
+              } text-2xl font-semibold text-gray-700 text-ellipsis line-clamp-2`}
+            >
               {product.productName}
             </h2>
-            <p className="text-gray-500 p-2 font-medium text-sm md:text-md">
+            <p
+              className={`${
+                darkMode ? "text-white" : ""
+              } text-gray-500 p-2 font-medium text-sm md:text-md`}
+            >
               {product.brandName}
             </p>
             <div className="flex items-center gap-2">
@@ -146,13 +160,27 @@ const ProductDetails = () => {
                 <span className="text-3xl font-bold">৳</span>
                 {convertNumberToBDT(product.sellingPrice)}
               </p>
-              <span className="text-md text-slate-500 line-through">
+              <span
+                className={`${
+                  darkMode ? "text-white" : ""
+                } text-md text-slate-500 line-through`}
+              >
                 ৳{convertNumberToBDT(product.price)}
               </span>
             </div>
-            <p className="text-base text-gray-500">{product.description}</p>
+            <p
+              className={`${
+                darkMode ? "text-white" : ""
+              } text-base text-gray-500`}
+            >
+              {product.description}
+            </p>
             <div className="flex items-center gap-2">
-              <button className="bg-transparent border border-orange-600 text-base text-black md:text-md px-4 py-2 rounded-lg shadow-lg mt-2 hover:bg-orange-600 hover:text-white">
+              <button
+                className={`${
+                  darkMode ? "text-white" : "text-black"
+                }bg-transparent border border-orange-600 text-base md:text-md px-4 py-2 rounded-lg shadow-lg mt-2 hover:bg-orange-600 hover:text-white`}
+              >
                 Buy Now
               </button>
               <button

@@ -8,8 +8,10 @@ import CategorizedProductCard from "../components/product/CategorizedProductCard
 import { productCategory } from "../constants";
 import useFetchCartProducts from "../hooks/useFetchCartProducts";
 import { useProduct } from "../hooks/useProduct";
+import { useTheme } from "../hooks/useTheme";
 
 const Shop = () => {
+  const { darkMode } = useTheme();
   const { state, dispatch } = useProduct();
   const [categoryList, setCategoryList] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -125,7 +127,13 @@ const Shop = () => {
   return (
     <div className="container mx-auto">
       <div className="flex gap-4 py-6">
-        <div className="md:w-1/6 bg-white rounded p-3 max-h-[90vh] overflow-y-scroll">
+        <div
+          className={`${
+            darkMode
+              ? "dark"
+              : "md:w-1/6 bg-white rounded p-3 max-h-[90vh] overflow-y-scroll"
+          }`}
+        >
           <h2 className="uppercase border-b border-slate-300 text-slate-500 pb-1 px-2 pt-2 font-semibold text-base">
             Filter by category
           </h2>
@@ -145,7 +153,9 @@ const Shop = () => {
               />
               <label
                 htmlFor={category.value}
-                className="text-gray-500 font-medium text-sm"
+                className={`${
+                  darkMode ? "dark" : "text-gray-500 font-medium text-sm"
+                }`}
               >
                 {category.label}
               </label>
@@ -153,7 +163,13 @@ const Shop = () => {
           ))}
         </div>
 
-        <div className="md:w-5/6 bg-white max-h-[90vh] overflow-y-scroll">
+        <div
+          className={`${
+            darkMode
+              ? "dark"
+              : "md:w-5/6 bg-white max-h-[90vh] overflow-y-scroll"
+          }`}
+        >
           <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {state.loading === true || loading === true
               ? loadingList?.map((el, index) => (
