@@ -6,6 +6,7 @@ import { api } from "../api";
 import CategorizedProductCard from "../components/product/CategorizedProductCard";
 import useFetchCartProducts from "../hooks/useFetchCartProducts";
 import { useProduct } from "../hooks/useProduct";
+import { useTheme } from "../hooks/useTheme";
 
 const CategoriesProducts = () => {
   const [sortValue, setSortValue] = useState("");
@@ -13,6 +14,7 @@ const CategoriesProducts = () => {
   const { state, dispatch } = useProduct();
   const navigate = useNavigate();
   const { fetchCartProducts } = useFetchCartProducts();
+  const { darkMode } = useTheme();
 
   useEffect(() => {
     const fetchProductsByCategory = async () => {
@@ -114,13 +116,19 @@ const CategoriesProducts = () => {
   return (
     <div className="container mx-auto py-6">
       <div className="flex justify-between items-center px-2 mb-4">
-        <p className="text-slate-600 text-md font-semibold  uppercase">
+        <p
+          className={`${
+            darkMode ? "text-white" : "text-slate-600"
+          }  text-md font-semibold  uppercase`}
+        >
           all {params.categoryName}s
         </p>
         <select
           name="sort"
           id="sort"
-          className="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none"
+          className={`${
+            darkMode ? "dark" : "bg-white"
+          } px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none`}
           value={sortValue}
           onChange={(e) => setSortValue(e.target.value)}
         >

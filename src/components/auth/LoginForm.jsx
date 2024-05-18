@@ -5,6 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
+import { useTheme } from "../../hooks/useTheme";
 import { useUser } from "../../hooks/useUser";
 import Button from "../shared/Button";
 import Field from "../shared/Field";
@@ -13,6 +14,8 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { dispatch } = useUser();
+  const { darkMode } = useTheme();
+
   const {
     register,
     handleSubmit,
@@ -62,7 +65,7 @@ const LoginForm = () => {
           {...register("email", {
             required: "Email is required.",
           })}
-          className="auth-input"
+          className={`${darkMode && "dark"} auth-input`}
           type="email"
           name="email"
           id="email"
@@ -75,7 +78,7 @@ const LoginForm = () => {
             {...register("password", {
               required: "Password is required.",
             })}
-            className="auth-input"
+            className={`${darkMode && "dark"} auth-input`}
             type={showPassword ? "text" : "password"}
             name="password"
             id="password"

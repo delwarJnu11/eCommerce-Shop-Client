@@ -3,6 +3,7 @@ import App from "../App";
 import AdminPanel from "../pages/AdminPanel";
 import Cart from "../pages/Cart";
 import CategoriesProducts from "../pages/CategoriesProducts";
+import Checkout from "../pages/Checkout";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import ProductDetails from "../pages/ProductDetails";
@@ -11,6 +12,7 @@ import Shop from "../pages/Shop";
 import SignUp from "../pages/SignUp";
 import AllProducts from "../pages/admin/AllProducts";
 import AllUsers from "../pages/admin/AllUsers";
+import PaymentSuccess from "../pages/payment/PaymentSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +34,14 @@ export const router = createBrowserRouter([
       {
         path: "/cart",
         element: <Cart />,
+      },
+      {
+        path: "/cart/checkout",
+        element: <Checkout />,
+      },
+      {
+        path: "/payment/success/:transactionId",
+        element: <PaymentSuccess />,
       },
       {
         path: "/shop",

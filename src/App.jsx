@@ -12,7 +12,9 @@ const App = () => {
       <div className={`w-full h-full ${darkMode ? "dark text-white" : ""}`}>
         <Header />
         <div
-          className={`${darkMode ? "dark text-white" : "bg-gray-100 pt-20"}`}
+          className={`${
+            darkMode ? "dark text-white  pt-20" : "bg-gray-100 pt-20"
+          }`}
         >
           <Outlet />
         </div>

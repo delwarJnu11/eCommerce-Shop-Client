@@ -134,7 +134,11 @@ const Shop = () => {
               : "md:w-1/6 bg-white rounded p-3 max-h-[90vh] overflow-y-scroll"
           }`}
         >
-          <h2 className="uppercase border-b border-slate-300 text-slate-500 pb-1 px-2 pt-2 font-semibold text-base">
+          <h2
+            className={`${
+              darkMode ? "text-white" : "text-slate-600"
+            } uppercase border-b border-slate-300 pb-1 px-2 pt-2 font-semibold text-base`}
+          >
             Filter by category
           </h2>
           {productCategory.map((category) => (
@@ -165,10 +169,8 @@ const Shop = () => {
 
         <div
           className={`${
-            darkMode
-              ? "dark"
-              : "md:w-5/6 bg-white max-h-[90vh] overflow-y-scroll"
-          }`}
+            darkMode ? "dark" : "bg-white"
+          } md:w-5/6 max-h-[90vh] overflow-y-scroll pt-2`}
         >
           <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {state.loading === true || loading === true

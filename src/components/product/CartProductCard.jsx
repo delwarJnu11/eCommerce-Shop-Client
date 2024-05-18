@@ -2,8 +2,8 @@ import { FaMinus, FaPlus } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 import { api } from "../../api";
-import { convertNumberToBDT } from "../../utils/convertNumberToBDT";
 import { useTheme } from "../../hooks/useTheme";
+import { convertNumberToBDT } from "../../utils/convertNumberToBDT";
 
 const CartProductCard = ({ product, fetchCartProducts, onDelete }) => {
   const { darkMode } = useTheme();
@@ -30,19 +30,19 @@ const CartProductCard = ({ product, fetchCartProducts, onDelete }) => {
   return (
     <div
       className={`${
-        darkMode
-          ? ""
-          : "flex flex-col md:flex-row bg-white shadow-md rounded-lg p-4 mb-4"
-      }`}
+        darkMode ? "dark border border-gray-700" : "bg-white"
+      } flex flex-col md:flex-row shadow-md rounded-lg p-4 mb-4`}
     >
       {/* Left side (image) */}
       <div className="md:w-1/3 h-40 mb-4 md:mb-0 md:mr-4 relative">
         <img
           src={product.productId.productImages[0]}
           alt={product.productId.productName}
-          className="w-full h-full md:h-full object-scale-down rounded-lg"
+          className={`${
+            darkMode && "bg-white"
+          } w-full h-full md:h-full object-scale-down rounded-lg`}
         />
-        <p className="w-[30%] bg-green-600 rounded-full text-white text-center absolute top-0 left-0 capitalize">
+        <p className="w-[30%] bg-green-600 rounded-full text-white text-center absolute top-1 left-1 capitalize">
           {product.productId.categoryName}
         </p>
       </div>
@@ -65,11 +65,15 @@ const CartProductCard = ({ product, fetchCartProducts, onDelete }) => {
           {product.productId.brandName}
         </p>
         <div className="flex justify-between items-center">
-          <p className="text-orange-700 text-base font-bold mt-2">
+          <p className="text-orange-600 text-base font-bold mt-2">
             <span className="font-extrabold">৳</span>{" "}
             {convertNumberToBDT(product?.productId?.sellingPrice)}
           </p>
-          <p className="text-gray-600 text-base font-semibold mt-2">
+          <p
+            className={`${
+              darkMode ? "text-white" : "text-gray-600"
+            } text-base font-semibold mt-2`}
+          >
             <span className="font-extrabold">Total: ৳</span>{" "}
             {convertNumberToBDT(
               product.productId.sellingPrice * product.quantity
@@ -89,7 +93,11 @@ const CartProductCard = ({ product, fetchCartProducts, onDelete }) => {
           </button>
           <input
             type="number"
-            className="w-12 text-center bg-gray-200 border-t border-b border-gray-300 py-1 font-bold"
+            className={
+              darkMode
+                ? "w-12 text-center dark border-t border-b border-gray-300 py-1 font-bold"
+                : "w-12 text-center bg-gray-200 border-t border-b border-gray-300 py-1 font-bold"
+            }
             disabled
             value={product.quantity}
           />

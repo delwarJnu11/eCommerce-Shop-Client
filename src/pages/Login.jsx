@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import LoginImage from "../assets/login.png";
-import UserImage from "../assets/signin.gif";
 import LoginForm from "../components/auth/LoginForm";
 
 const Login = () => {
@@ -10,9 +9,13 @@ const Login = () => {
         <img src={LoginImage} alt="Login Image" />
       </div>
       <div className="min-w-full lg:ml-6 lg:px-6 mt-6 px-2 mb-10">
-        <div className="flex items-center justify-center">
-          <img src={UserImage} alt="Avatar" />
-        </div>
+        {/* <div className="hidden md:block lg:w-full overflow-hidden">
+          <img
+            src={UserImage}
+            className="bg-black mix-blend-multiply"
+            alt="Login Image"
+          />
+        </div> */}
         <LoginForm />
         <p className="my-5">
           Don&#39;t have account ?{" "}

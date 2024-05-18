@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useTheme } from "../../hooks/useTheme";
 import Button from "../shared/Button";
 import Field from "../shared/Field";
 
@@ -11,6 +12,8 @@ const SignUpForm = ({ image }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+  const { darkMode } = useTheme();
+
   const {
     register,
     handleSubmit,
@@ -65,7 +68,7 @@ const SignUpForm = ({ image }) => {
           {...register("name", {
             required: "Name is required.",
           })}
-          className="auth-input"
+          className={`${darkMode && "dark"} auth-input`}
           type="text"
           name="name"
           id="name"
@@ -77,7 +80,7 @@ const SignUpForm = ({ image }) => {
           {...register("email", {
             required: "Email is required.",
           })}
-          className="auth-input"
+          className={`${darkMode && "dark"} auth-input`}
           type="email"
           name="email"
           id="email"
@@ -94,8 +97,8 @@ const SignUpForm = ({ image }) => {
                 message: "Your password must be at least 8 characters",
               },
             })}
-            className={`auth-input ${
-              errors.password ? "border-red-500" : "border-gray-200"
+            className={`${darkMode && "dark"} auth-input ${
+              errors.password && "border-red-500"
             }`}
             type={showPassword ? "text" : "password"}
             name="password"
@@ -116,8 +119,8 @@ const SignUpForm = ({ image }) => {
             {...register("confirmPassword", {
               required: "confirm Password is required.",
             })}
-            className={`auth-input ${
-              errors.confirmPassword ? "border-red-500" : "border-gray-200"
+            className={`${darkMode && "dark"} auth-input ${
+              errors.password && "border-red-500"
             }`}
             type={showConfirmPassword ? "text" : "password"}
             name="confirmPassword"
