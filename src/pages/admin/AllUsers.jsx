@@ -4,6 +4,7 @@ import { MdEdit } from "react-icons/md";
 import { actions } from "../../actions";
 import { api } from "../../api";
 import UserUpdateModal from "../../components/user/UserUpdateModal";
+import { useTheme } from "../../hooks/useTheme";
 import { useUser } from "../../hooks/useUser";
 
 const AllUsers = () => {
@@ -15,6 +16,7 @@ const AllUsers = () => {
     role: "",
   });
   const [showModal, setShowModal] = useState(false);
+  const { darkMode } = useTheme();
 
   //fetch users
   useEffect(() => {
@@ -50,29 +52,33 @@ const AllUsers = () => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+        <thead className={darkMode ? "dark" : "bg-gray-50 text-gray-900"}>
           <tr>
-            <th className="px-6 py-3 text-left text-xs text-gray-900 font-bold uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">
               SL.
             </th>
-            <th className="px-6 py-3 text-left text-xs text-gray-900 font-bold uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">
               Name
             </th>
-            <th className="px-6 py-3 text-left text-xs text-gray-900 font-bold uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">
               Email
             </th>
-            <th className="px-6 py-3 text-left text-xs text-gray-900 font-bold uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">
               Role
             </th>
-            <th className="px-6 py-3 text-left text-xs text-gray-900 font-bold uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">
               Join
             </th>
-            <th className="px-6 py-3 text-left text-xs text-gray-900 font-bold uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">
               Action
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-300">
+        <tbody
+          className={`${
+            darkMode ? "dark" : "bg-white"
+          } divide-y divide-gray-300`}
+        >
           {state?.users &&
             state.users.map((user, index) => (
               <tr key={user._id}>

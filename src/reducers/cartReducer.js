@@ -25,7 +25,11 @@ export const cartReducer = (state, action) => {
         loading: false,
         error: action.error,
       };
-
+    case actions.cart.CLEAR_CART_DATA:
+      return {
+        ...state,
+        cart: [],
+      };
     default:
       return state;
   }

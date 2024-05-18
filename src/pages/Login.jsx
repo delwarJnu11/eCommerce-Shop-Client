@@ -21,7 +21,7 @@ const Login = () => {
           Don&#39;t have account ?{" "}
           <Link
             to={"/sign-up"}
-            className=" text-red-600 hover:text-red-700 hover:underline"
+            className=" text-orange-600 hover:text-orange-700 hover:underline"
           >
             Sign up
           </Link>

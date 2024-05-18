@@ -5,6 +5,7 @@ import { actions } from "../../actions";
 import { api } from "../../api";
 import { productCategory } from "../../constants";
 import { useProduct } from "../../hooks/useProduct";
+import { useTheme } from "../../hooks/useTheme";
 import Button from "../shared/Button";
 import Field from "../shared/Field";
 import ProductImageUpload from "./ProductImageUpload";
@@ -12,6 +13,7 @@ import ProductImageUpload from "./ProductImageUpload";
 const EditProduct = ({ product, onClose }) => {
   const [imageUrls, setImageUrls] = useState([]);
   const { dispatch } = useProduct();
+  const { darkMode } = useTheme();
 
   useEffect(() => {
     setImageUrls(product.productImages);
@@ -62,9 +64,13 @@ const EditProduct = ({ product, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-auto bg-gray-900 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white rounded-lg p-8 w-[40%] mx-auto max-h-[80%] overflow-y-scroll">
-        <div className="flex justify-between items-center">
+    <div className="fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
+      <div
+        className={`${
+          darkMode ? "bg-[#1a202c] text-white" : "bg-white"
+        } rounded-lg p-8 w-[40%] mx-auto max-h-[80%] overflow-y-scroll shadow-lg`}
+      >
+        <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold">Update Product</h2>
           <button
             className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md text-white focus:outline-none"
@@ -80,7 +86,9 @@ const EditProduct = ({ product, onClose }) => {
                 {...register("productName", {
                   required: "Product Name is required.",
                 })}
-                className="auth-input"
+                className={`auth-input ${
+                  darkMode ? "bg-gray-700 text-white" : ""
+                }`}
                 type="text"
                 name="productName"
                 id="productName"
@@ -92,7 +100,9 @@ const EditProduct = ({ product, onClose }) => {
                 {...register("brandName", {
                   required: "Brand Name is required.",
                 })}
-                className="auth-input"
+                className={`auth-input ${
+                  darkMode ? "bg-gray-700 text-white" : ""
+                }`}
                 type="text"
                 name="brandName"
                 id="brandName"
@@ -106,7 +116,9 @@ const EditProduct = ({ product, onClose }) => {
                 })}
                 name="categoryName"
                 id="categoryName"
-                className="auth-input"
+                className={`auth-input ${
+                  darkMode ? "bg-gray-700 text-white" : ""
+                }`}
               >
                 {productCategory.map((category) => (
                   <option value={category.value} key={category.id}>
@@ -120,11 +132,13 @@ const EditProduct = ({ product, onClose }) => {
                 {...register("price", {
                   required: "Price is required.",
                 })}
-                className="auth-input"
+                className={`auth-input ${
+                  darkMode ? "bg-gray-700 text-white" : ""
+                }`}
                 type="number"
                 name="price"
                 id="price"
-                placeholder="price"
+                placeholder="Price"
               />
             </Field>
             <Field label="Selling Price" error={errors.sellingPrice}>
@@ -132,7 +146,9 @@ const EditProduct = ({ product, onClose }) => {
                 {...register("sellingPrice", {
                   required: "Selling Price is required.",
                 })}
-                className="auth-input"
+                className={`auth-input ${
+                  darkMode ? "bg-gray-700 text-white" : ""
+                }`}
                 type="number"
                 name="sellingPrice"
                 id="sellingPrice"
@@ -151,11 +167,13 @@ const EditProduct = ({ product, onClose }) => {
                 {...register("description", {
                   required: "Description is required.",
                 })}
-                className="auth-input resize-none"
+                className={`auth-input resize-none ${
+                  darkMode ? "bg-gray-700 text-white" : ""
+                }`}
                 type="text"
                 name="description"
                 id="description"
-                placeholder="write about product..."
+                placeholder="Write about product..."
                 rows={4}
               ></textarea>
             </Field>

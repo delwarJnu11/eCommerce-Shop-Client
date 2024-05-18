@@ -1,3 +1,4 @@
+import { useCallback, useEffect } from "react";
 import { actions } from "../actions";
 import { api } from "../api";
 import { useCart } from "./useCart";
@@ -5,7 +6,7 @@ import { useCart } from "./useCart";
 const useFetchCartProducts = () => {
   const { state, dispatch } = useCart();
 
-  const fetchCartProducts = async () => {
+  const fetchCartProducts = useCallback(async () => {
     dispatch({ type: actions.cart.CART_DATA_FETCHING });
 
     try {
@@ -28,7 +29,11 @@ const useFetchCartProducts = () => {
         error: error.message,
       });
     }
-  };
+  }, [dispatch]);
+
+  useEffect(() => {
+    fetchCartProducts();
+  }, [fetchCartProducts]);
 
   return { fetchCartProducts, ...state };
 };

@@ -5,6 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
+import useFetchCartProducts from "../../hooks/useFetchCartProducts";
 import { useTheme } from "../../hooks/useTheme";
 import { useUser } from "../../hooks/useUser";
 import Button from "../shared/Button";
@@ -15,6 +16,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const { dispatch } = useUser();
   const { darkMode } = useTheme();
+  const { fetchCartProducts } = useFetchCartProducts();
 
   const {
     register,
@@ -44,6 +46,7 @@ const LoginForm = () => {
         });
         toast.success(response.data.message);
         localStorage.setItem("token", response.data.token);
+        fetchCartProducts();
         navigate("/");
       }
 
@@ -93,7 +96,11 @@ const LoginForm = () => {
         </div>
       </Field>
       <Field>
-        <Button value={"Login"} bg={"bg-red-500"} hoverBg={"bg-red-700"} />
+        <Button
+          value={"Login"}
+          bg={"bg-orange-600"}
+          hoverBg={"bg-orange-700"}
+        />
       </Field>
     </form>
   );

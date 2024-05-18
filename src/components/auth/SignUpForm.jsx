@@ -141,7 +141,11 @@ const SignUpForm = ({ image }) => {
       </Field>
       <p className="text-red-500 my-2">{errors?.root?.random?.message}</p>
       <Field>
-        <Button value={"Register"} bg={"bg-red-500"} hoverBg={"bg-red-700"} />
+        <Button
+          value={"Register"}
+          bg={"bg-orange-600"}
+          hoverBg={"bg-orange-700"}
+        />
       </Field>
     </form>
   );

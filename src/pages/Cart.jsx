@@ -4,23 +4,21 @@ import { toast } from "react-toastify";
 import { api } from "../api";
 import CartLoader from "../components/loader/CartLoader";
 import CartProductCard from "../components/product/CartProductCard";
-import { useCart } from "../hooks/useCart";
 import useFetchCartProducts from "../hooks/useFetchCartProducts";
 import { useTheme } from "../hooks/useTheme";
 import { useUser } from "../hooks/useUser";
 import { convertNumberToBDT } from "../utils/convertNumberToBDT";
 
 const Cart = () => {
-  const { state } = useCart();
   const { state: user } = useUser();
-  const { fetchCartProducts } = useFetchCartProducts();
+  const { fetchCartProducts, cart, loading } = useFetchCartProducts();
   const { darkMode } = useTheme();
 
   useEffect(() => {
-    if (user?.data?.data?._id && state?.cart?.length) {
+    if (user?.data?.data?._id && cart?.length) {
       fetchCartProducts();
     }
-  }, [user?.data?.data?._id, state?.cart?.length]);
+  }, [fetchCartProducts, user?.data?.data?._id, cart?.length]);
 
   const handleDeleteCartProduct = async (id) => {
     try {
@@ -41,24 +39,23 @@ const Cart = () => {
   };
 
   //calculate total product quantity added in the cart
-  const totalQty = state?.cart?.reduce((prev, curr) => prev + curr.quantity, 0);
+  const totalQty = cart?.reduce((prev, curr) => prev + curr.quantity, 0);
   //calculate total product price added in the cart
-  const totalPrice = state?.cart?.reduce(
+  const totalPrice = cart?.reduce(
     (prev, curr) => prev + curr?.productId?.sellingPrice * curr.quantity,
     0
   );
-  const stateLaoding = new Array(state?.cart?.length).fill(null);
+  const stateLaoding = new Array(cart?.length).fill(null);
 
   {
-    state?.loading &&
-      stateLaoding.map((el, index) => <CartLoader key={index} />);
+    loading && stateLaoding.map((el, index) => <CartLoader key={index} />);
   }
 
   return (
     <div className="container mx-auto py-6 flex flex-col md:flex-row gap-4">
       <div className="w-full md:w-4/6 md:order-1">
-        {state?.cart?.length > 0 ? (
-          state?.cart?.map((product) => (
+        {cart?.length > 0 ? (
+          cart?.map((product) => (
             <CartProductCard
               key={product?._id}
               product={product}

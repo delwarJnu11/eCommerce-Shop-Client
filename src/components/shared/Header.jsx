@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { FaMoon, FaRegUserCircle, FaShoppingCart, FaSun } from "react-icons/fa";
-import { HiSearch } from "react-icons/hi";
+import { FaRegUserCircle, FaShoppingCart } from "react-icons/fa";
+import { HiMoon, HiSearch, HiSun } from "react-icons/hi";
+import { SiShopee } from "react-icons/si";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
 import { api } from "../../api";
-import Logo from "../../assets/logo.jpg";
 import { ROLE } from "../../constants";
-import { useCart } from "../../hooks/useCart";
 import useFetchCartProducts from "../../hooks/useFetchCartProducts";
 import { useTheme } from "../../hooks/useTheme";
 import { useUser } from "../../hooks/useUser";
@@ -15,23 +14,20 @@ import Button from "./Button";
 
 const Header = () => {
   const { state, dispatch } = useUser();
-  const { state: cartState } = useCart();
   const navigate = useNavigate();
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   const searchInput = useLocation();
   const URLSearch = new URLSearchParams(searchInput?.search);
   const searchQuery = URLSearch.getAll("q");
   const [search, setSearch] = useState(searchQuery);
-  const [cartLength, setCartLength] = useState(cartState?.cart.length);
-  const { fetchCartProducts } = useFetchCartProducts();
+  const { fetchCartProducts, cart } = useFetchCartProducts();
   //dark mode
   const { darkMode, setDarkMode } = useTheme();
 
   // Update cart length when cart state changes
   useEffect(() => {
     fetchCartProducts();
-    setCartLength(cartState?.cart.length);
-  }, [cartState?.cart.length]);
+  }, [fetchCartProducts]);
 
   // get user details
   useEffect(() => {
@@ -64,6 +60,7 @@ const Header = () => {
     try {
       const response = await api.get("/logout", { withCredentials: true });
       if (response.status === 200) {
+        dispatch({ type: actions.cart.CLEAR_CART_DATA });
         dispatch({ type: actions.user.USER_LOGGED_OUT, data: {} });
         toast.success(response.data.message);
         navigate("/login");
@@ -82,6 +79,8 @@ const Header = () => {
     }
   };
 
+  const cartLength = cart?.length || 0;
+
   //check loading state
   {
     state?.data?.loading && <p>Loading...</p>;
@@ -99,15 +98,17 @@ const Header = () => {
       } shadow-md  w-full py-4 h-20 fixed z-40`}
     >
       <div className="container mx-auto flex items-center justify-between py-6 h-full">
-        <Link
-          to={"/"}
-          className="w-20 h-20 md:w-20 md:h-20 rounded-full overflow-hidden flex items-center justify-center"
-        >
-          <img
-            src={Logo}
-            alt=""
-            className="h-full object-scale-down mix-blend-multiply"
-          />
+        <Link to={"/"} className="flex items-center justify-center gap-1">
+          <SiShopee size={60} color="#ea5a0c" />
+          <p
+            className={
+              darkMode
+                ? "text-white uppercase text-md font-extrabold"
+                : "text-gray-700 uppercase text-md font-extrabold"
+            }
+          >
+            Shopee
+          </p>
         </Link>
         <div className="hidden md:flex items-center justify-center">
           <input
@@ -146,33 +147,39 @@ const Header = () => {
               </span>
             </Link>
           )}
-          <div className="relative flex justify-center">
+          <div className="relative flex justify-center cursor-pointer">
             {user && (
-              <div onClick={() => setShowAdminPanel(!showAdminPanel)}>
+              <div
+                onClick={() => setShowAdminPanel(!showAdminPanel)}
+                className="flex items-center gap-2"
+              >
                 {user?.image ? (
                   <img
-                    className="w-12 h-12 rounded-full"
+                    className="w-12 h-12 rounded-full border border-purple-700 p-2"
                     src={user?.image}
                     alt={user?.name}
                   />
                 ) : (
                   <FaRegUserCircle size={35} />
                 )}
+                {user && (
+                  <div className="font-semibold text-md">
+                    Welcome, Mr. {user?.name}
+                  </div>
+                )}
               </div>
             )}
-            {showAdminPanel && (
-              <div className="absolute top-14 bg-slate-100 p-2 rounded-md shadow-md">
-                {user?.role === ROLE.ADMIN && (
-                  <nav>
-                    <Link
-                      className="whitespace-nowrap"
-                      to={"/admin-panel/products"}
-                      onClick={() => setShowAdminPanel(!showAdminPanel)}
-                    >
-                      Admin Panel
-                    </Link>
-                  </nav>
-                )}
+            {showAdminPanel && user?.role === ROLE.ADMIN && (
+              <div className="absolute top-14 right-32 bg-gray-600 text-white p-2 rounded-md shadow-md">
+                <nav>
+                  <Link
+                    className="whitespace-nowrap"
+                    to={"/admin-panel/products"}
+                    onClick={() => setShowAdminPanel(!showAdminPanel)}
+                  >
+                    Admin Panel
+                  </Link>
+                </nav>
               </div>
             )}
           </div>
@@ -181,15 +188,15 @@ const Header = () => {
               <Button
                 buttonAction={handleLogout}
                 value={"Logout"}
-                bg={"bg-red-500"}
-                hoverBg={"bg-red-700"}
+                bg={"bg-orange-600"}
+                hoverBg={"bg-orange-700"}
               />
             ) : (
               <Link to={"/login"}>
                 <Button
                   value={"Login"}
-                  bg={"bg-red-500"}
-                  hoverBg={"ng-red-700"}
+                  bg={"bg-orange-600"}
+                  hoverBg={"bg-orange-700"}
                 />
               </Link>
             )}
@@ -199,8 +206,13 @@ const Header = () => {
               e.preventDefault();
               setDarkMode(!darkMode);
             }}
+            className="cursor-pointer"
           >
-            {darkMode ? <FaSun color="red" /> : <FaMoon color="red" />}
+            {darkMode ? (
+              <HiSun size={30} color="#ea5a0c" />
+            ) : (
+              <HiMoon size={30} color="#ea5a0c" />
+            )}
           </div>
         </div>
       </div>

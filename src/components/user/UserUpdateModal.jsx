@@ -3,12 +3,14 @@ import { toast } from "react-toastify";
 import { actions } from "../../actions";
 import { api } from "../../api";
 import { ROLE } from "../../constants";
+import { useTheme } from "../../hooks/useTheme";
 import { useUser } from "../../hooks/useUser";
 import Button from "../shared/Button";
 
 const UserUpdateModal = ({ user, onClose }) => {
   const { dispatch } = useUser();
   const [userRole, setUserRole] = useState(user?.role);
+  const { darkMode } = useTheme();
 
   //handle update user role
   const handleUpdateRole = async () => {
@@ -43,8 +45,12 @@ const UserUpdateModal = ({ user, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-auto bg-gray-900 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white rounded-lg p-8 w-1/3 mx-auto">
+    <div className="fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
+      <div
+        className={`${
+          darkMode ? "bg-[#1a202c] text-white" : "bg-white"
+        } rounded-lg p-8 w-1/3 mx-auto`}
+      >
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold">Update User Role</h2>
           <button
@@ -64,25 +70,37 @@ const UserUpdateModal = ({ user, onClose }) => {
             id="selectOption"
             name="selectOption"
             required
-            className="block w-full mt-1 mb-4 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 focus:outline-none"
+            className={`auth-input ${
+              darkMode && "bg-gray-700 text-white"
+            } block w-full  rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 focus:outline-none`}
             value={userRole}
             onChange={(e) => setUserRole(e.target.value)}
           >
-            <option value="Select Role" disabled>
+            <option
+              className={darkMode && "text-white"}
+              value="Select Role"
+              disabled
+            >
               Select Role
             </option>
             {Object.values(ROLE)?.map((role) => (
-              <option value={role} key={role}>
+              <option
+                className={darkMode && "text-white"}
+                value={role}
+                key={role}
+              >
                 {role}
               </option>
             ))}
           </select>
-          <Button
-            value={"Update Role"}
-            buttonAction={handleUpdateRole}
-            bg={"bg-green-600"}
-            hoverBg={"bg-green-800"}
-          />
+          <div className="mt-4">
+            <Button
+              value={"Update Role"}
+              buttonAction={handleUpdateRole}
+              bg={"bg-green-600"}
+              hoverBg={"bg-green-800"}
+            />
+          </div>
         </div>
       </div>
     </div>

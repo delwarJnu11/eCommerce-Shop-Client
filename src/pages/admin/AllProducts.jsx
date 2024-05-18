@@ -47,7 +47,7 @@ const AllProducts = () => {
           hoverBg="bg-green-800"
         />
       </div>
-      <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[445px] overflow-y-scroll">
+      <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 max-h-[445px] overflow-y-scroll">
         {state?.products &&
           state.products.map((product) => (
             <ProductCard key={product._id} product={product} />
