@@ -21,12 +21,18 @@ const CheckOutForm = ({ cart, user }) => {
   });
 
   const { darkMode } = useTheme();
-  //store cart product ids
-  const cartProductsIds = cart.map((item) => item._id);
+
+  //store cart product details
+  const cartProductDetails = cart.map((item) => ({
+    productId: item.productId._id,
+    quantity: item.quantity,
+  }));
+
+  console.log(cartProductDetails);
 
   // Handle checkout
   const onCheckout = async (data) => {
-    data.cartItemsIds = cartProductsIds;
+    data.cartProductDetails = cartProductDetails;
     try {
       const response = await api.post("/order", data, {
         withCredentials: true,

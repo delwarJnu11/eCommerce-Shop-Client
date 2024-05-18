@@ -12,6 +12,8 @@ import Shop from "../pages/Shop";
 import SignUp from "../pages/SignUp";
 import AllProducts from "../pages/admin/AllProducts";
 import AllUsers from "../pages/admin/AllUsers";
+import Orders from "../pages/admin/Orders";
+import PaymentFailed from "../pages/payment/PaymentFailed";
 import PaymentSuccess from "../pages/payment/PaymentSuccess";
 
 export const router = createBrowserRouter([
@@ -44,6 +46,10 @@ export const router = createBrowserRouter([
         element: <PaymentSuccess />,
       },
       {
+        path: "/payment/fail/:transactionId",
+        element: <PaymentFailed />,
+      },
+      {
         path: "/shop",
         element: <Shop />,
       },
@@ -70,6 +76,10 @@ export const router = createBrowserRouter([
           {
             path: "products",
             element: <AllProducts />,
+          },
+          {
+            path: "orders",
+            element: <Orders />,
           },
         ],
       },

@@ -27,8 +27,8 @@ const Cart = () => {
       });
 
       if (response.data.success) {
-        toast.success(response.data.message);
         await fetchCartProducts();
+        toast.success(response.data.message);
       }
       if (response.data.error) {
         toast.error(response.data.message);

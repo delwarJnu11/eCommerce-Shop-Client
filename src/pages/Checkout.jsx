@@ -8,7 +8,7 @@ const Checkout = () => {
   const { fetchCartProducts, cart } = useFetchCartProducts();
   useEffect(() => {
     fetchCartProducts();
-  }, []);
+  }, [fetchCartProducts]);
   const user = cart.length && cart[0].userId;
   // total cart product price based on quantity
   const totalPrice = cart?.reduce(
