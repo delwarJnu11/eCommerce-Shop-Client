@@ -10,6 +10,7 @@ import ProductDetails from "../pages/ProductDetails";
 import SearchProducts from "../pages/SearchProducts";
 import Shop from "../pages/Shop";
 import SignUp from "../pages/SignUp";
+import TrackOrder from "../pages/TrackOrder";
 import AllProducts from "../pages/admin/AllProducts";
 import AllUsers from "../pages/admin/AllUsers";
 import Orders from "../pages/admin/Orders";
@@ -56,6 +57,10 @@ export const router = createBrowserRouter([
       {
         path: "/search",
         element: <SearchProducts />,
+      },
+      {
+        path: "/track/order/:email",
+        element: <TrackOrder />,
       },
       {
         path: "/products/category/:categoryName",

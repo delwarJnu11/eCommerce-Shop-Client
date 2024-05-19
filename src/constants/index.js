@@ -17,3 +17,13 @@ export const productCategory = [
   { id: 11, label: "Trimmer", value: "trimmer" },
   { id: 12, label: "Watch", value: "watch" },
 ];
+
+export const STATUS = [
+  "Pending",
+  "Confirmed",
+  "Dispatched",
+  "In Transit",
+  "Delivered",
+  "Cancelled",
+  "Returned",
+];

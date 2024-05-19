@@ -126,6 +126,11 @@ const Header = () => {
             <HiSearch size={25} color="white" />
           </div>
         </div>
+        {user?._id && (
+          <div>
+            <Link to={`/track/order/${user?.email}`}>Track Order</Link>
+          </div>
+        )}
         <div className="flex justify-center items-center gap-8">
           {user?._id && (
             <Link
