@@ -18,7 +18,7 @@ const Shop = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { fetchCartProducts } = useFetchCartProducts();
+  const { fetchCartProducts, cart } = useFetchCartProducts();
 
   //get all products
   useEffect(() => {
@@ -100,7 +100,9 @@ const Shop = () => {
         { withCredentials: true }
       );
       if (response.data.success) {
-        fetchCartProducts();
+        if (cart.length) {
+          fetchCartProducts();
+        }
         toast.success(response.data.message);
       }
 

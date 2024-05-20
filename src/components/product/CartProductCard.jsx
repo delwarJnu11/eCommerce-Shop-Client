@@ -5,7 +5,7 @@ import { api } from "../../api";
 import { useTheme } from "../../hooks/useTheme";
 import { convertNumberToBDT } from "../../utils/convertNumberToBDT";
 
-const CartProductCard = ({ product, fetchCartProducts, onDelete }) => {
+const CartProductCard = ({ product, fetchCartProducts, cart, onDelete }) => {
   const { darkMode } = useTheme();
 
   //handle update product quantity
@@ -18,7 +18,9 @@ const CartProductCard = ({ product, fetchCartProducts, onDelete }) => {
       );
       if (response.data.success) {
         //here fetch updated cart product
-        fetchCartProducts();
+        if (cart.length) {
+          fetchCartProducts();
+        }
       } else {
         toast.error(response.data.message);
       }

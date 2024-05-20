@@ -103,8 +103,8 @@ const Header = () => {
           <p
             className={
               darkMode
-                ? "text-white uppercase text-md font-extrabold"
-                : "text-gray-700 uppercase text-md font-extrabold"
+                ? "text-white uppercase text-md font-extrabold hidden md:block"
+                : "text-gray-700 uppercase text-md font-extrabold hidden md:block"
             }
           >
             Shopee
@@ -126,11 +126,6 @@ const Header = () => {
             <HiSearch size={25} color="white" />
           </div>
         </div>
-        {user?._id && (
-          <div>
-            <Link to={`/track/order/${user?.email}`}>Track Order</Link>
-          </div>
-        )}
         <div className="flex justify-center items-center gap-8">
           {user?._id && (
             <Link
@@ -168,7 +163,7 @@ const Header = () => {
                   <FaRegUserCircle size={35} />
                 )}
                 {user && (
-                  <div className="font-semibold text-md">
+                  <div className="font-semibold text-md hidden md:block">
                     Welcome, Mr. {user?.name}
                   </div>
                 )}
@@ -176,13 +171,33 @@ const Header = () => {
             )}
             {showAdminPanel && user?.role === ROLE.ADMIN && (
               <div className="absolute top-14 right-32 bg-gray-600 text-white p-2 rounded-md shadow-md">
-                <nav>
+                <nav className="flex flex-col gap-2">
                   <Link
                     className="whitespace-nowrap"
                     to={"/admin-panel/products"}
                     onClick={() => setShowAdminPanel(!showAdminPanel)}
                   >
                     Admin Panel
+                  </Link>
+                  <Link
+                    className="whitespace-nowrap"
+                    to={`/track/order/${user?.email}`}
+                    onClick={() => setShowAdminPanel(!showAdminPanel)}
+                  >
+                    My Orders
+                  </Link>
+                </nav>
+              </div>
+            )}
+            {showAdminPanel && user?.role !== ROLE.ADMIN && (
+              <div className="absolute top-14 right-32 bg-gray-600 text-white p-2 rounded-md shadow-md">
+                <nav>
+                  <Link
+                    className="whitespace-nowrap"
+                    to={`/track/order/${user?.email}`}
+                    onClick={() => setShowAdminPanel(!showAdminPanel)}
+                  >
+                    My Orders
                   </Link>
                 </nav>
               </div>

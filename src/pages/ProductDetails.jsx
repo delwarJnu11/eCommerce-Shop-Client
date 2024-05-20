@@ -1,21 +1,25 @@
+import moment from "moment";
 import { useEffect, useState } from "react";
-import { FaCartPlus } from "react-icons/fa";
+import { FaCartPlus, FaUser } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../actions";
 import { api } from "../api";
 import ProductDetailsLoader from "../components/loader/ProductDetailsLoader";
+import ReviewLoader from "../components/loader/ReviewLoader";
 import RelatedProducts from "../components/product/RelatedProducts";
 import useFetchCartProducts from "../hooks/useFetchCartProducts";
 import { useProduct } from "../hooks/useProduct";
 import { useTheme } from "../hooks/useTheme";
+import { useUser } from "../hooks/useUser";
 import { convertNumberToBDT } from "../utils/convertNumberToBDT";
 
 const ProductDetails = () => {
   const { darkMode } = useTheme();
   const { id } = useParams();
   const { state, dispatch } = useProduct();
-  const { fetchCartProducts } = useFetchCartProducts();
+  const { state: userState } = useUser();
+  const { fetchCartProducts, cart } = useFetchCartProducts();
   const [displayImage, setDisplayImage] = useState("");
   const [zoomImageCoordinate, setZoomImageCoordinate] = useState({
     x: 0,
@@ -23,6 +27,8 @@ const ProductDetails = () => {
   });
   const [zoomImage, setZoomImage] = useState(false);
   const navigate = useNavigate();
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchSingleProduct = async () => {
@@ -35,7 +41,9 @@ const ProductDetails = () => {
             data: response?.data?.product,
           });
           setDisplayImage(response?.data?.product?.productImages[0]);
-          fetchCartProducts();
+          if (cart.length) {
+            fetchCartProducts();
+          }
         }
         if (response?.data?.error) {
           toast.error(response.data.message);
@@ -48,7 +56,33 @@ const ProductDetails = () => {
       }
     };
     fetchSingleProduct();
-  }, [dispatch, id]);
+  }, [dispatch, id, fetchCartProducts, cart.length]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      setLoading(true);
+      try {
+        const response = await api.get(`/reviews/${id}/review`, {
+          withCredentials: true,
+        });
+        if (response.data.success) {
+          setLoading(false);
+          setReviews(response.data.reviews);
+        }
+        if (response.data.error) {
+          setLoading(false);
+          setReviews([]);
+        }
+      } catch (error) {
+        setLoading(false);
+        setReviews([]);
+        console.error(error);
+      }
+    };
+    fetchReviews();
+  }, [id]);
+
+  console.log(reviews);
 
   const product = state?.product;
 
@@ -91,6 +125,9 @@ const ProductDetails = () => {
     }
   };
 
+  {
+    loading === true && reviews.length === 0 && <ReviewLoader />;
+  }
   //if error exists
   if (state?.error) {
     return (
@@ -207,6 +244,61 @@ const ProductDetails = () => {
               </div>
             )}
           </div>
+        </div>
+      )}
+      {reviews.length > 0 && (
+        <div className="container mx-auto py-8">
+          <h2 className="text-md md:text-[22px] font-semibold block my-6">
+            Reviews
+          </h2>
+          {reviews.length &&
+            reviews?.map((review) => (
+              <div
+                key={review._id}
+                className={`${
+                  darkMode ? "bg-gray-700" : "bg-white"
+                } flex gap-4 p-4 rounded-lg mb-4`}
+              >
+                <div className="w-20 h-20">
+                  {userState?.data?.data?.image ? (
+                    <img
+                      src={userState?.data?.data?.image}
+                      alt="Avatar"
+                      className="w-full h-full rounded-full"
+                    />
+                  ) : (
+                    <FaUser size={60} />
+                  )}
+                </div>
+                <div className="flex flex-col space-y-1">
+                  <h2 className="text-base font-medium">{review.name}</h2>
+                  <p className="text-sm font-normal text-gray-400">
+                    {moment(review.createdAt).format("LLL")}
+                  </p>
+                  <p className="text-base text-gray-400 font-normal italic">
+                    {review.description}
+                  </p>
+                  <div className="flex space-x-1">
+                    {[...Array(review.rating)].map((_, index) => {
+                      index += 1;
+                      return (
+                        <button
+                          key={index}
+                          type="button"
+                          className={`text-2xl ${
+                            index <= review.rating
+                              ? "text-orange-600"
+                              : "text-gray-500"
+                          }`}
+                        >
+                          <span className="star">&#9733;</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            ))}
         </div>
       )}
       <div className="container mx-auto">

@@ -13,7 +13,7 @@ const CategoriesProducts = () => {
   const params = useParams();
   const { state, dispatch } = useProduct();
   const navigate = useNavigate();
-  const { fetchCartProducts } = useFetchCartProducts();
+  const { fetchCartProducts, cart } = useFetchCartProducts();
   const { darkMode } = useTheme();
 
   useEffect(() => {
@@ -89,7 +89,9 @@ const CategoriesProducts = () => {
         { withCredentials: true }
       );
       if (response.data.success) {
-        await fetchCartProducts();
+        if (cart.length) {
+          await fetchCartProducts();
+        }
         toast.success(response.data.message);
       }
 

@@ -29,7 +29,7 @@ const CategorizedProducts = ({ productCategory, heading }) => {
   const { state, dispatch } = useProduct();
   const navigate = useNavigate();
   const loadingList = new Array(4).fill(null);
-  const { fetchCartProducts } = useFetchCartProducts();
+  const { fetchCartProducts, cart } = useFetchCartProducts();
 
   useEffect(() => {
     const fetchProductsByCategory = async () => {
@@ -65,7 +65,9 @@ const CategorizedProducts = ({ productCategory, heading }) => {
         { withCredentials: true }
       );
       if (response.data.success) {
-        fetchCartProducts();
+        if (cart.length) {
+          fetchCartProducts();
+        }
         toast.success(response.data.message);
       }
 
@@ -91,7 +93,7 @@ const CategorizedProducts = ({ productCategory, heading }) => {
   };
   return (
     <div className="my-6">
-      <h2 className="text-md md:text-[22px] text-gray-700 font-semibold block">
+      <h2 className="sm:px-2 text-md md:text-[22px] font-semibold block">
         {heading}
       </h2>
       <Carousel

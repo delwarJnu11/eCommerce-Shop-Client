@@ -60,6 +60,7 @@ const Cart = () => {
               key={product?._id}
               product={product}
               fetchCartProducts={fetchCartProducts}
+              cart={cart}
               onDelete={handleDeleteCartProduct}
             />
           ))

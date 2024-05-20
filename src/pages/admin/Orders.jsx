@@ -57,7 +57,6 @@ const Orders = () => {
         },
         { withCredentials: true }
       );
-      console.log(response);
       if (response.data.success) {
         toast.success(response.data.message);
         fetchOrders(); // Refresh the orders list if necessary

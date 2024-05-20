@@ -16,7 +16,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const { dispatch } = useUser();
   const { darkMode } = useTheme();
-  const { fetchCartProducts } = useFetchCartProducts();
+  const { fetchCartProducts, cart } = useFetchCartProducts();
 
   const {
     register,
@@ -46,7 +46,9 @@ const LoginForm = () => {
         });
         toast.success(response.data.message);
         localStorage.setItem("token", response.data.token);
-        fetchCartProducts();
+        if (cart.length) {
+          fetchCartProducts();
+        }
         navigate("/");
       }
 

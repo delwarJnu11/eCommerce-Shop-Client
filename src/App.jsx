@@ -14,7 +14,7 @@ const App = () => {
         <div
           className={`${
             darkMode ? "dark text-white  pt-20" : "bg-gray-100 pt-20"
-          }`}
+          } sm:px-2`}
         >
           <Outlet />
         </div>
