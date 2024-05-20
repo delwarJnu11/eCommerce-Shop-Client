@@ -1,42 +1,16 @@
 import { useEffect } from "react";
-import { toast } from "react-toastify";
-import { actions } from "../actions";
-import { api } from "../api";
 import Banner from "../components/home/Banner";
 import CategorizedProducts from "../components/home/CategorizedProducts";
 import CategoryList from "../components/home/CategoryList";
-import { useCart } from "../hooks/useCart";
+import useFetchCartProducts from "../hooks/useFetchCartProducts";
 
 const Home = () => {
-  const { state, dispatch } = useCart();
-
+  const { fetchCartProducts, cart } = useFetchCartProducts();
   useEffect(() => {
-    const fetchCartData = async () => {
-      dispatch({ type: actions.cart.CART_DATA_FETCHING });
-      try {
-        const response = await api.get("/cart-products", {
-          withCredentials: true,
-        });
-        if (response.data.success) {
-          dispatch({
-            type: actions.cart.CART_DATA_FETCHED,
-            data: response.data.cart,
-          });
-        }
-        if (response.data.error) {
-          toast.error(response.data.message);
-        }
-      } catch (error) {
-        dispatch({
-          type: actions.cart.CART_DATA_FETCHING_ERROR,
-          error: error.response.data.message,
-        });
-      }
-    };
-    if (state?.cart?.length) {
-      fetchCartData();
+    if (cart.length) {
+      fetchCartProducts();
     }
-  }, [dispatch, state?.cart?.length]);
+  }, [fetchCartProducts, cart.length]);
 
   return (
     <div className="container mx-auto py-4">

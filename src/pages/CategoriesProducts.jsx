@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { actions } from "../actions";
 import { api } from "../api";
 import CategorizedProductCard from "../components/product/CategorizedProductCard";
+import { useCart } from "../hooks/useCart";
 import useFetchCartProducts from "../hooks/useFetchCartProducts";
 import { useProduct } from "../hooks/useProduct";
 import { useTheme } from "../hooks/useTheme";
@@ -12,9 +13,10 @@ const CategoriesProducts = () => {
   const [sortValue, setSortValue] = useState("");
   const params = useParams();
   const { state, dispatch } = useProduct();
+  const { dispatch: cartDispatch } = useCart();
   const navigate = useNavigate();
-  const { fetchCartProducts, cart } = useFetchCartProducts();
   const { darkMode } = useTheme();
+  const { fetchCartProducts } = useFetchCartProducts();
 
   useEffect(() => {
     const fetchProductsByCategory = async () => {
@@ -44,30 +46,8 @@ const CategoriesProducts = () => {
   }, [dispatch, params.categoryName]);
 
   useEffect(() => {
-    const fetchCartData = async () => {
-      dispatch({ type: actions.cart.CART_DATA_FETCHING });
-      try {
-        const response = await api.get("/cart-products", {
-          withCredentials: true,
-        });
-        if (response.data.success) {
-          dispatch({
-            type: actions.cart.CART_DATA_FETCHED,
-            data: response.data.cart,
-          });
-        }
-        if (response.data.error) {
-          toast.error(response.data.message);
-        }
-      } catch (error) {
-        dispatch({
-          type: actions.cart.CART_DATA_FETCHING_ERROR,
-          error: error.response.data.message,
-        });
-      }
-    };
-    fetchCartData();
-  }, [dispatch]);
+    fetchCartProducts();
+  }, [fetchCartProducts]);
 
   const handleProductDetails = (e, id) => {
     if (!e.target.closest("button")) {
@@ -89,9 +69,7 @@ const CategoriesProducts = () => {
         { withCredentials: true }
       );
       if (response.data.success) {
-        if (cart.length) {
-          await fetchCartProducts();
-        }
+        cartDispatch({ type: actions.cart.ADD_TO_CART, data: productId });
         toast.success(response.data.message);
       }
 

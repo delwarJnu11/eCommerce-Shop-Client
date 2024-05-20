@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { actions } from "../../actions";
 import { api } from "../../api";
 import { ROLE } from "../../constants";
-import useFetchCartProducts from "../../hooks/useFetchCartProducts";
+import { useCart } from "../../hooks/useCart";
 import { useTheme } from "../../hooks/useTheme";
 import { useUser } from "../../hooks/useUser";
 import Button from "./Button";
@@ -20,14 +20,9 @@ const Header = () => {
   const URLSearch = new URLSearchParams(searchInput?.search);
   const searchQuery = URLSearch.getAll("q");
   const [search, setSearch] = useState(searchQuery);
-  const { fetchCartProducts, cart } = useFetchCartProducts();
+  const { state: cartState, dispatch: cartDispatch } = useCart();
   //dark mode
   const { darkMode, setDarkMode } = useTheme();
-
-  // Update cart length when cart state changes
-  useEffect(() => {
-    fetchCartProducts();
-  }, [fetchCartProducts]);
 
   // get user details
   useEffect(() => {
@@ -60,7 +55,7 @@ const Header = () => {
     try {
       const response = await api.get("/logout", { withCredentials: true });
       if (response.status === 200) {
-        dispatch({ type: actions.cart.CLEAR_CART_DATA });
+        cartDispatch({ type: actions.cart.CLEAR_CART_DATA });
         dispatch({ type: actions.user.USER_LOGGED_OUT, data: {} });
         toast.success(response.data.message);
         navigate("/login");
@@ -79,7 +74,7 @@ const Header = () => {
     }
   };
 
-  const cartLength = cart?.length || 0;
+  const cartLength = cartState?.cart?.length || 0;
 
   //check loading state
   {

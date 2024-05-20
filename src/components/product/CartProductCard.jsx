@@ -1,13 +1,15 @@
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
+import { actions } from "../../actions";
 import { api } from "../../api";
+import { useCart } from "../../hooks/useCart";
 import { useTheme } from "../../hooks/useTheme";
 import { convertNumberToBDT } from "../../utils/convertNumberToBDT";
 
-const CartProductCard = ({ product, fetchCartProducts, cart, onDelete }) => {
+const CartProductCard = ({ product, fetchCartProducts, onDelete }) => {
   const { darkMode } = useTheme();
-
+  const { dispatch } = useCart();
   //handle update product quantity
   const handleProductQty = async (id, qty) => {
     try {
@@ -17,10 +19,12 @@ const CartProductCard = ({ product, fetchCartProducts, cart, onDelete }) => {
         { withCredentials: true }
       );
       if (response.data.success) {
-        //here fetch updated cart product
-        if (cart.length) {
-          fetchCartProducts();
-        }
+        dispatch({
+          type: actions.cart.UPDATE_CART_QUANTITY,
+          itemId: id,
+          quantity: qty,
+        });
+        fetchCartProducts();
       } else {
         toast.error(response.data.message);
       }
@@ -38,21 +42,21 @@ const CartProductCard = ({ product, fetchCartProducts, cart, onDelete }) => {
       {/* Left side (image) */}
       <div className="md:w-1/3 h-40 mb-4 md:mb-0 md:mr-4 relative">
         <img
-          src={product.productId.productImages[0]}
-          alt={product.productId.productName}
+          src={product?.productId?.productImages[0]}
+          alt={product?.productId?.productName}
           className={`${
             darkMode && "bg-white"
           } w-full h-full md:h-full object-scale-down rounded-lg`}
         />
         <p className="w-[30%] bg-green-600 rounded-full text-white text-center absolute top-1 left-1 capitalize">
-          {product.productId.categoryName}
+          {product?.productId?.categoryName}
         </p>
       </div>
       {/* Right side (product details) */}
       <div className="md:w-2/3">
         <div className="flex justify-between items-center mb-3">
           <h2 className="text-lg md:text-lg text-ellipsis line-clamp-1 font-semibold">
-            {product.productId.productName}
+            {product?.productId?.productName}
           </h2>
 
           <div
@@ -64,7 +68,7 @@ const CartProductCard = ({ product, fetchCartProducts, cart, onDelete }) => {
           </div>
         </div>
         <p className="bg-orange-600 w-1/6 md:w-[10%] rounded-full text-white text-center mb-2">
-          {product.productId.brandName}
+          {product?.productId?.brandName}
         </p>
         <div className="flex justify-between items-center">
           <p className="text-orange-600 text-base font-bold mt-2">
@@ -78,7 +82,7 @@ const CartProductCard = ({ product, fetchCartProducts, cart, onDelete }) => {
           >
             <span className="font-extrabold">Total: ৳</span>{" "}
             {convertNumberToBDT(
-              product.productId.sellingPrice * product.quantity
+              product?.productId?.sellingPrice * product?.quantity
             )}
           </p>
         </div>
@@ -87,7 +91,7 @@ const CartProductCard = ({ product, fetchCartProducts, cart, onDelete }) => {
             className="text-white font-bold px-3 py-1 bg-orange-600 rounded-l"
             onClick={() => {
               if (product?.quantity >= 2) {
-                handleProductQty(product._id, product.quantity - 1);
+                handleProductQty(product?._id, product?.quantity - 1);
               }
             }}
           >
@@ -101,11 +105,13 @@ const CartProductCard = ({ product, fetchCartProducts, cart, onDelete }) => {
                 : "w-12 text-center bg-gray-200 border-t border-b border-gray-300 py-1 font-bold"
             }
             disabled
-            value={product.quantity}
+            value={product?.quantity}
           />
           <button
             className="text-white font-bold px-3 py-1 bg-green-600 rounded-r"
-            onClick={() => handleProductQty(product._id, product.quantity + 1)}
+            onClick={() =>
+              handleProductQty(product?._id, product?.quantity + 1)
+            }
           >
             <FaPlus size={15} color="white" />
           </button>

@@ -102,13 +102,13 @@ const TrackOrder = () => {
                     <div className="flex flex-col md:flex-row gap-4 sm:text-center ">
                       <div className="sm:w-full md:w-20 md:h-20 bg-white">
                         <img
-                          src={product?.productId.productImages[0]}
-                          alt={product.productId.productName}
+                          src={product?.productId?.productImages[0]}
+                          alt={product?.productId?.productName}
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <h2 className="text-md font-medium">
-                        {product.productId.productName}
+                      <h2 className="text-md font-medium text-ellipsis line-clamp-1">
+                        {product?.productId?.productName.slice(0, 70)}
                       </h2>
                     </div>
                     <div className="flex flex-col md:flex-row items-center gap-4">

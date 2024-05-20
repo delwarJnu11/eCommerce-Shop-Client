@@ -1,24 +1,18 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { actions } from "../actions";
 import { api } from "../api";
 import CartLoader from "../components/loader/CartLoader";
 import CartProductCard from "../components/product/CartProductCard";
-import useFetchCartProducts from "../hooks/useFetchCartProducts";
+import { useCart } from "../hooks/useCart";
 import { useTheme } from "../hooks/useTheme";
-import { useUser } from "../hooks/useUser";
 import { convertNumberToBDT } from "../utils/convertNumberToBDT";
+import useFetchCartProducts from "../hooks/useFetchCartProducts";
 
 const Cart = () => {
-  const { state: user } = useUser();
-  const { fetchCartProducts, cart, loading } = useFetchCartProducts();
+  const { state, dispatch } = useCart();
   const { darkMode } = useTheme();
-
-  useEffect(() => {
-    if (user?.data?.data?._id && cart?.length) {
-      fetchCartProducts();
-    }
-  }, [fetchCartProducts, user?.data?.data?._id, cart?.length]);
+  const { fetchCartProducts } = useFetchCartProducts();
 
   const handleDeleteCartProduct = async (id) => {
     try {
@@ -27,8 +21,9 @@ const Cart = () => {
       });
 
       if (response.data.success) {
-        await fetchCartProducts();
+        dispatch({ type: actions.cart.REMOVE_FROM_CART, id: id });
         toast.success(response.data.message);
+        await fetchCartProducts();
       }
       if (response.data.error) {
         toast.error(response.data.message);
@@ -39,28 +34,28 @@ const Cart = () => {
   };
 
   //calculate total product quantity added in the cart
-  const totalQty = cart?.reduce((prev, curr) => prev + curr.quantity, 0);
+  const totalQty = state?.cart?.reduce((prev, curr) => prev + curr.quantity, 0);
   //calculate total product price added in the cart
-  const totalPrice = cart?.reduce(
+  const totalPrice = state?.cart?.reduce(
     (prev, curr) => prev + curr?.productId?.sellingPrice * curr.quantity,
     0
   );
-  const stateLaoding = new Array(cart?.length).fill(null);
+  const stateLaoding = new Array(state?.cart?.length).fill(null);
 
   {
-    loading && stateLaoding.map((el, index) => <CartLoader key={index} />);
+    state?.loading &&
+      stateLaoding.map((el, index) => <CartLoader key={index} />);
   }
 
   return (
     <div className="container mx-auto py-6 flex flex-col md:flex-row gap-4">
       <div className="w-full md:w-4/6 md:order-1">
-        {cart?.length > 0 ? (
-          cart?.map((product) => (
+        {state?.cart?.length > 0 ? (
+          state?.cart?.map((product) => (
             <CartProductCard
               key={product?._id}
               product={product}
               fetchCartProducts={fetchCartProducts}
-              cart={cart}
               onDelete={handleDeleteCartProduct}
             />
           ))

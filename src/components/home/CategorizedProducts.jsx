@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
 import { api } from "../../api";
-import useFetchCartProducts from "../../hooks/useFetchCartProducts";
+import { useCart } from "../../hooks/useCart";
 import { useProduct } from "../../hooks/useProduct";
 import ProductCardLoader from "../loader/ProductCardLoader";
 import CategorizedProductCard from "../product/CategorizedProductCard";
@@ -29,7 +29,7 @@ const CategorizedProducts = ({ productCategory, heading }) => {
   const { state, dispatch } = useProduct();
   const navigate = useNavigate();
   const loadingList = new Array(4).fill(null);
-  const { fetchCartProducts, cart } = useFetchCartProducts();
+  const { dispatch: cartDispatch } = useCart();
 
   useEffect(() => {
     const fetchProductsByCategory = async () => {
@@ -65,9 +65,7 @@ const CategorizedProducts = ({ productCategory, heading }) => {
         { withCredentials: true }
       );
       if (response.data.success) {
-        if (cart.length) {
-          fetchCartProducts();
-        }
+        cartDispatch({ type: actions.cart.ADD_TO_CART, data: productId });
         toast.success(response.data.message);
       }
 

@@ -30,6 +30,25 @@ export const cartReducer = (state, action) => {
         ...state,
         cart: [],
       };
+    case actions.cart.ADD_TO_CART:
+      return {
+        ...state,
+        cart: [...state.cart, action.data],
+      };
+    case actions.cart.REMOVE_FROM_CART:
+      return {
+        ...state,
+        cart: state.cart.filter((item) => item.id !== action.id),
+      };
+    case actions.cart.UPDATE_CART_QUANTITY:
+      return {
+        ...state,
+        cart: state.cart.map((item) =>
+          item.id === action.itemId
+            ? { ...item, quantity: action.quantity }
+            : item
+        ),
+      };
     default:
       return state;
   }
