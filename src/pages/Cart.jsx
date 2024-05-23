@@ -1,37 +1,13 @@
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
-import { actions } from "../actions";
-import { api } from "../api";
 import CartLoader from "../components/loader/CartLoader";
 import CartProductCard from "../components/product/CartProductCard";
 import { useCart } from "../hooks/useCart";
 import { useTheme } from "../hooks/useTheme";
 import { convertNumberToBDT } from "../utils/convertNumberToBDT";
-import useFetchCartProducts from "../hooks/useFetchCartProducts";
 
 const Cart = () => {
-  const { state, dispatch } = useCart();
+  const { state } = useCart();
   const { darkMode } = useTheme();
-  const { fetchCartProducts } = useFetchCartProducts();
-
-  const handleDeleteCartProduct = async (id) => {
-    try {
-      const response = await api.delete(`/delete-cart-product/${id}`, {
-        withCredentials: true,
-      });
-
-      if (response.data.success) {
-        dispatch({ type: actions.cart.REMOVE_FROM_CART, id: id });
-        toast.success(response.data.message);
-        await fetchCartProducts();
-      }
-      if (response.data.error) {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      toast.error(error.response.data.message);
-    }
-  };
 
   //calculate total product quantity added in the cart
   const totalQty = state?.cart?.reduce((prev, curr) => prev + curr.quantity, 0);
@@ -50,20 +26,33 @@ const Cart = () => {
   return (
     <div className="container mx-auto py-6 flex flex-col md:flex-row gap-4">
       <div className="w-full md:w-4/6 md:order-1">
-        {state?.cart?.length > 0 ? (
-          state?.cart?.map((product) => (
-            <CartProductCard
-              key={product?._id}
-              product={product}
-              fetchCartProducts={fetchCartProducts}
-              onDelete={handleDeleteCartProduct}
-            />
-          ))
-        ) : (
-          <div>
-            <p>No Products in the cart</p>
-          </div>
-        )}
+        <div className="hidden md:block">
+          <table className="min-w-full bg-white">
+            <thead>
+              <tr>
+                <th className="py-2 px-4 border-b-2 border-gray-300 text-left">
+                  Product
+                </th>
+                <th className="py-2 px-4 border-b-2 border-gray-300 text-left">
+                  Price
+                </th>
+                <th className="py-2 px-4 border-b-2 border-gray-300 text-left">
+                  Quantity
+                </th>
+                <th className="py-2 px-4 border-b-2 border-gray-300 text-left">
+                  Subtotal
+                </th>
+                <th className="py-2 px-4 border-b-2 border-gray-300 text-left"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {state?.cart?.length > 0 &&
+                state?.cart?.map((item) => (
+                  <CartProductCard key={item.id} item={item} />
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
       <div className="w-full md:w-2/6 md:order-2 sm:order-1 sm:w-full overflow-hidden">
         <h2 className="bg-orange-600 text-white rounded p-2">Summary</h2>

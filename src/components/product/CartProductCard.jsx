@@ -1,15 +1,34 @@
-import { FaMinus, FaPlus } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
+import { FiMinus, FiPlus } from "react-icons/fi";
+import { RxCross1 } from "react-icons/rx";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
 import { api } from "../../api";
 import { useCart } from "../../hooks/useCart";
-import { useTheme } from "../../hooks/useTheme";
-import { convertNumberToBDT } from "../../utils/convertNumberToBDT";
+import useFetchCartProducts from "../../hooks/useFetchCartProducts";
+import ToolTip from "../shared/ToolTip";
 
-const CartProductCard = ({ product, fetchCartProducts, onDelete }) => {
-  const { darkMode } = useTheme();
+const CartProductCard = ({ item }) => {
   const { dispatch } = useCart();
+  const { fetchCartProducts } = useFetchCartProducts();
+
+  const handleDeleteCartProduct = async (id) => {
+    try {
+      const response = await api.delete(`/delete-cart-product/${id}`, {
+        withCredentials: true,
+      });
+
+      if (response.data.success) {
+        dispatch({ type: actions.cart.REMOVE_FROM_CART, id: id });
+        toast.success(response.data.message);
+        await fetchCartProducts();
+      }
+      if (response.data.error) {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
   //handle update product quantity
   const handleProductQty = async (id, qty) => {
     try {
@@ -34,90 +53,57 @@ const CartProductCard = ({ product, fetchCartProducts, onDelete }) => {
   };
 
   return (
-    <div
-      className={`${
-        darkMode ? "dark border border-gray-700" : "bg-white"
-      } flex flex-col md:flex-row shadow-md rounded-lg p-4 mb-4`}
-    >
-      {/* Left side (image) */}
-      <div className="md:w-1/3 h-40 mb-4 md:mb-0 md:mr-4 relative">
-        <img
-          src={product?.productId?.productImages[0]}
-          alt={product?.productId?.productName}
-          className={`${
-            darkMode && "bg-white"
-          } w-full h-full md:h-full object-scale-down rounded-lg`}
-        />
-        <p className="w-[30%] bg-green-600 rounded-full text-white text-center absolute top-1 left-1 capitalize">
-          {product?.productId?.categoryName}
-        </p>
-      </div>
-      {/* Right side (product details) */}
-      <div className="md:w-2/3">
-        <div className="flex justify-between items-center mb-3">
-          <h2 className="text-lg md:text-lg text-ellipsis line-clamp-1 font-semibold">
-            {product?.productId?.productName}
-          </h2>
-
-          <div
-            className="cursor-pointer text-red-500 p-2 rounded-full hover:bg-red-600 hover:text-white hover:transition-all hover:scale-105"
-            title="Delete"
-            onClick={() => onDelete(product?._id)}
-          >
-            <MdDelete size={25} />
-          </div>
-        </div>
-        <p className="bg-orange-600 w-1/6 md:w-[10%] rounded-full text-white text-center mb-2">
-          {product?.productId?.brandName}
-        </p>
-        <div className="flex justify-between items-center">
-          <p className="text-orange-600 text-base font-bold mt-2">
-            <span className="font-extrabold">৳</span>{" "}
-            {convertNumberToBDT(product?.productId?.sellingPrice)}
-          </p>
-          <p
-            className={`${
-              darkMode ? "text-white" : "text-gray-600"
-            } text-base font-semibold mt-2`}
-          >
-            <span className="font-extrabold">Total: ৳</span>{" "}
-            {convertNumberToBDT(
-              product?.productId?.sellingPrice * product?.quantity
-            )}
-          </p>
-        </div>
-        <div className="ml-auto flex mt-2">
-          <button
-            className="text-white font-bold px-3 py-1 bg-orange-600 rounded-l"
-            onClick={() => {
-              if (product?.quantity >= 2) {
-                handleProductQty(product?._id, product?.quantity - 1);
-              }
-            }}
-          >
-            <FaMinus size={15} color="white" />
-          </button>
-          <input
-            type="number"
-            className={
-              darkMode
-                ? "w-12 text-center dark border-t border-b border-gray-300 py-1 font-bold"
-                : "w-12 text-center bg-gray-200 border-t border-b border-gray-300 py-1 font-bold"
-            }
-            disabled
-            value={product?.quantity}
+    <tr>
+      <td className="py-4 px-6 border-b border-gray-300">
+        <div className="flex items-center">
+          <img
+            src={item?.productId?.productImages[0]}
+            alt={item?.productId?.productName}
+            className="w-16 h-16 rounded"
           />
+          <span className="ml-4 text-ellipsis line-clamp-2">
+            {item?.productId?.productName}
+          </span>
+        </div>
+      </td>
+      <td className="py-4 px-6 border-b border-gray-300">
+        ${item?.productId?.sellingPrice}
+      </td>
+      <td className="py-4 px-6 border-b border-gray-300">
+        <div className="flex items-center space-x-2">
           <button
-            className="text-white font-bold px-3 py-1 bg-green-600 rounded-r"
+            className="px-2 py-1 bg-gray-300 rounded"
             onClick={() =>
-              handleProductQty(product?._id, product?.quantity + 1)
+              handleProductQty(item?._id, Number(item.quantity - 1))
             }
           >
-            <FaPlus size={15} color="white" />
+            <FiMinus />
+          </button>
+          <span>{item?.quantity}</span>
+          <button
+            className="px-2 py-1 bg-gray-300 rounded"
+            onClick={() =>
+              handleProductQty(item?._id, Number(item.quantity + 1))
+            }
+          >
+            <FiPlus />
           </button>
         </div>
-      </div>
-    </div>
+      </td>
+      <td className="py-4 px-6 border-b border-gray-300">
+        ${item?.productId?.sellingPrice * item?.quantity}
+      </td>
+      <td className="py-4 px-6 border-b border-gray-300">
+        <ToolTip text="Delete">
+          <button
+            className="text-[#C40C0C] text-lg"
+            onClick={() => handleDeleteCartProduct(item?._id)}
+          >
+            <RxCross1 />
+          </button>
+        </ToolTip>
+      </td>
+    </tr>
   );
 };
 export default CartProductCard;

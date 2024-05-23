@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { actions } from "../actions";
 import { api } from "../api";
 import ProductCardLoader from "../components/loader/ProductCardLoader";
-import CategorizedProductCard from "../components/product/CategorizedProductCard";
+import ProductCardVertical from "../components/product/homeProductCard/ProductCardVertical";
 import { productCategory } from "../constants";
-import { useCart } from "../hooks/useCart";
 import useFetchCartProducts from "../hooks/useFetchCartProducts";
 import { useProduct } from "../hooks/useProduct";
 import { useTheme } from "../hooks/useTheme";
@@ -14,12 +11,10 @@ import { useTheme } from "../hooks/useTheme";
 const Shop = () => {
   const { darkMode } = useTheme();
   const { state, dispatch } = useProduct();
-  const { dispatch: cartDispatch } = useCart();
   const [categoryList, setCategoryList] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
   const { fetchCartProducts } = useFetchCartProducts();
 
   useEffect(() => {
@@ -79,60 +74,16 @@ const Shop = () => {
   const products =
     categoryList.length === 0 ? state?.products : filteredProducts;
 
-  // handle product details
-  const handleProductDetails = (e, id) => {
-    //find product category Name
-    const product = products.find((pd) => {
-      if (pd._id === id) {
-        return pd.categoryName;
-      }
-    });
-    if (!e.target.closest("button")) {
-      navigate(`/products/${product?.categoryName}/${id}`);
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: "smooth",
-      });
-    }
-  };
-
-  // handle Add to Cart
-  const handleAddToCart = async (productId) => {
-    try {
-      const response = await api.post(
-        "/product/add-to-cart",
-        { productId },
-        { withCredentials: true }
-      );
-      if (response.data.success) {
-        cartDispatch({ type: actions.cart.ADD_TO_CART, data: productId });
-        toast.success(response.data.message);
-      }
-
-      if (response.data.error) {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      toast.error(error.response.data.message);
-      navigate("/login");
-    }
-  };
-
   //create loading state array
   const loadingList = new Array(products?.length).fill(null);
 
   if (state?.error || error) {
-    return (
-      <div className="flex text-red-400 w-full h-[100vh-300px] justify-center items-center">
-        <p>{state?.error}</p>
-      </div>
-    );
+    return <p>{state?.error}</p>;
   }
 
   return (
     <div className="container mx-auto">
-      <div className="flex gap-4 py-6">
+      <div className="flex gap-4 py-8">
         <div
           className={`${
             darkMode
@@ -184,12 +135,7 @@ const Shop = () => {
                   <ProductCardLoader key={index} />
                 ))
               : products?.map((product) => (
-                  <CategorizedProductCard
-                    key={product._id}
-                    product={product}
-                    productDetails={handleProductDetails}
-                    onAddCart={handleAddToCart}
-                  />
+                  <ProductCardVertical key={product._id} product={product} />
                 ))}
           </div>
         </div>

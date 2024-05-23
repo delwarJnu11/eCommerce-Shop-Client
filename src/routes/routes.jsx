@@ -10,6 +10,7 @@ import ProductDetails from "../pages/ProductDetails";
 import SearchProducts from "../pages/SearchProducts";
 import Shop from "../pages/Shop";
 import SignUp from "../pages/SignUp";
+import TopDiscountProductsPage from "../pages/TopDiscountProductsPage";
 import TrackOrder from "../pages/TrackOrder";
 import AllProducts from "../pages/admin/AllProducts";
 import AllUsers from "../pages/admin/AllUsers";
@@ -53,6 +54,10 @@ export const router = createBrowserRouter([
       {
         path: "/shop",
         element: <Shop />,
+      },
+      {
+        path: "/products/top-discount",
+        element: <TopDiscountProductsPage />,
       },
       {
         path: "/search",

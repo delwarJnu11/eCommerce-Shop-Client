@@ -1,20 +1,18 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../actions";
 import { api } from "../api";
-import CategorizedProductCard from "../components/product/CategorizedProductCard";
-import { useCart } from "../hooks/useCart";
+import ProductCardVertical from "../components/product/homeProductCard/ProductCardVertical";
+import Heading from "../components/shared/Heading";
 import useFetchCartProducts from "../hooks/useFetchCartProducts";
 import { useProduct } from "../hooks/useProduct";
 import { useTheme } from "../hooks/useTheme";
 
 const CategoriesProducts = () => {
   const [sortValue, setSortValue] = useState("");
-  const params = useParams();
+  const { categoryName } = useParams();
   const { state, dispatch } = useProduct();
-  const { dispatch: cartDispatch } = useCart();
-  const navigate = useNavigate();
   const { darkMode } = useTheme();
   const { fetchCartProducts } = useFetchCartProducts();
 
@@ -22,9 +20,7 @@ const CategoriesProducts = () => {
     const fetchProductsByCategory = async () => {
       dispatch({ type: actions.product.PRODUCT_DATA_FETCHING });
       try {
-        const response = await api.get(
-          `/products/category/${params.categoryName}`
-        );
+        const response = await api.get(`/products/category/${categoryName}`);
         if (response?.data?.error) {
           toast.error(response?.data?.message);
         }
@@ -32,7 +28,7 @@ const CategoriesProducts = () => {
           dispatch({
             type: actions.product.PRODUCTS_BY_CATEGORY_DATA_FETCHED,
             data: response?.data?.products,
-            category: params.categoryName,
+            category: categoryName,
           });
         }
       } catch (error) {
@@ -43,44 +39,11 @@ const CategoriesProducts = () => {
       }
     };
     fetchProductsByCategory();
-  }, [dispatch, params.categoryName]);
+  }, [dispatch, categoryName]);
 
   useEffect(() => {
     fetchCartProducts();
   }, [fetchCartProducts]);
-
-  const handleProductDetails = (e, id) => {
-    if (!e.target.closest("button")) {
-      navigate(`/products/${params.categoryName}/${id}`);
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: "smooth",
-      });
-    }
-  };
-
-  // handle Add to Cart
-  const handleAddToCart = async (productId) => {
-    try {
-      const response = await api.post(
-        "/product/add-to-cart",
-        { productId },
-        { withCredentials: true }
-      );
-      if (response.data.success) {
-        cartDispatch({ type: actions.cart.ADD_TO_CART, data: productId });
-        toast.success(response.data.message);
-      }
-
-      if (response.data.error) {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      toast.error(error.response.data.message);
-      navigate("/login");
-    }
-  };
 
   // Function to sort products by price
   const sortProductsByPrice = (products, sortOrder) => {
@@ -96,13 +59,7 @@ const CategoriesProducts = () => {
   return (
     <div className="container mx-auto py-6">
       <div className="flex justify-between items-center px-2 mb-4">
-        <p
-          className={`${
-            darkMode ? "text-white" : "text-slate-600"
-          }  text-md font-semibold  uppercase`}
-        >
-          all {params.categoryName}s
-        </p>
+        <Heading value={categoryName} />
         <select
           name="sort"
           id="sort"
@@ -126,17 +83,12 @@ const CategoriesProducts = () => {
       <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {Object.keys(state.productsByCategory).map(
           (category) =>
-            category === params.categoryName &&
+            category === categoryName &&
             sortProductsByPrice(
-              state?.productsByCategory[params.categoryName],
+              state?.productsByCategory[categoryName],
               sortValue
             )?.map((product) => (
-              <CategorizedProductCard
-                key={product._id}
-                product={product}
-                productDetails={handleProductDetails}
-                onAddCart={handleAddToCart}
-              />
+              <ProductCardVertical key={product?._id} product={product} />
             ))
         )}
       </div>

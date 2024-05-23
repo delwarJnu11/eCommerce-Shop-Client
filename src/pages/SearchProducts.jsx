@@ -1,14 +1,13 @@
 import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { actions } from "../actions";
 import { api } from "../api";
 import ProductCardLoader from "../components/loader/ProductCardLoader";
-import CategorizedProductCard from "../components/product/CategorizedProductCard";
+import ProductCardVertical from "../components/product/homeProductCard/ProductCardVertical";
 import { useProduct } from "../hooks/useProduct";
 
 const SearchProducts = () => {
   const query = useLocation();
-  const navigate = useNavigate();
   const { state, dispatch } = useProduct();
 
   useEffect(() => {
@@ -40,19 +39,6 @@ const SearchProducts = () => {
     fetchSearchProducts();
   }, [query.search, dispatch]);
 
-  // extract product category from query
-  const productCategory = query?.search.split("=")[1];
-
-  const handleProductDetails = (e, id) => {
-    if (!e.target.closest("button")) {
-      navigate(`/products/${productCategory}/${id}`);
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: "smooth",
-      });
-    }
-  };
   const loadingState = new Array(state.searchProducts.length).fill(null);
   return (
     <div className="container mx-auto py-6">
@@ -67,11 +53,7 @@ const SearchProducts = () => {
           ? loadingState.map((el, index) => <ProductCardLoader key={index} />)
           : state?.searchProducts &&
             state?.searchProducts?.map((product) => (
-              <CategorizedProductCard
-                key={product?._id}
-                product={product}
-                productDetails={handleProductDetails}
-              />
+              <ProductCardVertical key={product?._id} product={product} />
             ))}
       </div>
     </div>

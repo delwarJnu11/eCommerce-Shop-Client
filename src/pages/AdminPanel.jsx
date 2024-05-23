@@ -47,7 +47,7 @@ const AdminPanel = () => {
 
         {/***navigation */}
         <div>
-          <nav className="grid p-4 gap-4 text-white h-full">
+          <nav className={`grid p-4 gap-4 h-full ${darkMode && "text-white"}`}>
             <NavLink
               to="users"
               className="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700"
