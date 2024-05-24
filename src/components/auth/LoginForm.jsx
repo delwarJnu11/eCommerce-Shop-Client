@@ -33,7 +33,7 @@ const LoginForm = () => {
     };
     try {
       const response = await axios.post(
-        "https://shopee-backend.vercel.app/api/login",
+        "https://e-commerce-shop-backend.vercel.app/api/login",
         loginData,
         {
           withCredentials: true,

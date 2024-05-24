@@ -41,7 +41,7 @@ const SignUpForm = ({ image }) => {
     } else {
       try {
         const response = await axios.post(
-          "https://shopee-backend.vercel.app/api/register",
+          "https://e-commerce-shop-backend.vercel.app/api/register",
           data
         );
         if (response.status === 201) {

@@ -11,8 +11,7 @@ import { convertNumberToBDT } from "../../../utils/convertNumberToBDT";
 const ProductCard = ({ product }) => {
   const { dispatch: cartDispatch } = useCart();
   //handle add to cart
-  const handleAddToCart = async (e, productId) => {
-    e.stopPropagation();
+  const handleAddToCart = async (productId) => {
     try {
       const response = await api.post(
         "/product/add-to-cart",
