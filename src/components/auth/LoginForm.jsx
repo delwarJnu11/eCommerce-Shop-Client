@@ -35,9 +35,7 @@ const LoginForm = () => {
       const response = await axios.post(
         "https://e-commerce-shop-backend.vercel.app/api/login",
         loginData,
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
       if (response.data.success) {
         dispatch({
@@ -45,6 +43,8 @@ const LoginForm = () => {
           data: response.data,
         });
         toast.success(response.data.message);
+        console.log("token", response.data.token);
+        console.log("user", response.data.data);
         localStorage.setItem("token", response.data.token);
         if (cart.length) {
           fetchCartProducts();
