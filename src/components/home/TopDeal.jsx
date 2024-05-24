@@ -7,6 +7,11 @@ const TopDeal = () => {
   const { state } = useProduct();
   // give products and number it return number of top discount product
   const discountProducts = getTopDiscountProducts(state?.products, 2);
+  console.log("topdeal", discountProducts);
+  if (state?.error) {
+    return <p>{state?.error}</p>;
+  }
+
   return (
     <div>
       <Heading value="Deal Of The Week" />
