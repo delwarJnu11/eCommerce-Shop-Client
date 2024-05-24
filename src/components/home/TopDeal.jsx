@@ -5,6 +5,7 @@ import Heading from "../shared/Heading";
 
 const TopDeal = () => {
   const { state } = useProduct();
+  // give products and number it return number of top discount product
   const discountProducts = getTopDiscountProducts(state?.products, 2);
   return (
     <div>
