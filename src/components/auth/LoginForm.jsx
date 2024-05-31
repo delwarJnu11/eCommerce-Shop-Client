@@ -5,6 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
+import { useAuth } from "../../hooks/useAuth";
 import useFetchCartProducts from "../../hooks/useFetchCartProducts";
 import { useTheme } from "../../hooks/useTheme";
 import { useUser } from "../../hooks/useUser";
@@ -16,6 +17,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const { dispatch } = useUser();
   const { darkMode } = useTheme();
+  const { setIsAuthenticated } = useAuth();
   const { fetchCartProducts, cart } = useFetchCartProducts();
 
   const {
@@ -43,9 +45,8 @@ const LoginForm = () => {
           data: response.data,
         });
         toast.success(response.data.message);
-        console.log("token", response.data.token);
-        console.log("user", response.data.data);
         localStorage.setItem("token", response.data.token);
+        setIsAuthenticated(true);
         if (cart.length) {
           fetchCartProducts();
         }
@@ -56,7 +57,7 @@ const LoginForm = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response.data.message);
       setError("root.random", {
         type: "random",
         message: error.message,

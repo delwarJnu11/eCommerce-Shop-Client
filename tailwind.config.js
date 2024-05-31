@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        inter: ["raleway", "sans-serif"],
+        mulish: ["Mulish", "sans-serif"],
       },
       colors: {
         deepDark: "#17181C",

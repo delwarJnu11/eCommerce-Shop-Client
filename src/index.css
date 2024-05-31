@@ -1,8 +1,7 @@
-@import "@fontsource/raleway";
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap");
 
 .dark {
   @apply bg-[#171923] text-white;

@@ -48,10 +48,10 @@ const Footer = () => {
           {/* Column 2 */}
           <div className="mb-4">
             <h3 className="text-lg font-semibold mb-2">Contact Us</h3>
-            <p>123 E-commerce St,</p>
-            <p>New York, NY 10001</p>
-            <p>Email: info@example.com</p>
-            <p>Phone: +1 (123) 456-7890</p>
+            <p>Tajmahar Road</p>
+            <p>Mohammadpur, Dhaka-1207</p>
+            <p>Email: shopee@gmail.com</p>
+            <p>Phone: +880 1749497676</p>
           </div>
 
           {/* Column 3 */}
@@ -87,21 +87,8 @@ const Footer = () => {
 
           {/* Column 4 */}
           <div className="mb-4">
-            <h3 className="text-lg font-semibold mb-2">Newsletter</h3>
-            <p>Subscribe to our newsletter for updates!</p>
-            <form className="mt-4 flex">
-              <input
-                type="email"
-                placeholder="Your email"
-                className="bg-gray-800 text-gray-100 py-2 px-4 rounded-l-md focus:outline-none focus:ring focus:border-blue-300"
-              />
-              <button
-                type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-r-md focus:outline-none focus:ring focus:border-blue-300"
-              >
-                Subscribe
-              </button>
-            </form>
+            <h3 className="text-lg font-semibold mb-2">Payments</h3>
+            <img src="https://i.ibb.co/vJ1RWwM/Payment-Brands.jpg" alt="SSL" />
           </div>
         </div>
       </div>

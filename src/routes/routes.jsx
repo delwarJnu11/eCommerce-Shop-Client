@@ -1,11 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
+import ProtectedRoute from "../components/protectedRoute/ProtectedRoute";
 import AdminPanel from "../pages/AdminPanel";
 import Cart from "../pages/Cart";
 import CategoriesProducts from "../pages/CategoriesProducts";
 import Checkout from "../pages/Checkout";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import OrderHistory from "../pages/OrderHistory";
 import ProductDetails from "../pages/ProductDetails";
 import SearchProducts from "../pages/SearchProducts";
 import Shop from "../pages/Shop";
@@ -37,11 +39,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/cart",
-        element: <Cart />,
+        element: <ProtectedRoute element={<Cart />} />,
       },
       {
         path: "/cart/checkout",
-        element: <Checkout />,
+        element: <ProtectedRoute element={<Checkout />} />,
       },
       {
         path: "/payment/success/:transactionId",
@@ -53,7 +55,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/shop",
-        element: <Shop />,
+        element: <ProtectedRoute element={<Shop />} />,
       },
       {
         path: "/products/top-discount",
@@ -65,7 +67,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/track/order/:email",
-        element: <TrackOrder />,
+        element: <ProtectedRoute element={<TrackOrder />} />,
+      },
+      {
+        path: "/orders/history/:email",
+        element: <ProtectedRoute element={<OrderHistory />} />,
       },
       {
         path: "/products/category/:categoryName",
@@ -73,11 +79,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/products/:category/:id",
-        element: <ProductDetails />,
+        element: <ProtectedRoute element={<ProductDetails />} />,
       },
       {
         path: "/admin-panel",
-        element: <AdminPanel />,
+        element: <ProtectedRoute element={<AdminPanel />} />,
         children: [
           {
             path: "users",

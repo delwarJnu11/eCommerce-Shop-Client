@@ -21,7 +21,7 @@ const Shop = () => {
     fetchCartProducts();
   }, [fetchCartProducts]);
 
-  //get all products
+  // Get all products
   useEffect(() => {
     dispatch({ type: actions.product.PRODUCT_DATA_FETCHING });
     const fetchAllProducts = async () => {
@@ -62,7 +62,7 @@ const Shop = () => {
     fetchAllProducts();
   }, [categoryList]);
 
-  //handle checkbox
+  // Handle checkbox
   const handleCheckboxChange = (categoryValue, isChecked) => {
     if (isChecked) {
       setCategoryList([...categoryList, categoryValue]);
@@ -70,11 +70,12 @@ const Shop = () => {
       setCategoryList(categoryList.filter((value) => value !== categoryValue));
     }
   };
-  // decide what to render
+
+  // Decide what to render
   const products =
     categoryList.length === 0 ? state?.products : filteredProducts;
 
-  //create loading state array
+  // Create loading state array
   const loadingList = new Array(products?.length).fill(null);
 
   if (state?.error || error) {
@@ -82,19 +83,17 @@ const Shop = () => {
   }
 
   return (
-    <div className="container mx-auto">
-      <div className="flex gap-4 py-8">
+    <div className="container mx-auto px-4">
+      <div className="flex flex-col md:flex-row gap-4 py-8">
         <div
-          className={`${
-            darkMode
-              ? "dark"
-              : "md:w-1/6 bg-white rounded p-3 max-h-[90vh] overflow-y-scroll"
+          className={`md:w-1/6 bg-white rounded p-3 max-h-[90vh] overflow-y-scroll ${
+            darkMode ? "dark" : ""
           }`}
         >
           <h2
-            className={`${
+            className={`uppercase border-b border-slate-300 pb-1 px-2 pt-2 font-semibold text-base ${
               darkMode ? "text-white" : "text-slate-600"
-            } uppercase border-b border-slate-300 pb-1 px-2 pt-2 font-semibold text-base`}
+            }`}
           >
             Filter by category
           </h2>
@@ -115,8 +114,8 @@ const Shop = () => {
               <label
                 htmlFor={category.value}
                 className={`${
-                  darkMode ? "dark" : "text-gray-500 font-medium text-sm"
-                }`}
+                  darkMode ? "text-white" : "text-gray-500"
+                } font-medium text-sm`}
               >
                 {category.label}
               </label>
@@ -125,11 +124,11 @@ const Shop = () => {
         </div>
 
         <div
-          className={`${
+          className={`md:w-5/6 max-h-[90vh] overflow-y-scroll pt-2 ${
             darkMode ? "dark" : "bg-white"
-          } md:w-5/6 max-h-[90vh] overflow-y-scroll pt-2`}
+          }`}
         >
-          <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {state.loading === true || loading === true
               ? loadingList?.map((el, index) => (
                   <ProductCardLoader key={index} />
@@ -143,4 +142,5 @@ const Shop = () => {
     </div>
   );
 };
+
 export default Shop;

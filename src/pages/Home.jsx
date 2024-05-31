@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { actions } from "../actions";
 import { api } from "../api";
 import Banner from "../components/home/Banner";
@@ -14,6 +15,15 @@ import { useProduct } from "../hooks/useProduct";
 const Home = () => {
   const { dispatch } = useProduct();
   const { fetchCartProducts, cart } = useFetchCartProducts();
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate, token]);
+
   useEffect(() => {
     if (cart.length) {
       fetchCartProducts();
@@ -41,7 +51,7 @@ const Home = () => {
   }, [dispatch]);
 
   return (
-    <div className="container mx-auto py-4">
+    <div className="container mx-auto">
       <>
         <Banner />
         <CategoryList />

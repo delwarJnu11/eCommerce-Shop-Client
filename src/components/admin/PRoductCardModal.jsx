@@ -8,7 +8,7 @@ const ProductCardModal = ({ onClose, data }) => {
       <div
         className={`${
           darkMode ? "dark" : "bg-white"
-        }  rounded-lg p-6 w-full max-w-4xl`}
+        }  rounded-lg p-6 mt-28 w-full max-w-4xl z-50`}
       >
         <h2 className="text-xl font-semibold mb-4">
           Order Products for {data.order.customerName}

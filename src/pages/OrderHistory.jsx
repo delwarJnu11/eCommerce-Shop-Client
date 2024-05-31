@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { BiArrowBack } from "react-icons/bi";
+import { useParams } from "react-router-dom";
 import { api } from "../api";
 import Order from "../components/order/Order";
 import OrderTracking from "../components/order/OrderTracking";
 import CustomerReview from "../components/review/CustomerReview";
 import { STATUS } from "../constants";
 
-const TrackOrder = () => {
+const OrderHistory = () => {
   const { email } = useParams();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -69,16 +70,20 @@ const TrackOrder = () => {
 
   return (
     <div className="container mx-auto py-6">
-      <Link to={`/orders/history/${email}`} className="flex justify-start">
-        <button className="bg-[#FF6500] px-4 py-2 rounded-md text-white text-sm font-semibold uppercase">
-          ORder History
+      <div className="flex justify-start">
+        <button
+          className="bg-[#FF6500] px-4 py-2 rounded-md text-white text-sm font-semibold uppercase flex items-center gap-2"
+          onClick={() => window.history.back()}
+        >
+          <BiArrowBack size={20} />
+          Go Back
         </button>
-      </Link>
+      </div>
       <div className="py-8">
         {orders?.length &&
           orders
             ?.filter(
-              (order) => order?.orderStatus !== STATUS[lastCompletedIndex]
+              (order) => order?.orderStatus === STATUS[lastCompletedIndex]
             )
             ?.map((order) => {
               return (
@@ -107,4 +112,4 @@ const TrackOrder = () => {
     </div>
   );
 };
-export default TrackOrder;
+export default OrderHistory;

@@ -38,8 +38,6 @@ export const STATUS = [
   "Dispatched",
   "In Transit",
   "Delivered",
-  "Cancelled",
-  "Returned",
 ];
 export const ROLE = {
   CUSTOMER: "CUSTOMER",

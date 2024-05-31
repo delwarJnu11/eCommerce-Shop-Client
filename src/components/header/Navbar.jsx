@@ -60,6 +60,7 @@ const Navbar = () => {
         cartDispatch({ type: actions.cart.CLEAR_CART_DATA });
         dispatch({ type: actions.user.USER_LOGGED_OUT, data: {} });
         toast.success(response.data.message);
+        localStorage.clear();
         navigate("/login");
       }
     } catch (error) {
@@ -140,7 +141,9 @@ const Navbar = () => {
         <div className="relative">
           <CiHeart size={30} />
           <div className="w-5 h-5 bg-[#FF6500] rounded-full flex justify-center items-center absolute -top-2 -right-[10px] -sm:right-[0.5rem]">
-            <span className="text-white text-[10px]">5</span>
+            <span className="text-white text-[10px]">
+              {cartState?.wishlist?.length ? cartState?.wishlist?.length : 0}
+            </span>
           </div>
         </div>
 

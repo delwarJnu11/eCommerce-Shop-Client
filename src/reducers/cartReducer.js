@@ -4,6 +4,7 @@ export const initialState = {
   loading: false,
   error: null,
   cart: [],
+  wishlist: JSON.parse(localStorage.getItem("wishlist")) || [],
 };
 
 export const cartReducer = (state, action) => {
@@ -49,6 +50,26 @@ export const cartReducer = (state, action) => {
             : item
         ),
       };
+    case actions.wishlist.ADD_TO_WISHLIST: {
+      localStorage.setItem("wishlist", [
+        ...state.wishlist,
+        JSON.stringify(action.data),
+      ]);
+      return {
+        ...state,
+        wishlist: [...state.wishlist, action.data],
+      };
+    }
+    case actions.wishlist.REMOVE_FROM_WISHLIST: {
+      const updatedWishlist = state.wishlist.filter(
+        (item) => item._id !== action.id
+      );
+      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+      return {
+        ...state,
+        wishlist: updatedWishlist,
+      };
+    }
     default:
       return state;
   }

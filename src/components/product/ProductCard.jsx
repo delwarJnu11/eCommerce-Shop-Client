@@ -30,32 +30,29 @@ const ProductCard = ({ product }) => {
         />
       </div>
       <div className="px-6 py-4">
-        <h2 className="font-bold text-md mb-2 text-ellipsis line-clamp-1">
+        <h2 className="text-base font-semibold tracking-wider text-[#414141] hover:text-[#FF6500] transition-all text-ellipsis line-clamp-1 mb-2">
           {product.productName}
         </h2>
 
-        <span className="inline-block bg-green-400 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 absolute top-2 left-2">
+        <span className="inline-block bg-[#FF8A08] rounded-full px-3 py-1 text-sm font-semibold text-white mr-2 absolute top-2 left-2">
           {product.categoryName}
         </span>
         <p
           className={`${
-            darkMode ? "text-white" : "text-gray-700"
-          } text-base mb-2 font-semibold`}
+            darkMode ? "text-white" : "text-[#848484]"
+          } capitalize text-sm font-medium tracking-wide  hover:text-[#FF6500] transition-all mb-2`}
         >
           Brand: {product.brandName}
         </p>
 
-        <p
-          className={`${
-            darkMode ? "text-white" : "text-gray-700"
-          } text-base mb-2 font-semibold`}
-        >
-          Price: <span className="font-extrabold">৳</span>{" "}
+        <p className={`text-[#C40C0C] text-[15px] font-extrabold leading-5`}>
+          {" "}
+          <span className="font-extrabold">৳</span>{" "}
           {convertNumberToBDT(product.sellingPrice)}
         </p>
       </div>
       <div
-        className="absolute top-2 right-2 p-2 text-white bg-green-600 rounded-full hidden group-hover:block cursor-pointer"
+        className="absolute top-2 right-2 p-2 text-white bg-[#FF6500] rounded-full hidden group-hover:block cursor-pointer"
         onClick={() => setShowEditModal(true)}
       >
         <MdEdit size={18} />

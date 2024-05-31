@@ -1,5 +1,6 @@
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
 import { api } from "../../api";
@@ -8,6 +9,7 @@ import useFetchCartProducts from "../../hooks/useFetchCartProducts";
 import ToolTip from "../shared/ToolTip";
 
 const CartProductCard = ({ item }) => {
+  const location = useLocation();
   const { dispatch } = useCart();
   const { fetchCartProducts } = useFetchCartProducts();
 
@@ -90,19 +92,22 @@ const CartProductCard = ({ item }) => {
           </button>
         </div>
       </td>
-      <td className="py-4 px-6 border-b border-gray-300">
-        ${item?.productId?.sellingPrice * item?.quantity}
+      <td className="py-4 px-4 border-b border-gray-300 text-sm">
+        <span className="font-extrabold">৳</span>{" "}
+        {item?.productId?.sellingPrice * item?.quantity}
       </td>
-      <td className="py-4 px-6 border-b border-gray-300">
-        <ToolTip text="Delete">
-          <button
-            className="text-[#C40C0C] text-lg"
-            onClick={() => handleDeleteCartProduct(item?._id)}
-          >
-            <RxCross1 />
-          </button>
-        </ToolTip>
-      </td>
+      {!location.pathname.includes("checkout") && (
+        <td className="py-4 px-4 border-b border-gray-300">
+          <ToolTip text="Delete">
+            <button
+              className="text-[#C40C0C] text-lg"
+              onClick={() => handleDeleteCartProduct(item?._id)}
+            >
+              <RxCross1 />
+            </button>
+          </ToolTip>
+        </td>
+      )}
     </tr>
   );
 };

@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import CheckOutForm from "../components/checkoutForm.jsx/CheckOutForm";
+import CartProductCard from "../components/product/CartProductCard";
+import Heading from "../components/shared/Heading";
 import { useCart } from "../hooks/useCart";
 import useFetchCartProducts from "../hooks/useFetchCartProducts";
 import { convertNumberToBDT } from "../utils/convertNumberToBDT";
@@ -19,44 +21,36 @@ const Checkout = () => {
   );
   return (
     <div className="container mx-auto py-6">
-      Total cart items: {state?.cart?.length}
-      <div className="flex justify-between gap-4">
+      <Heading value={"Checkout"} />
+      <div className="flex justify-between gap-8">
         <div className="md:w-2/3 overflow-x-auto">
           <table className="min-w-full bg-transparent border-collapse">
             <thead>
-              <tr className="bg-orange-500 text-white border-b border-gray-700">
-                <th className="py-2 px-4">SL.</th>
-                <th className="py-2 px-4">Product Name</th>
-                <th className="py-2 px-4">Quantity</th>
-                <th className="py-2 px-4">Unit Price</th>
-                <th className="py-2 px-4">Total Price</th>
+              <tr>
+                <th className="py-2 px-4 border-b-2 border-gray-300 text-left">
+                  Product
+                </th>
+                <th className="py-2 px-4 border-b-2 border-gray-300 text-left">
+                  Price
+                </th>
+                <th className="py-2 px-4 border-b-2 border-gray-300 text-left">
+                  Quantity
+                </th>
+                <th className="py-2 px-4 border-b-2 border-gray-300 text-left">
+                  Subtotal
+                </th>
               </tr>
             </thead>
             <tbody>
               {state?.cart.length &&
-                state?.cart?.map((product, index) => (
-                  <tr
-                    key={product._id}
-                    className="text-center py-3 border-b border-gray-700"
-                  >
-                    <td className="py-2 px-4">{index + 1}</td>
-                    <td className="py-2 px-4 line-clamp-1 text-ellipsis">
-                      {product?.productId?.productName.slice(0, 50)}
-                    </td>
-                    <td className="py-2 px-4">{product.quantity}</td>
-                    <td className="py-2 px-4">
-                      {product?.productId?.sellingPrice}
-                    </td>
-                    <td className="py-2 px-4">
-                      {product?.productId?.sellingPrice * product?.quantity}
-                    </td>
-                  </tr>
+                state?.cart?.map((product) => (
+                  <CartProductCard key={product?._id} item={product} />
                 ))}
               <tr className="text-center font-bold">
-                <td colSpan="4" className="py-2 px-4">
+                <td colSpan="3" className="py-2 px-4">
                   Total
                 </td>
-                <td className="py-2 px-4">
+                <td className="py-2 px-4 text-sm text-[#C40C0C] flex justify-between items-center">
                   <span className="font-extrabold">৳</span>{" "}
                   {convertNumberToBDT(totalPrice)}
                 </td>

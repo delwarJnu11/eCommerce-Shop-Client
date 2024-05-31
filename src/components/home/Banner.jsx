@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import SwiperCore from "swiper/core";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -47,7 +48,10 @@ const Banner = () => {
                 darkMode ? "dark" : "bg-slate-300"
               } absolute inset-0 bg-opacity-50 z-0`}
             ></div>
-            <div className="relative flex flex-col md:flex-row justify-center items-center gap-5 z-10">
+            <Link
+              to={`/products/category/mobile`}
+              className="relative flex flex-col md:flex-row justify-center items-center gap-5 z-10"
+            >
               <div className="text-center md:text-left pl-6">
                 <button className="text-[12px] font-[600] leading-[15px] bg-[#C40C0C] text-white uppercase px-5 py-2 rounded-tr-lg rounded-br-lg rounded-bl-lg mb-4">
                   Flash Sale
@@ -81,7 +85,7 @@ const Banner = () => {
                   className="w-full h-full object-scale-down p-4"
                 />
               </div>
-            </div>
+            </Link>
           </SwiperSlide>
           <SwiperSlide className="relative">
             <div
@@ -89,7 +93,10 @@ const Banner = () => {
                 darkMode ? "dark" : "bg-slate-300"
               } absolute inset-0 bg-opacity-50 z-0`}
             ></div>
-            <div className="relative flex flex-col md:flex-row justify-center items-center gap-5 z-10">
+            <Link
+              to={`/products/category/earphone`}
+              className="relative flex flex-col md:flex-row justify-center items-center gap-5 z-10"
+            >
               <div className="text-center md:text-left pl-6">
                 <button className="text-[12px] font-[600] leading-[15px] bg-[#C40C0C] text-white uppercase px-5 py-2 rounded-tr-lg rounded-br-lg rounded-bl-lg mb-4">
                   weekend Deal
@@ -123,7 +130,7 @@ const Banner = () => {
                   className="w-full h-full object-scale-down p-4"
                 />
               </div>
-            </div>
+            </Link>
           </SwiperSlide>
           <SwiperSlide className="relative">
             <div
@@ -131,7 +138,10 @@ const Banner = () => {
                 darkMode ? "dark" : "bg-slate-300"
               } absolute inset-0 bg-opacity-50 z-0`}
             ></div>
-            <div className="relative flex flex-col md:flex-row justify-center items-center gap-5 z-10">
+            <Link
+              to={`/products/category/camera`}
+              className="relative flex flex-col md:flex-row justify-center items-center gap-5 z-10"
+            >
               <div className="text-center md:text-left pl-6">
                 <button className="text-[12px] font-[600] leading-[15px] bg-[#C40C0C] text-white uppercase px-5 py-2 rounded-tr-lg rounded-br-lg rounded-bl-lg mb-4">
                   Big Sale
@@ -165,7 +175,7 @@ const Banner = () => {
                   className="w-full h-full object-scale-down p-4"
                 />
               </div>
-            </div>
+            </Link>
           </SwiperSlide>
         </Swiper>
       </div>

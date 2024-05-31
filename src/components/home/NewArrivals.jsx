@@ -4,7 +4,6 @@ import Heading from "../shared/Heading";
 
 const NewArrivals = () => {
   const { state } = useProduct();
-  console.log(state?.products);
   if (state?.error) {
     return <p>{state.error}</p>;
   }

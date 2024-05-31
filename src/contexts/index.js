@@ -4,3 +4,4 @@ export const UserContext = createContext();
 export const ProductContext = createContext();
 export const CartContext = createContext();
 export const ThemeContext = createContext();
+export const AuthContext = createContext();

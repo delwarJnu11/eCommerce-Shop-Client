@@ -2367,6 +2367,11 @@ react-multi-carousel@^2.8.5:
   resolved "https://registry.yarnpkg.com/react-multi-carousel/-/react-multi-carousel-2.8.5.tgz#033e35426ee2d2ddd46a5b3967a654cd901a80d1"
   integrity sha512-C5DAvJkfzR2JK9YixZ3oyF9x6R4LW6nzTpIXrl9Oujxi4uqP9SzVVCjl+JLM3tSdqdjAx/oWZK3dTVBSR73Q+w==
 
+react-rating-stars-component@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-rating-stars-component/-/react-rating-stars-component-2.2.0.tgz#e947c6a1f59278e6fea1098453f43cb15d077c14"
+  integrity sha512-A3lgLxumfFQQicKQmxacZ91fq/zRaVWlCPnVodJmJV6obvod4/yCotetN9WuyBiUfnKsEFDBo/8B85ocwmL7ng==
+
 react-refresh@^0.14.0:
   version "0.14.2"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.14.2.tgz#3833da01ce32da470f1f936b9d477da5c7028bf9"

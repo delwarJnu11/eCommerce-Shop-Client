@@ -42,13 +42,15 @@ const Cart = () => {
                 <th className="py-2 px-4 border-b-2 border-gray-300 text-left">
                   Subtotal
                 </th>
-                <th className="py-2 px-4 border-b-2 border-gray-300 text-left"></th>
+                <th className="py-2 px-4 border-b-2 border-gray-300 text-left">
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody>
               {state?.cart?.length > 0 &&
                 state?.cart?.map((item) => (
-                  <CartProductCard key={item.id} item={item} />
+                  <CartProductCard key={item._id} item={item} />
                 ))}
             </tbody>
           </table>
