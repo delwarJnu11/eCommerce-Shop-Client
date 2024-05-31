@@ -40,6 +40,8 @@ const LoginForm = () => {
         { withCredentials: true }
       );
       if (response.data.success) {
+        const tokenExpirationTime = Date.now() + 3600000;
+        localStorage.setItem("tokenExpirationTime", tokenExpirationTime);
         dispatch({
           type: actions.user.USER_DATA_FETCHED,
           data: response.data,

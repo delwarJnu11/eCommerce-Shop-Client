@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { BsCart3 } from "react-icons/bs";
 import { CiHeart, CiLogout, CiUser } from "react-icons/ci";
@@ -53,7 +53,7 @@ const Navbar = () => {
   const user = state?.data?.data;
 
   //handle logout
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
       const response = await api.get("/logout", { withCredentials: true });
       if (response.status === 200) {
@@ -66,7 +66,20 @@ const Navbar = () => {
     } catch (error) {
       toast.error(error.message);
     }
-  };
+  }, [cartDispatch, dispatch, navigate]);
+
+  useEffect(() => {
+    const checkTokenExpiration = () => {
+      const tokenExpirationTime = localStorage.getItem("tokenExpirationTime");
+      if (tokenExpirationTime && Date.now() > tokenExpirationTime) {
+        handleLogout();
+      }
+    };
+
+    const intervalId = setInterval(checkTokenExpiration, 1000); // Check every second
+
+    return () => clearInterval(intervalId);
+  }, [handleLogout]);
 
   //handle change
   const handleSearch = (e) => {
