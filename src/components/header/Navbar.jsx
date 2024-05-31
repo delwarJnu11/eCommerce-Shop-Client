@@ -181,7 +181,7 @@ const Navbar = () => {
             </p>
           </div>
           {showDropdown && user?._id && (
-            <div className="absolute top-[70px] right-0 bg-gray-600 text-white p-2 rounded-bl-md rounded-br-md shadow-md md:max-w-sm z-30">
+            <div className="absolute top-[63px] -right-[34px] bg-gray-600 text-white p-2 rounded-bl-md rounded-br-md shadow-md md:max-w-sm z-30">
               <nav className="flex flex-col gap-2">
                 {user.role === "ADMIN" && (
                   <Link

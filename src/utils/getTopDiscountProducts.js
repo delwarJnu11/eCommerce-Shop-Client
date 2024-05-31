@@ -1,8 +1,10 @@
+import { calculateProductDiscount } from "./calculateProductDiscount";
+
 export const getTopDiscountProducts = (products, topN) => {
   const productsWithDiscount = products.map((product) => {
     return {
       ...product,
-      discount: product.price - product.sellingPrice,
+      discount: calculateProductDiscount(product.price, product.sellingPrice),
     };
   });
 

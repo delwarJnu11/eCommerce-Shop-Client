@@ -15,27 +15,28 @@ const TopDeal = () => {
   return (
     <div>
       <Heading value="Deal Of The Week" />
-      <div className="flex justify-center gap-4">
+      <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-4">
         <ProductCardVertical product={discountProducts[0]} />
+
         <div
+          className="h-[300px] md:h-full relative"
           style={{
             background: "url('https://i.ibb.co/RyhL2Z9/banner-deals.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
-            width: "100%",
-            backgroundRepeat: "no-repeat",
-            color: "white",
             borderRadius: "20px",
+            color: "#d3d3d3",
           }}
         >
-          <div className="flex flex-col space-y-2 px-10 pt-10">
+          <div className="absolute inset-0 w-full h-full bg-black opacity-20 rounded-[20px]"></div>
+          <div className="flex flex-col justify-center items-center h-full p-6">
             <p className="text-base font-medium text-[#FF8A08] tracking-[1.3px]">
               BEST DEALS OF THIS WEEK
             </p>
             <h1 className="text-white text-[50px] tracking-[2px] font-extrabold">
               50% OFF
             </h1>
-            <p className="text-[15px] font-medium leading-[24px] tracking-[1px]">
+            <p className="text-[15px] font-medium leading-[24px] tracking-[1px] text-center">
               Deal of the Week for deals on consumer electronics.
             </p>
             <div className="flex items-center gap-4 pt-8">

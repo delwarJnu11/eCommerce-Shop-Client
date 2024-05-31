@@ -34,7 +34,7 @@ const TopDiscountProductsPage = () => {
   return (
     <div className="container mx-auto">
       <Heading value="TOP DISCOUNT PRODUCTS" />
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
         {disCountProducts?.map((product) => (
           <ProductCardVertical key={product?._id} product={product} />
         ))}

@@ -4,7 +4,6 @@ import { api } from "../../api";
 import ProductCard from "../../components/product/ProductCard";
 import ProductUploadModal from "../../components/product/ProductUploadModal";
 import Button from "../../components/shared/Button";
-import Heading from "../../components/shared/Heading";
 import { useProduct } from "../../hooks/useProduct";
 
 const AllProducts = () => {
@@ -36,13 +35,11 @@ const AllProducts = () => {
   return (
     <>
       <div className="flex items-center justify-between mb-4">
-        <Heading
-          value={
-            state?.products.length
-              ? "All Products"
-              : "No product available. please add some product."
-          }
-        />
+        <h2 className="mt-16 capitalize border-b pb-6 font-bold text-3xl tracking-wider">
+          {state?.products.length
+            ? "All Products"
+            : "No product available. please add some product."}
+        </h2>
         <Button
           value="Upload Product"
           buttonAction={() => setOpenModal(true)}
@@ -50,7 +47,7 @@ const AllProducts = () => {
           hoverBg="bg-[#C40C0C]"
         />
       </div>
-      <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 max-h-[445px] overflow-y-scroll">
+      <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 max-h-[445px] overflow-y-scroll">
         {state?.products &&
           state.products.map((product) => (
             <ProductCard key={product._id} product={product} />
