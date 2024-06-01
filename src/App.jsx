@@ -8,7 +8,7 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(false);
   return (
     <ThemeContext.Provider value={{ darkMode, setDarkMode }}>
-      <div className={` ${darkMode ? "dark text-white" : ""} font-mulish`}>
+      <div className={` ${darkMode ? "dark" : "bg-slate-100"} font-mulish`}>
         <Header />
         <div
           className={`pt-36 min-h-[calc(100vh-144px)] container mx-auto ${

@@ -58,7 +58,7 @@ const OurBrands = () => {
         {brands.map((brand, index) => (
           <div
             key={index}
-            className="flex justify-center items-center border border-gray-200 p-4 opacity-20 cursor-pointer hover:opacity-100 transition-all"
+            className="flex justify-center items-center border border-gray-200 p-4 opacity-20 cursor-pointer hover:opacity-100 hover:bg-white transition-all"
           >
             <img src={brand.src} alt={brand.name} className="max-h-12" />
           </div>

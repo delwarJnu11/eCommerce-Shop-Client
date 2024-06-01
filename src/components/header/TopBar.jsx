@@ -31,10 +31,10 @@ const TopBar = () => {
           <Link to={`/track/order/${user?.email}`}>Track Order</Link>
         </p>
         <p className="capitalize text-sm font-medium leading-4 tracking-wide py-3 cursor-pointer">
-          About
+          <Link to="/about">About</Link>
         </p>
         <p className="capitalize text-sm font-medium leading-4 tracking-wide py-3 cursor-pointer">
-          Contact
+          <Link to="/contact">Contact</Link>
         </p>
       </div>
     </div>

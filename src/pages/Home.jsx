@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { actions } from "../actions";
 import { api } from "../api";
 import Banner from "../components/home/Banner";
@@ -9,20 +8,14 @@ import OurBrands from "../components/home/OurBrands";
 import ProductsByCategory from "../components/home/ProductsByCategory";
 import TopDeal from "../components/home/TopDeal";
 import TopDiscountProducts from "../components/home/TopDiscountProducts";
+import { useAuth } from "../hooks/useAuth";
 import useFetchCartProducts from "../hooks/useFetchCartProducts";
 import { useProduct } from "../hooks/useProduct";
 
 const Home = () => {
   const { dispatch } = useProduct();
   const { fetchCartProducts, cart } = useFetchCartProducts();
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    }
-  }, [navigate, token]);
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     if (cart.length) {
@@ -55,9 +48,9 @@ const Home = () => {
       <>
         <Banner />
         <CategoryList />
-        <TopDeal />
+        {isAuthenticated && <TopDeal />}
         <OurBrands />
-        <NewArrivals />
+        {isAuthenticated && <NewArrivals />}
         <TopDiscountProducts />
         <ProductsByCategory
           bannerURL={"https://i.ibb.co/dGzv0hP/mobile-banner.jpg"}

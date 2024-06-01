@@ -10,12 +10,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
 import { api } from "../../api";
+import { useAuth } from "../../hooks/useAuth";
 import { useCart } from "../../hooks/useCart";
 import useFetchCartProducts from "../../hooks/useFetchCartProducts";
 import { useUser } from "../../hooks/useUser";
 
 const Navbar = () => {
   const { state, dispatch } = useUser();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const searchInput = useLocation();
@@ -73,13 +75,14 @@ const Navbar = () => {
       const tokenExpirationTime = localStorage.getItem("tokenExpirationTime");
       if (tokenExpirationTime && Date.now() > tokenExpirationTime) {
         handleLogout();
+        navigate("/login");
       }
     };
 
     const intervalId = setInterval(checkTokenExpiration, 1000); // Check every second
 
     return () => clearInterval(intervalId);
-  }, [handleLogout]);
+  }, [handleLogout, navigate]);
 
   //handle change
   const handleSearch = (e) => {
@@ -91,7 +94,7 @@ const Navbar = () => {
   };
 
   const handleLogin = () => {
-    if (user?._id) {
+    if (user?._id && isAuthenticated) {
       setShowDropdown(!showDropdown);
     } else {
       navigate("/login");
@@ -151,17 +154,19 @@ const Navbar = () => {
       </div>
       <div className="flex gap-4">
         {/* Wishlist */}
-        <div className="relative">
-          <CiHeart size={30} />
-          <div className="w-5 h-5 bg-[#FF6500] rounded-full flex justify-center items-center absolute -top-2 -right-[10px] -sm:right-[0.5rem]">
-            <span className="text-white text-[10px]">
-              {cartState?.wishlist?.length ? cartState?.wishlist?.length : 0}
-            </span>
+        {user?._id && isAuthenticated && (
+          <div className="relative">
+            <CiHeart size={30} />
+            <div className="w-5 h-5 bg-[#FF6500] rounded-full flex justify-center items-center absolute -top-2 -right-[10px] -sm:right-[0.5rem]">
+              <span className="text-white text-[10px]">
+                {cartState?.wishlist?.length ? cartState?.wishlist?.length : 0}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Cart */}
-        {user?._id && (
+        {user?._id && isAuthenticated && (
           <Link to="/cart" className="flex items-center gap-2">
             <div className="relative">
               <BsCart3 size={30} />
@@ -174,7 +179,7 @@ const Navbar = () => {
                 My Cart
               </span>
               <p className="text-[#A7BCEC] text-[15px] font-extrabold leading-5">
-                ৳{cartLength ? totalPrice : 0.0}
+                ৳{cartLength > 0 ? totalPrice : 0.0}
               </p>
             </div>
           </Link>
@@ -190,7 +195,7 @@ const Navbar = () => {
               My Account
             </span>
             <p className="text-[#A7BCEC] text-[15px] font-extrabold leading-5">
-              {user?._id ? user?.name : "Login"}
+              {user?._id && isAuthenticated ? user?.name : "Login"}
             </p>
           </div>
           {showDropdown && user?._id && (

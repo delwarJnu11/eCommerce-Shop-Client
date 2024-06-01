@@ -1,10 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import ProtectedRoute from "../components/protectedRoute/ProtectedRoute";
+import About from "../pages/About";
 import AdminPanel from "../pages/AdminPanel";
 import Cart from "../pages/Cart";
 import CategoriesProducts from "../pages/CategoriesProducts";
 import Checkout from "../pages/Checkout";
+import Contact from "../pages/Contact";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import OrderHistory from "../pages/OrderHistory";
@@ -28,6 +30,14 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/about",
+        element: <About />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
       },
       {
         path: "/login",
