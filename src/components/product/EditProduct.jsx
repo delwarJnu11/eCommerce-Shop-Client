@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
-import { api } from "../../api";
 import { productCategory } from "../../constants";
+import useAxios from "../../hooks/useAxios";
 import { useProduct } from "../../hooks/useProduct";
 import { useTheme } from "../../hooks/useTheme";
 import Button from "../shared/Button";
@@ -14,6 +14,7 @@ const EditProduct = ({ product, onClose }) => {
   const [imageUrls, setImageUrls] = useState([]);
   const { dispatch } = useProduct();
   const { darkMode } = useTheme();
+  const { api } = useAxios();
 
   useEffect(() => {
     setImageUrls(product.productImages);

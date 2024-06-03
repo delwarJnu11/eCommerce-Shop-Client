@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { BsCart3 } from "react-icons/bs";
 import { CiHeart, CiLogout, CiUser } from "react-icons/ci";
@@ -9,15 +11,15 @@ import { TbOutlet, TbSearch } from "react-icons/tb";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
-import { api } from "../../api";
 import { useAuth } from "../../hooks/useAuth";
+import useAxios from "../../hooks/useAxios";
 import { useCart } from "../../hooks/useCart";
 import useFetchCartProducts from "../../hooks/useFetchCartProducts";
 import { useUser } from "../../hooks/useUser";
 
 const Navbar = () => {
+  const { api } = useAxios();
   const { state, dispatch } = useUser();
-  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const searchInput = useLocation();
@@ -25,18 +27,17 @@ const Navbar = () => {
   const searchQuery = URLSearch.getAll("q");
   const [search, setSearch] = useState(searchQuery);
   const { state: cartState, dispatch: cartDispatch } = useCart();
-
+  const { authenticated, setAuthenticated } = useAuth();
   const { cart } = useFetchCartProducts();
-
   // get user details
   useEffect(() => {
     const fetchUser = async () => {
       dispatch({ type: actions.user.USER_DATA_FETCHING });
       try {
-        const response = await api.get("/user-details", {
+        const response = await api.get("/auth/user-details", {
           withCredentials: true,
         });
-        if (response.status === 200) {
+        if (response.data.success) {
           dispatch({
             type: actions.user.USER_DATA_FETCHED,
             data: response.data,
@@ -45,44 +46,33 @@ const Navbar = () => {
       } catch (error) {
         dispatch({
           type: actions.user.USER_DATA_FETCHING_ERROR,
-          error: error.message,
+          error: error.response.data.message,
         });
       }
     };
-    fetchUser();
-  }, [dispatch]);
+    if (authenticated) {
+      fetchUser();
+    }
+  }, [dispatch, api, authenticated]);
 
   const user = state?.data?.data;
 
   //handle logout
-  const handleLogout = useCallback(async () => {
+  const handleLogout = async () => {
     try {
-      const response = await api.get("/logout", { withCredentials: true });
+      const response = await api.post("/auth/logout");
       if (response.status === 200) {
         cartDispatch({ type: actions.cart.CLEAR_CART_DATA });
         dispatch({ type: actions.user.USER_LOGGED_OUT, data: {} });
         toast.success(response.data.message);
-        localStorage.clear();
+        Cookies.remove("accessToken");
+        setAuthenticated(false);
         navigate("/login");
       }
     } catch (error) {
       toast.error(error.message);
     }
-  }, [cartDispatch, dispatch, navigate]);
-
-  useEffect(() => {
-    const checkTokenExpiration = () => {
-      const tokenExpirationTime = localStorage.getItem("tokenExpirationTime");
-      if (tokenExpirationTime && Date.now() > tokenExpirationTime) {
-        handleLogout();
-        navigate("/login");
-      }
-    };
-
-    const intervalId = setInterval(checkTokenExpiration, 1000); // Check every second
-
-    return () => clearInterval(intervalId);
-  }, [handleLogout, navigate]);
+  };
 
   //handle change
   const handleSearch = (e) => {
@@ -94,7 +84,7 @@ const Navbar = () => {
   };
 
   const handleLogin = () => {
-    if (user?._id && isAuthenticated) {
+    if (authenticated) {
       setShowDropdown(!showDropdown);
     } else {
       navigate("/login");
@@ -102,20 +92,18 @@ const Navbar = () => {
   };
 
   const cartLength = cartState?.cart?.length || 0;
-  const totalPrice = cart?.reduce(
-    (prev, curr) => prev + curr?.productId?.sellingPrice * curr.quantity,
-    0
-  );
-
+  const totalPrice = cart?.reduce((prev, curr) => {
+    const sellingPrice = parseFloat(curr?.productId?.sellingPrice) || 0;
+    const quantity = parseInt(curr?.quantity, 10) || 0;
+    return prev + sellingPrice * quantity;
+  }, 0);
   //check loading state
   {
-    state?.data?.loading && <p>Loading...</p>;
+    state?.loading && <p>Loading...</p>;
   }
   //check error state
   {
-    state?.data?.error && (
-      <div className="text-rose-500 text-sm">{state?.error}</div>
-    );
+    state?.error && <div className="text-rose-500 text-sm">{state?.error}</div>;
   }
   return (
     <nav className="flex flex-col sm:flex-row justify-between items-center gap-4 py-2">
@@ -154,19 +142,21 @@ const Navbar = () => {
       </div>
       <div className="flex gap-4">
         {/* Wishlist */}
-        {user?._id && isAuthenticated && (
+        {authenticated && user?._id && (
           <div className="relative">
             <CiHeart size={30} />
             <div className="w-5 h-5 bg-[#FF6500] rounded-full flex justify-center items-center absolute -top-2 -right-[10px] -sm:right-[0.5rem]">
               <span className="text-white text-[10px]">
-                {cartState?.wishlist?.length ? cartState?.wishlist?.length : 0}
+                {cartState?.wishlist?.length && authenticated
+                  ? cartState?.wishlist?.length
+                  : 0}
               </span>
             </div>
           </div>
         )}
 
         {/* Cart */}
-        {user?._id && isAuthenticated && (
+        {authenticated && user?._id && (
           <Link to="/cart" className="flex items-center gap-2">
             <div className="relative">
               <BsCart3 size={30} />
@@ -195,13 +185,21 @@ const Navbar = () => {
               My Account
             </span>
             <p className="text-[#A7BCEC] text-[15px] font-extrabold leading-5">
-              {user?._id && isAuthenticated ? user?.name : "Login"}
+              {user?._id && authenticated ? user?.name : "Login"}
             </p>
           </div>
-          {showDropdown && user?._id && (
-            <div className="absolute top-[63px] -right-[34px] bg-gray-600 text-white p-2 rounded-bl-md rounded-br-md shadow-md md:max-w-sm z-30">
+          {showDropdown && authenticated && (
+            <motion.div
+              className="absolute top-[63px] -right-[34px] bg-gray-600 text-white p-2 rounded-bl-md rounded-br-md shadow-md md:max-w-sm z-30"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                visible: { opacity: 1 },
+                hidden: { opacity: 0 },
+              }}
+            >
               <nav className="flex flex-col gap-2">
-                {user.role === "ADMIN" && (
+                {user?.role === "ADMIN" && (
                   <Link
                     className="whitespace-nowrap text-base tracking-wider font-semibold flex items-center gap-2 hover:bg-[#FF8A08] hover:scale-105 transition-all px-2 py-2 rounded-sm"
                     to={"/admin-panel/products"}
@@ -224,7 +222,7 @@ const Navbar = () => {
                   <CiLogout color="#fff" size={20} /> Logout
                 </button>
               </nav>
-            </div>
+            </motion.div>
           )}
         </div>
       </div>

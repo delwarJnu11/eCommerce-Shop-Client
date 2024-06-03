@@ -5,8 +5,8 @@ import { SiShopee } from "react-icons/si";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
-import { api } from "../../api";
 import { ROLE } from "../../constants";
+import useAxios from "../../hooks/useAxios";
 import { useCart } from "../../hooks/useCart";
 import { useTheme } from "../../hooks/useTheme";
 import { useUser } from "../../hooks/useUser";
@@ -21,6 +21,7 @@ const Header = () => {
   const searchQuery = URLSearch.getAll("q");
   const [search, setSearch] = useState(searchQuery);
   const { state: cartState, dispatch: cartDispatch } = useCart();
+  const { api } = useAxios();
   //dark mode
   const { darkMode, setDarkMode } = useTheme();
 
@@ -29,9 +30,7 @@ const Header = () => {
     const fetchUser = async () => {
       dispatch({ type: actions.user.USER_DATA_FETCHING });
       try {
-        const response = await api.get("/user-details", {
-          withCredentials: true,
-        });
+        const response = await api.get("/auth/user-details");
         if (response.status === 200) {
           dispatch({
             type: actions.user.USER_DATA_FETCHED,
@@ -46,7 +45,7 @@ const Header = () => {
       }
     };
     fetchUser();
-  }, [dispatch]);
+  }, [dispatch, api]);
 
   const user = state?.data?.data;
 

@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { motion, useAnimation } from "framer-motion";
+import { useEffect, useState } from "react";
 import { BsCart3 } from "react-icons/bs";
 import { CiHeart } from "react-icons/ci";
 import { HiHeart } from "react-icons/hi2";
 import { IoEyeOutline } from "react-icons/io5";
+import { useInView } from "react-intersection-observer";
 import ReactStars from "react-rating-stars-component";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../../actions";
-import { api } from "../../../api";
+import useAxios from "../../../hooks/useAxios";
 import { useCart } from "../../../hooks/useCart";
 import { calculateAverageRating } from "../../../utils/averageRating";
 import { calculateProductDiscount } from "../../../utils/calculateProductDiscount";
@@ -15,10 +17,19 @@ import { convertNumberToBDT } from "../../../utils/convertNumberToBDT";
 import ToolTip from "../../shared/ToolTip";
 
 const ProductCard = ({ product }) => {
+  const { api } = useAxios();
   const { state, dispatch } = useCart();
   const [isImageEnter, setIsImageEnter] = useState(false);
   const [isAddedWishList, setIsAddedWishList] = useState(false);
   const averageRating = parseFloat(calculateAverageRating(product?.reviews));
+  const controls = useAnimation();
+  const [ref, inView] = useInView({ triggerOnce: true });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible");
+    }
+  }, [controls, inView]);
   //handle wish list
   const handleWishlist = () => {
     const isInWishlist = state?.wishlist.some(
@@ -62,7 +73,17 @@ const ProductCard = ({ product }) => {
     }
   };
   return (
-    <div className="border rounded-lg p-4 flex gap-4 shadow-lg cursor-pointer bg-white">
+    <motion.div
+      className="border rounded-lg p-4 flex gap-4 shadow-lg cursor-pointer bg-white"
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={{
+        hidden: { opacity: 0, x: 100 },
+        visible: { opacity: 1, x: 0 },
+      }}
+      transition={{ duration: 1 }}
+    >
       <div className="w-2/5">
         <div
           className="w-full h-[200px] overflow-hidden relative"
@@ -147,7 +168,7 @@ const ProductCard = ({ product }) => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 export default ProductCard;

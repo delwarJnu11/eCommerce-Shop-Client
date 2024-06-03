@@ -4,10 +4,10 @@ import { FaCartPlus, FaUser } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../actions";
-import { api } from "../api";
 import ProductDetailsLoader from "../components/loader/ProductDetailsLoader";
 import ReviewLoader from "../components/loader/ReviewLoader";
 import RelatedProducts from "../components/product/RelatedProducts";
+import useAxios from "../hooks/useAxios";
 import useFetchCartProducts from "../hooks/useFetchCartProducts";
 import { useProduct } from "../hooks/useProduct";
 import { useTheme } from "../hooks/useTheme";
@@ -29,6 +29,7 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { api } = useAxios();
 
   useEffect(() => {
     const fetchSingleProduct = async () => {
@@ -56,7 +57,7 @@ const ProductDetails = () => {
       }
     };
     fetchSingleProduct();
-  }, [dispatch, id, fetchCartProducts, cart.length]);
+  }, [dispatch, id, fetchCartProducts, cart.length, api]);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -79,7 +80,7 @@ const ProductDetails = () => {
       }
     };
     fetchReviews();
-  }, [id]);
+  }, [id, api]);
   const product = state?.product;
 
   const handleZoomImage = (e) => {

@@ -1,3 +1,6 @@
+import { motion, useAnimation } from "framer-motion";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 import { useProduct } from "../../hooks/useProduct";
 import { getTopDiscountProducts } from "../../utils/getTopDiscountProducts";
 import ProductCardVertical from "../product/homeProductCard/ProductCardVertical";
@@ -8,6 +11,15 @@ const TopDeal = () => {
   // give products and number it return number of top discount product
   const discountProducts = getTopDiscountProducts(state?.products, 2);
 
+  const controls = useAnimation();
+  const [ref, inView] = useInView({ triggerOnce: true });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible");
+    }
+  }, [controls, inView]);
+
   if (state?.error) {
     return <p>{state?.error}</p>;
   }
@@ -15,7 +27,17 @@ const TopDeal = () => {
   return (
     <div>
       <Heading value="Deal Of The Week" />
-      <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-4">
+      <motion.div
+        className="grid sm:grid-cols-1 md:grid-cols-3 gap-4"
+        ref={ref}
+        initial="hidden"
+        animate={controls}
+        variants={{
+          hidden: { opacity: 0, x: -100 },
+          visible: { opacity: 1, x: 0 },
+        }}
+        transition={{ duration: 1 }}
+      >
         <ProductCardVertical product={discountProducts[0]} />
 
         <div
@@ -59,7 +81,7 @@ const TopDeal = () => {
           </div>
         </div>
         <ProductCardVertical product={discountProducts[1]} />
-      </div>
+      </motion.div>
     </div>
   );
 };

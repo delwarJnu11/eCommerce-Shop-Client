@@ -4,7 +4,7 @@ import "react-multi-carousel/lib/styles.css";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
-import { api } from "../../api";
+import useAxios from "../../hooks/useAxios";
 import { useCart } from "../../hooks/useCart";
 import { useProduct } from "../../hooks/useProduct";
 import ProductCardLoader from "../loader/ProductCardLoader";
@@ -30,6 +30,7 @@ const CategorizedProducts = ({ productCategory, heading }) => {
   const navigate = useNavigate();
   const loadingList = new Array(4).fill(null);
   const { dispatch: cartDispatch } = useCart();
+  const { api } = useAxios();
 
   useEffect(() => {
     const fetchProductsByCategory = async () => {
@@ -54,7 +55,7 @@ const CategorizedProducts = ({ productCategory, heading }) => {
       }
     };
     fetchProductsByCategory();
-  }, [dispatch, productCategory]);
+  }, [dispatch, productCategory, api]);
 
   // handle Add to Cart
   const handleAddToCart = async (productId) => {

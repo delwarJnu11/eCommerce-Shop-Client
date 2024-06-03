@@ -1,22 +1,26 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { AuthContext } from "../contexts";
-import { api } from "../api";
 
 const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await api.get("/users/auth/check", {
-          withCredentials: true,
-        });
-        if (response.status === 200) {
-          setIsAuthenticated(true);
+        const response = await axios.get(
+          "http://localhost:8000/api/user/auth/check",
+          {
+            withCredentials: true,
+          }
+        );
+        console.log(response);
+        if (response.status === 200 && response?.data?.success) {
+          setAuthenticated(response?.data?.success);
         }
       } catch (error) {
-        setIsAuthenticated(false);
+        setAuthenticated(error?.response?.data?.error);
       } finally {
         setLoading(false);
       }
@@ -24,10 +28,9 @@ const AuthProvider = ({ children }) => {
 
     checkAuth();
   }, []);
+
   return (
-    <AuthContext.Provider
-      value={{ isAuthenticated, setIsAuthenticated, loading }}
-    >
+    <AuthContext.Provider value={{ loading, authenticated, setAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );

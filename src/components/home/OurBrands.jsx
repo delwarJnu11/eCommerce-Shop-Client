@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import Heading from "../shared/Heading";
 
 const OurBrands = () => {
@@ -52,7 +53,11 @@ const OurBrands = () => {
     },
   ];
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ ease: "easeOut", duration: 1.5 }}
+    >
       <Heading value="Our Brands" />
       <div className="grid grid-cols-2 md:grid-cols-6 lg:grid-cols-6 p-4">
         {brands.map((brand, index) => (
@@ -64,7 +69,7 @@ const OurBrands = () => {
           </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 export default OurBrands;

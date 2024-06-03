@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { actions } from "../actions";
-import { api } from "../api";
 import ProductCardVertical from "../components/product/homeProductCard/ProductCardVertical";
 import Heading from "../components/shared/Heading";
+import useAxios from "../hooks/useAxios";
 import { useProduct } from "../hooks/useProduct";
 import { getTopDiscountProducts } from "../utils/getTopDiscountProducts";
 
 const TopDiscountProductsPage = () => {
+  const { api } = useAxios();
   const { state, dispatch } = useProduct();
   useEffect(() => {
     const fetchProducts = async () => {
@@ -28,7 +29,7 @@ const TopDiscountProductsPage = () => {
       }
     };
     fetchProducts();
-  }, [dispatch]);
+  }, [dispatch, api]);
 
   const disCountProducts = getTopDiscountProducts(state?.products, 12);
   return (

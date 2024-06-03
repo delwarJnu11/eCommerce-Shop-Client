@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { useParams } from "react-router-dom";
-import { api } from "../api";
 import Order from "../components/order/Order";
 import OrderTracking from "../components/order/OrderTracking";
 import CustomerReview from "../components/review/CustomerReview";
-import { STATUS } from "../constants";
+import NotFound from "../components/shared/NotFound";
+import useAxios from "../hooks/useAxios";
 
 const OrderHistory = () => {
   const { email } = useParams();
@@ -17,6 +17,7 @@ const OrderHistory = () => {
     customerEmail: "",
     productId: "",
   });
+  const { api } = useAxios();
   const [orderHistory, setOrderHistory] = useState(null);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [trackOrderModal, setTrackOrderModal] = useState(false);
@@ -43,7 +44,7 @@ const OrderHistory = () => {
       }
     };
     fetchOrdersbyUser();
-  }, [email]);
+  }, [email, api]);
 
   const handleReviewData = (name, email, productId) => {
     setReviewData({
@@ -58,15 +59,26 @@ const OrderHistory = () => {
     setTrackOrderModal(true);
   };
 
+  //decide what to render
+  const deliveriedOrders = orders.filter(
+    (order) => order?.orderStatus === "Delivered"
+  );
+
+  if (deliveriedOrders.length === 0) {
+    return (
+      <NotFound
+        image={"https://i.ibb.co/h1gzLXY/history.jpg"}
+        title="Opps!!! No Order History Fond."
+      />
+    );
+  }
+
   if (loading) {
     return <p>orders fetching....</p>;
   }
   if (error) {
     return <p>{error}</p>;
   }
-
-  const statuses = orders?.map((order) => order.orderStatus);
-  const lastCompletedIndex = STATUS.findIndex((step) => step === statuses[0]);
 
   return (
     <div className="container mx-auto py-6">
@@ -80,21 +92,15 @@ const OrderHistory = () => {
         </button>
       </div>
       <div className="py-8">
-        {orders?.length &&
-          orders
-            ?.filter(
-              (order) => order?.orderStatus === STATUS[lastCompletedIndex]
-            )
-            ?.map((order) => {
-              return (
-                <Order
-                  key={order?._id}
-                  order={order}
-                  onReview={handleReviewData}
-                  onTrackOrder={handleTrackOrder}
-                />
-              );
-            })}
+        {deliveriedOrders?.length &&
+          deliveriedOrders?.map((order) => (
+            <Order
+              key={order?._id}
+              order={order}
+              onReview={handleReviewData}
+              onTrackOrder={handleTrackOrder}
+            />
+          ))}
       </div>
 
       {showReviewModal && (

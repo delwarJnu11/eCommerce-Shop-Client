@@ -1,7 +1,7 @@
 @tailwind base;
+@import url("https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap");
 @tailwind components;
 @tailwind utilities;
-@import url("https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap");
 
 .dark {
   @apply bg-[#171923] text-white;
@@ -10,9 +10,11 @@
 .form-control {
   @apply mb-6 space-y-2.5;
 }
+
 .auth-label {
   @apply leading-[138%] lg:text-lg;
 }
+
 .auth-input {
   @apply w-full rounded-md border border-[#CCCCCC]/[14%]  p-1.5 focus:outline-none lg:p-3;
 }
@@ -47,6 +49,14 @@
   transition-timing-function: ease-in-out;
   transition-duration: 0.3s;
 }
+
 .carousel-item img {
   image-rendering: -webkit-optimize-contrast;
+}
+
+span.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  width: 30px;
+  height: 5px;
+  border-radius: 10px;
+  background-color: #ff6500;
 }

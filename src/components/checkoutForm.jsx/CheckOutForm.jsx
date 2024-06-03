@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { api } from "../../api";
+import useAxios from "../../hooks/useAxios";
 import { useTheme } from "../../hooks/useTheme";
 import Button from "../shared/Button";
 import Field from "../shared/Field";
@@ -19,6 +19,8 @@ const CheckOutForm = ({ cart, user }) => {
       phone: "",
     },
   });
+
+  const { api } = useAxios();
 
   const { darkMode } = useTheme();
 

@@ -17,8 +17,8 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const { dispatch } = useUser();
   const { darkMode } = useTheme();
-  const { setIsAuthenticated } = useAuth();
   const { fetchCartProducts, cart } = useFetchCartProducts();
+  const { setAuthenticated } = useAuth();
 
   const {
     register,
@@ -27,6 +27,7 @@ const LoginForm = () => {
     setError,
   } = useForm();
 
+  axios.defaults.withCredentials = true;
   //handle user login
   const handleLogin = async (formData) => {
     const loginData = {
@@ -35,30 +36,28 @@ const LoginForm = () => {
     };
     try {
       const response = await axios.post(
-        "https://e-commerce-shop-backend.vercel.app/api/login",
-        loginData,
-        { withCredentials: true }
+        "https://e-commerce-shop-backend.vercel.app/api/auth/login",
+        loginData
       );
       if (response.data.success) {
-        const tokenExpirationTime = Date.now() + 3600000;
-        localStorage.setItem("tokenExpirationTime", tokenExpirationTime);
         dispatch({
           type: actions.user.USER_DATA_FETCHED,
           data: response.data,
         });
+        setAuthenticated(true);
+        navigate("/");
         toast.success(response.data.message);
-        localStorage.setItem("token", response.data.token);
-        setIsAuthenticated(true);
+
         if (cart.length) {
           fetchCartProducts();
         }
-        navigate("/");
       }
 
       if (response.data.error) {
         toast.error(response.data.message);
       }
     } catch (error) {
+      console.log(error);
       toast.error(error.response.data.message);
       setError("root.random", {
         type: "random",
@@ -66,6 +65,7 @@ const LoginForm = () => {
       });
     }
   };
+
   return (
     <form onSubmit={handleSubmit(handleLogin)}>
       <Field label={"Email"} error={errors.email}>

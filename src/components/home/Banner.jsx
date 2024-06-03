@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import SwiperCore from "swiper/core";
@@ -6,8 +7,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import { useTheme } from "../../hooks/useTheme";
 import CategoryMenu from "./CategoryMenu";
-SwiperCore.use([Pagination, Navigation, Autoplay]);
 
+SwiperCore.use([Pagination, Navigation, Autoplay]);
 const Banner = () => {
   const swiperRef = useRef(null);
   const { darkMode } = useTheme();
@@ -26,7 +27,12 @@ const Banner = () => {
     };
   }, []);
   return (
-    <div className="flex flex-col md:flex-row">
+    <motion.div
+      className="flex flex-col md:flex-row"
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ ease: "easeOut", duration: 1.5 }}
+    >
       {/* Category Menu */}
       <CategoryMenu />
 
@@ -179,7 +185,7 @@ const Banner = () => {
           </SwiperSlide>
         </Swiper>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

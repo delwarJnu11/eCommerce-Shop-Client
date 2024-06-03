@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -6,7 +7,7 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import { actions } from "../../actions";
-import { api } from "../../api";
+import useAxios from "../../hooks/useAxios";
 import { useProduct } from "../../hooks/useProduct";
 import { useTheme } from "../../hooks/useTheme";
 import ProductCard from "../product/homeProductCard/ProductCard";
@@ -24,6 +25,7 @@ const ProductsByCategory = ({
   const { state, dispatch } = useProduct();
   const swiperRef = useRef(null);
   const { darkMode } = useTheme();
+  const { api } = useAxios();
   //manage swiper autoplay
   useEffect(() => {
     const swiper = swiperRef?.current?.swiper;
@@ -62,7 +64,7 @@ const ProductsByCategory = ({
       }
     };
     fetchProductsByCategory();
-  }, [dispatch, productCategory]);
+  }, [dispatch, productCategory, api]);
 
   // Get the products for the specific category
   const products = state?.productsByCategory[productCategory] || [];
@@ -73,7 +75,12 @@ const ProductsByCategory = ({
     productChunks.push(products.slice(i, i + 4));
   }
   return (
-    <div className="flex flex-col md:flex-row justify-center gap-4 my-16">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ ease: "easeOut", duration: 1.5 }}
+      className="flex flex-col md:flex-row justify-center gap-4 my-16"
+    >
       <Link
         to={`/products/category/${productCategory}`}
         style={{
@@ -140,7 +147,7 @@ const ProductsByCategory = ({
           ))}
         </Swiper>
       </div>
-    </div>
+    </motion.div>
   );
 };
 export default ProductsByCategory;

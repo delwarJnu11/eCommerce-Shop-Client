@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../actions";
-import { api } from "../api";
 import ProductCardVertical from "../components/product/homeProductCard/ProductCardVertical";
 import Heading from "../components/shared/Heading";
+import useAxios from "../hooks/useAxios";
 import useFetchCartProducts from "../hooks/useFetchCartProducts";
 import { useProduct } from "../hooks/useProduct";
 import { useTheme } from "../hooks/useTheme";
@@ -15,6 +15,7 @@ const CategoriesProducts = () => {
   const { state, dispatch } = useProduct();
   const { darkMode } = useTheme();
   const { fetchCartProducts } = useFetchCartProducts();
+  const { api } = useAxios();
 
   useEffect(() => {
     const fetchProductsByCategory = async () => {
@@ -39,7 +40,7 @@ const CategoriesProducts = () => {
       }
     };
     fetchProductsByCategory();
-  }, [dispatch, categoryName]);
+  }, [dispatch, categoryName, api]);
 
   useEffect(() => {
     fetchCartProducts();

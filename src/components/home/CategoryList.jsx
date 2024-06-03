@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { GoLink } from "react-icons/go";
 import { Link } from "react-router-dom";
@@ -6,7 +7,7 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import { actions } from "../../actions";
-import { api } from "../../api";
+import useAxios from "../../hooks/useAxios";
 import { useProduct } from "../../hooks/useProduct";
 import Heading from "../shared/Heading";
 SwiperCore.use([Pagination, Navigation, Autoplay]);
@@ -14,6 +15,8 @@ SwiperCore.use([Pagination, Navigation, Autoplay]);
 const CategoryList = () => {
   const { state, dispatch } = useProduct();
   const swiperRef = useRef(null);
+  const { api } = useAxios();
+
   useEffect(() => {
     const swiper = swiperRef?.current?.swiper;
 
@@ -49,7 +52,7 @@ const CategoryList = () => {
       }
     };
     fetchCategories();
-  }, [dispatch]);
+  }, [dispatch, api]);
 
   if (state?.error) {
     return <p>{state.error}</p>;
@@ -83,7 +86,12 @@ const CategoryList = () => {
                       to={`/products/category/${category?.categoryName}`}
                       className="min-w-[190px] flex flex-wrap flex-col items-center space-y-1 group relative cursor-pointer gap-6"
                     >
-                      <div className="relative">
+                      <motion.div
+                        className="relative"
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ ease: "easeOut", duration: 2 }}
+                      >
                         <div className="w-32 h-32 bg-slate-200 rounded-md">
                           <img
                             src={category.productImages[0]}
@@ -97,7 +105,7 @@ const CategoryList = () => {
                             size={24}
                           />
                         </div>
-                      </div>
+                      </motion.div>
                       <span className="text-sm font-medium capitalize">
                         {category.categoryName}
                       </span>

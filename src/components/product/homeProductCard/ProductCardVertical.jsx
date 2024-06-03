@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { BsCart3 } from "react-icons/bs";
 import { CiHeart } from "react-icons/ci";
@@ -7,7 +8,7 @@ import ReactStars from "react-rating-stars-component";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../../actions";
-import { api } from "../../../api";
+import useAxios from "../../../hooks/useAxios";
 import { useCart } from "../../../hooks/useCart";
 import { calculateAverageRating } from "../../../utils/averageRating";
 import { calculateProductDiscount } from "../../../utils/calculateProductDiscount";
@@ -18,7 +19,7 @@ const ProductCardVertical = ({ product }) => {
   const { state, dispatch } = useCart();
   const [isAddedWishList, setIsAddedWishList] = useState(false);
   const [isImageEnter, setIsImageEnter] = useState(false);
-
+  const { api } = useAxios();
   const averageRating = parseFloat(calculateAverageRating(product?.reviews));
 
   useEffect(() => {
@@ -69,7 +70,12 @@ const ProductCardVertical = ({ product }) => {
     }
   };
   return (
-    <div className="relative group cursor-pointer bg-white border border-gray-200 rounded-md">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ ease: "easeOut", duration: 1.5 }}
+      className="relative group cursor-pointer bg-white border border-gray-200 rounded-md"
+    >
       <div className="p-4 transition-all">
         <div
           className="w-full h-60 lg:h-72 overflow-hidden relative"
@@ -154,7 +160,7 @@ const ProductCardVertical = ({ product }) => {
           </span>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 export default ProductCardVertical;

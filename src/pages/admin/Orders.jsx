@@ -1,9 +1,9 @@
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { api } from "../../api";
 import ProductCardModal from "../../components/admin/PRoductCardModal";
 import { STATUS } from "../../constants";
+import useAxios from "../../hooks/useAxios";
 import { useTheme } from "../../hooks/useTheme";
 
 const Orders = () => {
@@ -12,12 +12,13 @@ const Orders = () => {
   const [error, setError] = useState(null);
   const { darkMode } = useTheme();
   const [showModal, setShowModal] = useState(false);
+  const { api } = useAxios();
   const [data, setData] = useState({
     customerName: "",
     products: [],
   });
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       const response = await api.get("/orders", { withCredentials: true });
       if (response.data.success) {
@@ -32,12 +33,12 @@ const Orders = () => {
       setLoading(false);
       setError(error.response.data.message);
     }
-  };
+  }, [api]);
 
   useEffect(() => {
     setLoading(true);
     fetchOrders();
-  }, []);
+  }, [fetchOrders]);
 
   // handle order products
   const handleOrderedProducts = (order, items) => {
@@ -65,7 +66,6 @@ const Orders = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error(error);
       toast.error(error.response.data.message);
     }
   };

@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { actions } from "../actions";
-import { api } from "../api";
 import Banner from "../components/home/Banner";
 import CategoryList from "../components/home/CategoryList";
 import NewArrivals from "../components/home/NewArrivals";
@@ -9,13 +8,15 @@ import ProductsByCategory from "../components/home/ProductsByCategory";
 import TopDeal from "../components/home/TopDeal";
 import TopDiscountProducts from "../components/home/TopDiscountProducts";
 import { useAuth } from "../hooks/useAuth";
+import useAxios from "../hooks/useAxios";
 import useFetchCartProducts from "../hooks/useFetchCartProducts";
 import { useProduct } from "../hooks/useProduct";
 
 const Home = () => {
   const { dispatch } = useProduct();
+  const { api } = useAxios();
   const { fetchCartProducts, cart } = useFetchCartProducts();
-  const { isAuthenticated } = useAuth();
+  const { authenticated } = useAuth();
 
   useEffect(() => {
     if (cart.length) {
@@ -40,17 +41,19 @@ const Home = () => {
         });
       }
     };
-    fetchProducts();
-  }, [dispatch]);
+    if (authenticated) {
+      fetchProducts();
+    }
+  }, [dispatch, authenticated, api]);
 
   return (
     <div className="container mx-auto">
       <>
         <Banner />
         <CategoryList />
-        {isAuthenticated && <TopDeal />}
+        {authenticated && <TopDeal />}
         <OurBrands />
-        {isAuthenticated && <NewArrivals />}
+        {authenticated && <NewArrivals />}
         <TopDiscountProducts />
         <ProductsByCategory
           bannerURL={"https://i.ibb.co/dGzv0hP/mobile-banner.jpg"}

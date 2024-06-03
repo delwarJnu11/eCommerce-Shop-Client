@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { api } from "../api";
 import Order from "../components/order/Order";
 import OrderTracking from "../components/order/OrderTracking";
 import CustomerReview from "../components/review/CustomerReview";
-import { STATUS } from "../constants";
+import NotFound from "../components/shared/NotFound";
+import useAxios from "../hooks/useAxios";
 
 const TrackOrder = () => {
   const { email } = useParams();
@@ -19,6 +19,7 @@ const TrackOrder = () => {
   const [orderHistory, setOrderHistory] = useState(null);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [trackOrderModal, setTrackOrderModal] = useState(false);
+  const { api } = useAxios();
 
   //fetch orders by user email
   useEffect(() => {
@@ -42,7 +43,7 @@ const TrackOrder = () => {
       }
     };
     fetchOrdersbyUser();
-  }, [email]);
+  }, [email, api]);
 
   const handleReviewData = (name, email, productId) => {
     setReviewData({
@@ -64,9 +65,17 @@ const TrackOrder = () => {
     return <p>{error}</p>;
   }
 
-  const statuses = orders?.map((order) => order.orderStatus);
-  const lastCompletedIndex = STATUS.findIndex((step) => step === statuses[0]);
-
+  const pendingOrders = orders.filter(
+    (order) => order.orderStatus !== "Delivered"
+  );
+  if (pendingOrders.length === 0) {
+    return (
+      <NotFound
+        image="https://i.ibb.co/Z8rdq8G/cart.jpg"
+        title="you have no pending orders at the moment"
+      />
+    );
+  }
   return (
     <div className="container mx-auto py-6">
       <Link to={`/orders/history/${email}`} className="flex justify-start">
@@ -75,21 +84,24 @@ const TrackOrder = () => {
         </button>
       </Link>
       <div className="py-8">
-        {orders?.length &&
-          orders
-            ?.filter(
-              (order) => order?.orderStatus !== STATUS[lastCompletedIndex]
-            )
-            ?.map((order) => {
-              return (
-                <Order
-                  key={order?._id}
-                  order={order}
-                  onReview={handleReviewData}
-                  onTrackOrder={handleTrackOrder}
-                />
-              );
-            })}
+        {pendingOrders?.length ? (
+          pendingOrders?.map((order) => {
+            return (
+              <Order
+                key={order?._id}
+                order={order}
+                onReview={handleReviewData}
+                onTrackOrder={handleTrackOrder}
+              />
+            );
+          })
+        ) : (
+          <div className="grid place-items-center place-content-center">
+            <p className="text-center text-lg font-bold">
+              you have no orders, at the moment
+            </p>
+          </div>
+        )}
       </div>
 
       {showReviewModal && (

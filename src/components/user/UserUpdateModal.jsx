@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
-import { api } from "../../api";
 import { ROLE } from "../../constants";
+import useAxios from "../../hooks/useAxios";
 import { useTheme } from "../../hooks/useTheme";
 import { useUser } from "../../hooks/useUser";
 import Button from "../shared/Button";
@@ -11,6 +11,7 @@ const UserUpdateModal = ({ user, onClose }) => {
   const { dispatch } = useUser();
   const [userRole, setUserRole] = useState(user?.role);
   const { darkMode } = useTheme();
+  const { api } = useAxios();
 
   //handle update user role
   const handleUpdateRole = async () => {

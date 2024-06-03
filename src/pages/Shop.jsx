@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { actions } from "../actions";
-import { api } from "../api";
 import ProductCardLoader from "../components/loader/ProductCardLoader";
 import ProductCardVertical from "../components/product/homeProductCard/ProductCardVertical";
 import { productCategory } from "../constants";
+import useAxios from "../hooks/useAxios";
 import useFetchCartProducts from "../hooks/useFetchCartProducts";
 import { useProduct } from "../hooks/useProduct";
 import { useTheme } from "../hooks/useTheme";
@@ -16,6 +16,7 @@ const Shop = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { fetchCartProducts } = useFetchCartProducts();
+  const { api } = useAxios();
 
   useEffect(() => {
     fetchCartProducts();
@@ -41,7 +42,7 @@ const Shop = () => {
       }
     };
     fetchAllProducts();
-  }, [dispatch]);
+  }, [dispatch, api]);
 
   useEffect(() => {
     setLoading(true);
@@ -60,7 +61,7 @@ const Shop = () => {
       }
     };
     fetchAllProducts();
-  }, [categoryList]);
+  }, [categoryList, api]);
 
   // Handle checkbox
   const handleCheckboxChange = (categoryValue, isChecked) => {

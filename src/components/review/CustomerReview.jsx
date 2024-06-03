@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { api } from "../../api";
+import useAxios from "../../hooks/useAxios";
 import { useTheme } from "../../hooks/useTheme";
 import Button from "../shared/Button";
 import Field from "../shared/Field";
 import StarRating from "./StarRating";
 
 const CustomerReview = ({ data, onClose }) => {
+  const { api } = useAxios();
   const {
     register,
     handleSubmit,

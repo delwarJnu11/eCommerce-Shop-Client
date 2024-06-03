@@ -3,7 +3,7 @@ import { RxCross1 } from "react-icons/rx";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
-import { api } from "../../api";
+import useAxios from "../../hooks/useAxios";
 import { useCart } from "../../hooks/useCart";
 import useFetchCartProducts from "../../hooks/useFetchCartProducts";
 import ToolTip from "../shared/ToolTip";
@@ -12,6 +12,7 @@ const CartProductCard = ({ item }) => {
   const location = useLocation();
   const { dispatch } = useCart();
   const { fetchCartProducts } = useFetchCartProducts();
+  const { api } = useAxios();
 
   const handleDeleteCartProduct = async (id) => {
     try {

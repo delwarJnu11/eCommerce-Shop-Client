@@ -1,10 +1,12 @@
 import { useCallback, useEffect } from "react";
 import { actions } from "../actions";
 import { api } from "../api";
+import { useAuth } from "./useAuth";
 import { useCart } from "./useCart";
 
 const useFetchCartProducts = () => {
   const { state, dispatch } = useCart();
+  const { authenticated } = useAuth();
 
   const fetchCartProducts = useCallback(async () => {
     dispatch({ type: actions.cart.CART_DATA_FETCHING });
@@ -32,8 +34,10 @@ const useFetchCartProducts = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    fetchCartProducts();
-  }, [fetchCartProducts]);
+    if (authenticated) {
+      fetchCartProducts();
+    }
+  }, [fetchCartProducts, authenticated]);
 
   return { fetchCartProducts, ...state };
 };

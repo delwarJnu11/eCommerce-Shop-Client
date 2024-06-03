@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { actions } from "../../actions";
-import { api } from "../../api";
 import ProductCard from "../../components/product/ProductCard";
 import ProductUploadModal from "../../components/product/ProductUploadModal";
 import Button from "../../components/shared/Button";
+import useAxios from "../../hooks/useAxios";
 import { useProduct } from "../../hooks/useProduct";
 
 const AllProducts = () => {
   const [openModal, setOpenModal] = useState(false);
   const { state, dispatch } = useProduct();
+  const { api } = useAxios();
 
   //get all product
   useEffect(() => {
@@ -30,7 +31,7 @@ const AllProducts = () => {
       }
     };
     fetchAllProducts();
-  }, [dispatch]);
+  }, [dispatch, api]);
   // console.log(state);
   return (
     <>

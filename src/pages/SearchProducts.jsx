@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { actions } from "../actions";
-import { api } from "../api";
 import ProductCardLoader from "../components/loader/ProductCardLoader";
 import ProductCardVertical from "../components/product/homeProductCard/ProductCardVertical";
+import useAxios from "../hooks/useAxios";
 import { useProduct } from "../hooks/useProduct";
 
 const SearchProducts = () => {
   const query = useLocation();
+  const { api } = useAxios();
   const { state, dispatch } = useProduct();
 
   useEffect(() => {
@@ -37,7 +38,7 @@ const SearchProducts = () => {
       }
     };
     fetchSearchProducts();
-  }, [query.search, dispatch]);
+  }, [query.search, dispatch, api]);
 
   const loadingState = new Array(state.searchProducts.length).fill(null);
   return (

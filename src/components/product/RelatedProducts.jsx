@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { actions } from "../../actions";
-import { api } from "../../api";
+import useAxios from "../../hooks/useAxios";
 import { useProduct } from "../../hooks/useProduct";
 import ProductCardLoader from "../loader/ProductCardLoader";
 import ProductCardVertical from "./homeProductCard/ProductCardVertical";
@@ -9,6 +9,7 @@ import ProductCardVertical from "./homeProductCard/ProductCardVertical";
 const RelatedProducts = ({ productId, productCategory, heading }) => {
   const { state, dispatch } = useProduct();
   const loadingList = new Array(4).fill(null);
+  const { api } = useAxios();
 
   useEffect(() => {
     const fetchProductsByCategory = async () => {
@@ -33,7 +34,7 @@ const RelatedProducts = ({ productId, productCategory, heading }) => {
       }
     };
     fetchProductsByCategory();
-  }, [dispatch, productCategory]);
+  }, [dispatch, productCategory,api]);
 
   return (
     <div className="my-6">
