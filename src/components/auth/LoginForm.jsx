@@ -18,7 +18,7 @@ const LoginForm = () => {
   const { dispatch } = useUser();
   const { darkMode } = useTheme();
   const { fetchCartProducts, cart } = useFetchCartProducts();
-  const { setAuthenticated, setEmail } = useAuth();
+  const { setAuthenticated, setUserId } = useAuth();
 
   const {
     register,
@@ -46,7 +46,7 @@ const LoginForm = () => {
           data: response.data,
         });
         setAuthenticated(true);
-        setEmail(response?.data?.data?.email);
+        setUserId(response?.data?.data?._id);
         navigate("/");
         toast.success(response.data.message);
 

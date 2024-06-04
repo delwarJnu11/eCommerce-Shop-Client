@@ -68,14 +68,7 @@ const TrackOrder = () => {
   const pendingOrders = orders.filter(
     (order) => order.orderStatus !== "Delivered"
   );
-  if (pendingOrders.length === 0) {
-    return (
-      <NotFound
-        image="https://i.ibb.co/Z8rdq8G/cart.jpg"
-        title="you have no pending orders at the moment"
-      />
-    );
-  }
+
   return (
     <div className="container mx-auto py-6">
       <Link to={`/orders/history/${email}`} className="flex justify-start">
@@ -84,7 +77,7 @@ const TrackOrder = () => {
         </button>
       </Link>
       <div className="py-8">
-        {pendingOrders?.length ? (
+        {pendingOrders?.length > 0 ? (
           pendingOrders?.map((order) => {
             return (
               <Order
@@ -96,11 +89,10 @@ const TrackOrder = () => {
             );
           })
         ) : (
-          <div className="grid place-items-center place-content-center">
-            <p className="text-center text-lg font-bold">
-              you have no orders, at the moment
-            </p>
-          </div>
+          <NotFound
+            image="https://i.ibb.co/Z8rdq8G/cart.jpg"
+            title="you have no pending orders at the moment"
+          />
         )}
       </div>
 

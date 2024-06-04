@@ -46,7 +46,7 @@ const Navbar = () => {
       } catch (error) {
         dispatch({
           type: actions.user.USER_DATA_FETCHING_ERROR,
-          error: error.response.data.message,
+          error: error?.response?.data?.message,
         });
       }
     };

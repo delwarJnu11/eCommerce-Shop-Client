@@ -64,15 +64,6 @@ const OrderHistory = () => {
     (order) => order?.orderStatus === "Delivered"
   );
 
-  if (deliveriedOrders.length === 0) {
-    return (
-      <NotFound
-        image={"https://i.ibb.co/h1gzLXY/history.jpg"}
-        title="Opps!!! No Order History Fond."
-      />
-    );
-  }
-
   if (loading) {
     return <p>orders fetching....</p>;
   }
@@ -92,7 +83,7 @@ const OrderHistory = () => {
         </button>
       </div>
       <div className="py-8">
-        {deliveriedOrders?.length &&
+        {deliveriedOrders?.length > 0 ? (
           deliveriedOrders?.map((order) => (
             <Order
               key={order?._id}
@@ -100,7 +91,13 @@ const OrderHistory = () => {
               onReview={handleReviewData}
               onTrackOrder={handleTrackOrder}
             />
-          ))}
+          ))
+        ) : (
+          <NotFound
+            image={"https://i.ibb.co/h1gzLXY/history.jpg"}
+            title="Opps!!! No Order History Found."
+          />
+        )}
       </div>
 
       {showReviewModal && (

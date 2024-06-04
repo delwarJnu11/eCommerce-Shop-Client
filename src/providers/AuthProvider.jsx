@@ -5,7 +5,7 @@ import { AuthContext } from "../contexts";
 const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
-  const [email, setEmail] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -19,7 +19,7 @@ const AuthProvider = ({ children }) => {
         console.log(response);
         if (response.status === 200 && response?.data?.success) {
           setAuthenticated(response?.data?.success);
-          setEmail(response?.data?.user?.email);
+          setUserId(response?.data?.user?._id);
         }
       } catch (error) {
         setAuthenticated(error?.response?.data?.error);
@@ -33,7 +33,7 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ loading, email, setEmail, authenticated, setAuthenticated }}
+      value={{ loading, userId, setUserId, authenticated, setAuthenticated }}
     >
       {children}
     </AuthContext.Provider>
