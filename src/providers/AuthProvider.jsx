@@ -11,7 +11,7 @@ const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       try {
         const response = await axios.get(
-          "https:e-commerce-shop-backend.vercel.app/api/user/auth/check",
+          "https://e-commerce-shop-backend.vercel.app/api/user/auth/check",
           {
             withCredentials: true,
           }
