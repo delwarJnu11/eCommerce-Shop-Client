@@ -18,7 +18,7 @@ const LoginForm = () => {
   const { dispatch } = useUser();
   const { darkMode } = useTheme();
   const { fetchCartProducts, cart } = useFetchCartProducts();
-  const { setAuthenticated } = useAuth();
+  const { setAuthenticated, setEmail } = useAuth();
 
   const {
     register,
@@ -26,7 +26,7 @@ const LoginForm = () => {
     formState: { errors },
     setError,
   } = useForm();
-
+  //https:e-commerce-shop-backend.vercel.app
   axios.defaults.withCredentials = true;
   //handle user login
   const handleLogin = async (formData) => {
@@ -36,15 +36,17 @@ const LoginForm = () => {
     };
     try {
       const response = await axios.post(
-        "https://e-commerce-shop-backend.vercel.app/api/auth/login",
+        "https:e-commerce-shop-backend.vercel.app/api/auth/login",
         loginData
       );
+      console.log("login", response);
       if (response.data.success) {
         dispatch({
           type: actions.user.USER_DATA_FETCHED,
           data: response.data,
         });
         setAuthenticated(true);
+        setEmail(response?.data?.data?.email);
         navigate("/");
         toast.success(response.data.message);
 

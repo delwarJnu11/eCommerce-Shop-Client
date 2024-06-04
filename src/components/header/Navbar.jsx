@@ -188,7 +188,7 @@ const Navbar = () => {
               {user?._id && authenticated ? user?.name : "Login"}
             </p>
           </div>
-          {showDropdown && authenticated && (
+          {showDropdown && user?._id && authenticated && (
             <motion.div
               className="absolute top-[63px] -right-[34px] bg-gray-600 text-white p-2 rounded-bl-md rounded-br-md shadow-md md:max-w-sm z-30"
               initial="hidden"

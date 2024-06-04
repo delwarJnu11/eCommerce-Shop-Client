@@ -57,6 +57,7 @@ const CheckOutForm = ({ cart, user }) => {
           name="name"
           id="name"
           placeholder="Name"
+          disabled
         />
       </Field>
       <Field label={"Email"} error={errors.email}>
@@ -67,6 +68,7 @@ const CheckOutForm = ({ cart, user }) => {
           name="email"
           id="email"
           placeholder="Email"
+          disabled
         />
       </Field>
       <Field label="Address" error={errors.address}>

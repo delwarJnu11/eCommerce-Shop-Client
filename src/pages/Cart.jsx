@@ -12,10 +12,11 @@ const Cart = () => {
   //calculate total product quantity added in the cart
   const totalQty = state?.cart?.reduce((prev, curr) => prev + curr.quantity, 0);
   //calculate total product price added in the cart
-  const totalPrice = state?.cart?.reduce(
-    (prev, curr) => prev + curr?.productId?.sellingPrice * curr.quantity,
-    0
-  );
+  const totalPrice = state?.cart?.reduce((prev, curr) => {
+    const sellingPrice = parseFloat(curr?.productId?.sellingPrice) || 0;
+    const quantity = parseInt(curr?.quantity, 10) || 0;
+    return prev + sellingPrice * quantity;
+  }, 0);
   const stateLaoding = new Array(state?.cart?.length).fill(null);
 
   {
