@@ -258,20 +258,11 @@ const ProductDetails = () => {
               >
                 <div className="md:w-1/12">
                   <div className="w-20 h-20 overflow-hidden">
-                    {userState?.data?.data?._id &&
-                      userState?.data?.data?.image !== null && (
-                        <img
-                          src={userState?.data?.data?.image}
-                          alt="Avatar"
-                          className="w-full h-full rounded-full"
-                        />
-                      )}
-                    {userState?.data?.data?._id &&
-                      userState?.data?.data?.image === null && (
-                        <div className="w-full h-full rounded-full">
-                          <FaUser size={60} />
-                        </div>
-                      )}
+                    {userState?.data?.data?._id && (
+                      <div className="w-full h-full rounded-full">
+                        <FaUser size={60} />
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="flex flex-col space-y-1 md:w-11/12">

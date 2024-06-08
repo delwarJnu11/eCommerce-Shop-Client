@@ -6,6 +6,7 @@ import { actions } from "../../actions";
 import useAxios from "../../hooks/useAxios";
 import { useCart } from "../../hooks/useCart";
 import useFetchCartProducts from "../../hooks/useFetchCartProducts";
+import { convertNumberToBDT } from "../../utils/convertNumberToBDT";
 import ToolTip from "../shared/ToolTip";
 
 const CartProductCard = ({ item }) => {
@@ -23,7 +24,7 @@ const CartProductCard = ({ item }) => {
       if (response.data.success) {
         dispatch({ type: actions.cart.REMOVE_FROM_CART, id: id });
         toast.success(response.data.message);
-        await fetchCartProducts();
+        fetchCartProducts();
       }
       if (response.data.error) {
         toast.error(response.data.message);
@@ -57,7 +58,7 @@ const CartProductCard = ({ item }) => {
 
   return (
     <tr>
-      <td className="py-4 px-6 border-b border-gray-300">
+      <td className="py-4 px-2 border-b border-gray-300">
         <div className="flex items-center">
           <img
             src={item?.productId?.productImages[0]}
@@ -69,10 +70,11 @@ const CartProductCard = ({ item }) => {
           </span>
         </div>
       </td>
-      <td className="py-4 px-6 border-b border-gray-300">
-        ${item?.productId?.sellingPrice}
+      <td className="py-4 px-2 border-b border-gray-300 text-sm">
+        <span className="font-bold">৳</span>
+        {convertNumberToBDT(item?.productId?.sellingPrice)}
       </td>
-      <td className="py-4 px-6 border-b border-gray-300">
+      <td className="py-4 px-2 border-b border-gray-300">
         <div className="flex items-center space-x-2">
           <button
             className="px-2 py-1 bg-gray-300 rounded"
@@ -93,18 +95,18 @@ const CartProductCard = ({ item }) => {
           </button>
         </div>
       </td>
-      <td className="py-4 px-4 border-b border-gray-300 text-sm">
+      <td className="py-4 px-2 border-b border-gray-300 text-sm">
         <span className="font-extrabold">৳</span>{" "}
-        {item?.productId?.sellingPrice * item?.quantity}
+        {convertNumberToBDT(item?.productId?.sellingPrice * item?.quantity)}
       </td>
       {!location.pathname.includes("checkout") && (
-        <td className="py-4 px-4 border-b border-gray-300">
+        <td className="py-4 px-2 border-b border-gray-300">
           <ToolTip text="Delete">
             <button
               className="text-[#C40C0C] text-lg"
               onClick={() => handleDeleteCartProduct(item?._id)}
             >
-              <RxCross1 />
+              <RxCross1 size={20} />
             </button>
           </ToolTip>
         </td>

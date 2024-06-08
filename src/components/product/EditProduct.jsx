@@ -69,7 +69,7 @@ const EditProduct = ({ product, onClose }) => {
       <div
         className={`${
           darkMode ? "bg-[#1a202c] text-white" : "bg-white"
-        } rounded-lg p-8 w-[40%] mx-auto max-h-[80%] overflow-y-scroll shadow-lg`}
+        } rounded-lg p-8 w-[40%] mx-auto max-h-[80%] overflow-y-scroll scrollbar-thumb-gradient scrollbar-thin shadow-lg`}
       >
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold">Update Product</h2>

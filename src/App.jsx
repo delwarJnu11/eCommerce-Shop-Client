@@ -11,9 +11,9 @@ const App = () => {
       <div className={` ${darkMode ? "dark" : "bg-slate-100"} font-mulish`}>
         <Header />
         <div
-          className={`pt-36 min-h-[calc(100vh-144px)] container mx-auto ${
+          className={`md:pt-36 sm:pt-44 min-h-[calc(100vh-144px)] container mx-auto z-50 ${
             darkMode ? "dark" : "bg-slate-100"
-          } sm:px-2`}
+          } sm:px-2 scrollbar-thumb-gradient scrollbar-thin`}
         >
           <Outlet />
         </div>

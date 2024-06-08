@@ -125,7 +125,7 @@ const Shop = () => {
         </div>
 
         <div
-          className={`md:w-5/6 max-h-[90vh] overflow-y-scroll pt-2 ${
+          className={`md:w-5/6 max-h-[90vh] overflow-y-scroll scrollbar-hide pt-2 ${
             darkMode ? "dark" : "bg-white"
           }`}
         >

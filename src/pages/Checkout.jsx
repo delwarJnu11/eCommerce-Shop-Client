@@ -50,8 +50,8 @@ const Checkout = () => {
                 <td colSpan="3" className="py-2 px-4">
                   Total
                 </td>
-                <td className="py-2 px-4 text-sm text-[#C40C0C] flex justify-between items-center">
-                  <span className="font-extrabold">৳</span>{" "}
+                <td className="py-2 px-2 text-sm text-[#C40C0C] flex gap-1 items-center">
+                  <span className="font-extrabold">৳</span>
                   {convertNumberToBDT(totalPrice)}
                 </td>
               </tr>

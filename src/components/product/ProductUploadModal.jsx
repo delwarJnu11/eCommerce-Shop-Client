@@ -49,14 +49,14 @@ const ProductUploadModal = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
+    <div className="fixed inset-0 z-50 bg-gray-500 bg-opacity-50 backdrop-blur-sm flex justify-center items-center overflow-auto">
       <div
         className={`${
           darkMode ? "bg-[#1a202c] text-white" : "bg-white"
-        } rounded-lg p-8 w-[40%] mx-auto max-h-[80%] overflow-y-scroll shadow-lg`}
+        } rounded-lg p-8 w-[40%] mx-auto max-h-[80%] overflow-y-scroll scrollbar-thumb-gradient scrollbar-thin shadow-lg`}
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold">Update Product</h2>
+          <h2 className="text-2xl font-semibold">Upload Product</h2>
           <button
             className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md text-white focus:outline-none"
             onClick={onClose}
@@ -163,9 +163,9 @@ const ProductUploadModal = ({ onClose }) => {
               ></textarea>
             </Field>
             <Button
-              value={"Update Product"}
-              bg={"bg-green-600"}
-              hoverBg={"bg-green-800"}
+              value={"Upload Product"}
+              bg={"bg-[#ff7300]"}
+              hoverBg={"bg-[#FF6500]"}
             />
           </form>
         </div>

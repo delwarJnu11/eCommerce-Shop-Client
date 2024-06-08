@@ -30,8 +30,6 @@ const CheckOutForm = ({ cart, user }) => {
     quantity: item.quantity,
   }));
 
-  console.log(cartProductDetails);
-
   // Handle checkout
   const onCheckout = async (data) => {
     data.cartProductDetails = cartProductDetails;

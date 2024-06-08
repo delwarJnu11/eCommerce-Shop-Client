@@ -39,7 +39,6 @@ const LoginForm = () => {
         "https://e-commerce-shop-backend.vercel.app/api/auth/login",
         loginData
       );
-      console.log("login", response);
       if (response.data.success) {
         dispatch({
           type: actions.user.USER_DATA_FETCHED,
@@ -59,7 +58,6 @@ const LoginForm = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.log(error);
       toast.error(error.response.data.message);
       setError("root.random", {
         type: "random",

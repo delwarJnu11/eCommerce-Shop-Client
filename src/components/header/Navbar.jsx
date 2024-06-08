@@ -1,9 +1,10 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { BsCart3 } from "react-icons/bs";
 import { CiHeart, CiLogout, CiUser } from "react-icons/ci";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { GrUserAdmin } from "react-icons/gr";
 import { RiListOrdered2 } from "react-icons/ri";
 import { SiShopee } from "react-icons/si";
@@ -21,6 +22,7 @@ const Navbar = () => {
   const { api } = useAxios();
   const { state, dispatch } = useUser();
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const searchInput = useLocation();
   const URLSearch = new URLSearchParams(searchInput?.search);
@@ -28,7 +30,7 @@ const Navbar = () => {
   const [search, setSearch] = useState(searchQuery);
   const { state: cartState, dispatch: cartDispatch } = useCart();
   const { authenticated, setAuthenticated } = useAuth();
-  const { cart } = useFetchCartProducts();
+  const { cart, fetchCartProducts } = useFetchCartProducts();
   // get user details
   useEffect(() => {
     const fetchUser = async () => {
@@ -55,6 +57,10 @@ const Navbar = () => {
     }
   }, [dispatch, api, authenticated]);
 
+  useEffect(() => {
+    fetchCartProducts;
+  }, [fetchCartProducts]);
+
   const user = state?.data?.data;
 
   //handle logout
@@ -78,8 +84,9 @@ const Navbar = () => {
   const handleSearch = (e) => {
     const { value } = e.target;
     setSearch(value);
-    if (search) {
+    if (search.trim()) {
       navigate(`/search?q=${search}`);
+      setTimeout(() => setSearch(""), 4000);
     }
   };
 
@@ -89,6 +96,9 @@ const Navbar = () => {
     } else {
       navigate("/login");
     }
+  };
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
   };
 
   const cartLength = cartState?.cart?.length || 0;
@@ -106,17 +116,20 @@ const Navbar = () => {
     state?.error && <div className="text-rose-500 text-sm">{state?.error}</div>;
   }
   return (
-    <nav className="flex flex-col sm:flex-row justify-between items-center gap-4 py-2">
+    <nav className="flex flex-col sm:flex-row justify-between items-center gap-4 md:pt-2 shadow-md">
+      {/* Logo */}
       <Link
         to="/"
-        className="flex flex-col space-y-1 items-center sm:items-start"
+        className="flex md:flex-col items-center sm:flex-row sm:items-start space-y-1 sm:space-y-0"
       >
         <SiShopee color="#FF6500" size={65} />
-        <span className="text-[15px] font-semibold leading-[160%] tracking-wider text-[#FF6500] uppercase">
+        <span className="text-sm font-semibold leading-[160%] tracking-wide text-[#FF6500] uppercase">
           Shopee
         </span>
       </Link>
-      <div className="flex justify-around items-center gap-6">
+
+      {/* Links and Search Input */}
+      <div className="hidden sm:flex justify-around items-center gap-6 w-full sm:w-auto">
         <Link to="/" className="flex items-center gap-2 cursor-pointer">
           <AiOutlineHome size={30} />
           <span className="text-[#A7BCEC] text-[15px] font-extrabold leading-5 uppercase">
@@ -140,12 +153,19 @@ const Navbar = () => {
           />
         </div>
       </div>
-      <div className="flex gap-4">
+
+      {/* Right Section */}
+      <div className="flex items-center gap-4">
+        {/* Hamburger Menu for Small Screens */}
+        <button className="sm:hidden p-2 text-white" onClick={toggleMenu}>
+          {menuOpen ? <FaTimes size={25} /> : <FaBars size={25} />}
+        </button>
+
         {/* Wishlist */}
         {authenticated && user?._id && (
           <div className="relative">
             <CiHeart size={30} />
-            <div className="w-5 h-5 bg-[#FF6500] rounded-full flex justify-center items-center absolute -top-2 -right-[10px] -sm:right-[0.5rem]">
+            <div className="w-5 h-5 bg-[#FF6500] rounded-full flex justify-center items-center absolute -top-2 -right-[12px] sm:right-0.5">
               <span className="text-white text-[10px]">
                 {cartState?.wishlist?.length && authenticated
                   ? cartState?.wishlist?.length
@@ -174,6 +194,7 @@ const Navbar = () => {
             </div>
           </Link>
         )}
+
         {/* Login */}
         <div
           className="flex items-center gap-1 sm:gap-2 relative cursor-pointer"
@@ -190,19 +211,17 @@ const Navbar = () => {
           </div>
           {showDropdown && user?._id && authenticated && (
             <motion.div
-              className="absolute top-[63px] -right-[34px] bg-gray-600 text-white p-2 rounded-bl-md rounded-br-md shadow-md md:max-w-sm z-30"
-              initial="hidden"
-              animate="visible"
-              variants={{
-                visible: { opacity: 1 },
-                hidden: { opacity: 0 },
-              }}
+              className="absolute top-16 right-0 bg-gray-600 text-white p-2 rounded-bl-md rounded-br-md shadow-md z-30"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ yx: "100%" }}
+              transition={{ type: "tween", duration: 0.7, ease: "easeInOut" }}
             >
               <nav className="flex flex-col gap-2">
                 {user?.role === "ADMIN" && (
                   <Link
                     className="whitespace-nowrap text-base tracking-wider font-semibold flex items-center gap-2 hover:bg-[#FF8A08] hover:scale-105 transition-all px-2 py-2 rounded-sm"
-                    to={"/admin-panel/products"}
+                    to="/admin-panel/products"
                     onClick={() => setShowDropdown(!showDropdown)}
                   >
                     <GrUserAdmin color="#fff" size={20} /> Admin Panel
@@ -226,6 +245,50 @@ const Navbar = () => {
           )}
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            className="lg:hidden bg-gray-900 shadow-md space-y-4 p-4 rounded-md"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "-140%" }}
+            transition={{ type: "tween", duration: 0.7, ease: "easeInOut" }}
+          >
+            <Link
+              to="/"
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={toggleMenu}
+            >
+              <AiOutlineHome size={30} />
+              <span className="text-[#A7BCEC] text-[15px] font-extrabold leading-5 uppercase">
+                Home
+              </span>
+            </Link>
+            <Link
+              to="/shop"
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={toggleMenu}
+            >
+              <TbOutlet size={30} />
+              <span className="text-[#A7BCEC] text-[15px] font-extrabold leading-5 uppercase">
+                Shop
+              </span>
+            </Link>
+            <div className="flex items-center p-2 rounded-md bg-gray-700">
+              <TbSearch size={20} className="text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search"
+                className="bg-transparent outline-none ml-2 text-gray-100 placeholder-gray-500 w-full"
+                value={search}
+                onChange={handleSearch}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };

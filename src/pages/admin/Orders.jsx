@@ -81,25 +81,25 @@ const Orders = () => {
       <table className="min-w-full divide-y divide-gray-200">
         <thead className={darkMode ? "dark" : "bg-gray-50 text-gray-900"}>
           <tr>
-            <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">
+            <th className="px-2 py-3 text-left text-xs font-bold uppercase tracking-wider">
               Cus. Name
             </th>
-            <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">
+            <th className="px-2 py-3 text-left text-xs font-bold uppercase tracking-wider">
               Phone
             </th>
-            <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">
+            <th className="px-2 py-3 text-left text-xs font-bold uppercase tracking-wider">
               Payment
             </th>
-            <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">
+            <th className="px-2 py-3 text-left text-xs font-bold uppercase tracking-wider">
               TrxId
             </th>
-            <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">
+            <th className="px-2 py-3 text-left text-xs font-bold uppercase tracking-wider">
               Order Date
             </th>
-            <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">
+            <th className="px-2 py-3 text-left text-xs font-bold uppercase tracking-wider">
               ORder status
             </th>
-            <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">
+            <th className="px-2 py-3 text-left text-xs font-bold uppercase tracking-wider">
               Products
             </th>
           </tr>
@@ -112,20 +112,20 @@ const Orders = () => {
           {orders.length &&
             orders.map((order) => (
               <tr key={order._id}>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-2 py-4 whitespace-nowrap">
                   {order.customerName}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">{order.phone}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-2 py-4 whitespace-nowrap">{order.phone}</td>
+                <td className="px-2 py-4 whitespace-nowrap">
                   {order.paymentStatus}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-2 py-4 whitespace-nowrap uppercase">
                   {order.transactionId}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-2 py-4 whitespace-nowrap">
                   {moment(order.createdAt).format("ll")}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-2 py-4 whitespace-nowrap">
                   <select
                     className={`block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
                       darkMode ? "dark" : "bg-white"
@@ -142,9 +142,9 @@ const Orders = () => {
                     ))}
                   </select>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-2 py-4 whitespace-nowrap">
                   <button
-                    className="bg-orange-600 px-4 py-1 uppercase font-semibold text-sm rounded"
+                    className="bg-orange-600 text-white px-4 py-1 uppercase font-semibold text-sm rounded"
                     onClick={() =>
                       handleOrderedProducts(order, order.cartProductDetails)
                     }

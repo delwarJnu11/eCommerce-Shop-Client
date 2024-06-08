@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { actions } from "../../../actions";
 import useAxios from "../../../hooks/useAxios";
 import { useCart } from "../../../hooks/useCart";
+import useFetchCartProducts from "../../../hooks/useFetchCartProducts";
 import { calculateAverageRating } from "../../../utils/averageRating";
 import { calculateProductDiscount } from "../../../utils/calculateProductDiscount";
 import { convertNumberToBDT } from "../../../utils/convertNumberToBDT";
@@ -20,6 +21,7 @@ const ProductCardVertical = ({ product }) => {
   const [isAddedWishList, setIsAddedWishList] = useState(false);
   const [isImageEnter, setIsImageEnter] = useState(false);
   const { api } = useAxios();
+  const { fetchCartProducts } = useFetchCartProducts();
   const averageRating = parseFloat(calculateAverageRating(product?.reviews));
 
   useEffect(() => {
@@ -28,7 +30,6 @@ const ProductCardVertical = ({ product }) => {
 
   //handle wish list
   const handleWishlist = () => {
-    console.log(product);
     const isInWishlist = state?.wishlist.some(
       (item) => item?._id === product._id
     );
@@ -60,6 +61,7 @@ const ProductCardVertical = ({ product }) => {
       if (response.data.success) {
         dispatch({ type: actions.cart.ADD_TO_CART, data: productId });
         toast.success(response.data.message);
+        fetchCartProducts();
       }
 
       if (response.data.error) {
@@ -69,6 +71,7 @@ const ProductCardVertical = ({ product }) => {
       toast.error(error.response.data.message);
     }
   };
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.5 }}

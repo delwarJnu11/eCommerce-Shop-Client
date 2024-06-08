@@ -58,11 +58,17 @@ const TrackOrder = () => {
     setTrackOrderModal(true);
   };
 
-  if (loading) {
+  if (loading && error === null) {
     return <p>orders fetching....</p>;
   }
-  if (error) {
-    return <p>{error}</p>;
+
+  if (orders.length === 0) {
+    return (
+      <NotFound
+        image="https://i.ibb.co/Z8rdq8G/cart.jpg"
+        title="you have no pending orders at the moment"
+      />
+    );
   }
 
   const pendingOrders = orders.filter(

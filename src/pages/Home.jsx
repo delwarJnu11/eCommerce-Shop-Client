@@ -50,35 +50,41 @@ const Home = () => {
     <div className="container mx-auto">
       <>
         <Banner />
-        <CategoryList />
+        {authenticated && <CategoryList />}
         {authenticated && <TopDeal />}
         <OurBrands />
         {authenticated && <NewArrivals />}
         <TopDiscountProducts />
-        <ProductsByCategory
-          bannerURL={"https://i.ibb.co/dGzv0hP/mobile-banner.jpg"}
-          dealType={"Month Deals"}
-          title={"Now 2000tk OFF"}
-          subTitle={"Today's Super Offer"}
-          productCategory="mobile"
-          heading="Smartphones & Tablets"
-        />
-        <ProductsByCategory
-          bannerURL={"https://i.ibb.co/dM7L54t/computer-banner.jpg"}
-          dealType={"New Product"}
-          title={"30% Off Or More"}
-          subTitle={"FREE DELIVERY ON ALL ORDER"}
-          productCategory="television"
-          heading="Televisions & Computers"
-        />
-        <ProductsByCategory
-          bannerURL={"https://i.ibb.co/gR9h95Z/speaker-banner.jpg"}
-          dealType={"BIG SALE"}
-          title={"Speaker Deal"}
-          subTitle={"UPTO 30% Off"}
-          productCategory="speaker"
-          heading="Speaker"
-        />
+        {authenticated && (
+          <ProductsByCategory
+            bannerURL={"https://i.ibb.co/dGzv0hP/mobile-banner.jpg"}
+            dealType={"Month Deals"}
+            title={"Now 2000tk OFF"}
+            subTitle={"Today's Super Offer"}
+            productCategory="mobile"
+            heading="Smartphones & Tablets"
+          />
+        )}
+        {authenticated && (
+          <ProductsByCategory
+            bannerURL={"https://i.ibb.co/dM7L54t/computer-banner.jpg"}
+            dealType={"New Product"}
+            title={"30% Off Or More"}
+            subTitle={"FREE DELIVERY ON ALL ORDER"}
+            productCategory="television"
+            heading="Televisions & Computers"
+          />
+        )}
+        {authenticated && (
+          <ProductsByCategory
+            bannerURL={"https://i.ibb.co/gR9h95Z/speaker-banner.jpg"}
+            dealType={"BIG SALE"}
+            title={"Speaker Deal"}
+            subTitle={"UPTO 30% Off"}
+            productCategory="speaker"
+            heading="Speaker"
+          />
+        )}
       </>
     </div>
   );

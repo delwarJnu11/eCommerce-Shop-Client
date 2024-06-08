@@ -12,7 +12,13 @@ export default {
         mediumDark: "#1E1F24",
         lighterDark: "#F0F0F0",
       },
+      scrollbar: {
+        width: "thin",
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require("tailwind-scrollbar-hide"),
+    require("tailwind-scrollbar")({ nocompatible: true }),
+  ],
 };

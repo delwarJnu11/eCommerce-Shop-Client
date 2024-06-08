@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 const TopDiscountProducts = () => {
   return (
-    <Link to="/products/top-discount">
-      <div className="relative mt-16 flex flex-col justify-center items-center w-full h-[60vh] rounded-lg overflow-hidden">
+    <div className="relative my-16 flex flex-col justify-center items-center w-full h-[60vh] rounded-lg overflow-hidden">
+      <Link to="/products/top-discount">
         <div
           style={{
             background: "url('https://i.ibb.co/7CzQqSX/discount-Banner.jpg')",
@@ -33,8 +33,8 @@ const TopDiscountProducts = () => {
             SHOP NOW
           </button>
         </motion.div>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 };
 export default TopDiscountProducts;

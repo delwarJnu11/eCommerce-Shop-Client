@@ -16,7 +16,6 @@ const AuthProvider = ({ children }) => {
             withCredentials: true,
           }
         );
-        console.log(response);
         if (response.status === 200 && response?.data?.success) {
           setAuthenticated(response?.data?.success);
           setUserId(response?.data?.user?._id);

@@ -60,3 +60,23 @@ span.swiper-pagination-bullet.swiper-pagination-bullet-active {
   border-radius: 10px;
   background-color: #ff6500;
 }
+
+/* .scrollbar-thumb-gradient::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #ff7300, #ff6500, #ff7300);
+} */
+
+.scrollbar-thumb-gradient {
+  scrollbar-color: #ff6500 #fff;
+  scrollbar-width: thin;
+}
+
+body::-webkit-scrollbar {
+  width: 5px;
+}
+body::-webkit-scrollbar-track {
+  background: #fff;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: #ff6500;
+  border-radius: 20px;
+}
