@@ -205,9 +205,12 @@ const Navbar = () => {
             <span className="text-[#848484] text-[12px] leading-3">
               My Account
             </span>
-            <p className="text-[#A7BCEC] text-[15px] font-extrabold leading-5">
+            <Link
+              to={"/login"}
+              className="text-[#A7BCEC] text-[15px] font-extrabold leading-5"
+            >
               {user?._id && authenticated ? user?.name : "Login"}
-            </p>
+            </Link>
           </div>
           {showDropdown && user?._id && authenticated && (
             <motion.div
