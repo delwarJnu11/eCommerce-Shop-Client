@@ -53,7 +53,7 @@ const Home = () => {
         {authenticated && <CategoryList />}
         {authenticated && userId && <TopDeal />}
         <OurBrands />
-        {authenticated && <NewArrivals />}
+        {authenticated && userId && <NewArrivals />}
         <TopDiscountProducts />
         {authenticated && (
           <ProductsByCategory
