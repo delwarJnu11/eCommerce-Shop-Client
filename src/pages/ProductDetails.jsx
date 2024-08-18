@@ -15,6 +15,11 @@ import { useUser } from "../hooks/useUser";
 import { convertNumberToBDT } from "../utils/convertNumberToBDT";
 
 const ProductDetails = () => {
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: "smooth",
+  });
   const { darkMode } = useTheme();
   const { id } = useParams();
   const { state, dispatch } = useProduct();
@@ -83,6 +88,7 @@ const ProductDetails = () => {
   }, [id, api]);
   const product = state?.product;
 
+  //handle Zoom Image
   const handleZoomImage = (e) => {
     setZoomImage(true);
     const { left, top, width, height } = e.target.getBoundingClientRect();
@@ -101,7 +107,7 @@ const ProductDetails = () => {
   };
 
   // handle Add to Cart
-  const handleAddToCart = async (productId) => {
+  const handleAddToCart = async (productId, navigateToCheckout = false) => {
     try {
       const response = await api.post(
         "/product/add-to-cart",
@@ -111,6 +117,9 @@ const ProductDetails = () => {
       if (response.data.success) {
         fetchCartProducts();
         toast.success(response.data.message);
+        if (navigateToCheckout) {
+          navigate("/cart/checkout");
+        }
       }
 
       if (response.data.error) {
@@ -214,6 +223,7 @@ const ProductDetails = () => {
                 className={`${
                   darkMode ? "text-white" : "text-black"
                 }bg-transparent border border-orange-600 text-base md:text-md px-4 py-2 rounded-lg shadow-lg mt-2 hover:bg-orange-600 hover:text-white`}
+                onClick={() => handleAddToCart(product._id, true)}
               >
                 Buy Now
               </button>

@@ -13,7 +13,7 @@ const Checkout = () => {
     fetchCartProducts();
   }, [fetchCartProducts]);
 
-  const user = state?.cart?.length && state?.cart[0].userId;
+  // const user = state?.cart?.length && state?.cart[0].userId;
   // total cart product price based on quantity
   const totalPrice = state?.cart?.reduce(
     (prev, curr) => prev + curr?.productId?.sellingPrice * curr.quantity,
@@ -59,7 +59,7 @@ const Checkout = () => {
           </table>
         </div>
         <div className="md:w-1/3">
-          <CheckOutForm cart={state?.cart} user={user} />
+          <CheckOutForm cart={state?.cart} />
         </div>
       </div>
     </div>

@@ -140,7 +140,7 @@ const ProductCard = ({ product }) => {
           <div className="flex mt-4 gap-4">
             <ToolTip text={"Add to wishlist"}>
               <p
-                className="bg-slate-300 p-3 rounded-full cursor-pointer hover:text-[#FF6500] transition-all"
+                className="bg-slate-300 p-3 rounded-full cursor-pointer hover:bg-[#FF6500] hover:text-white transition-all ease-in-out"
                 onClick={handleWishlist}
               >
                 {isAddedWishList ? (
@@ -151,7 +151,7 @@ const ProductCard = ({ product }) => {
               </p>
             </ToolTip>
             <ToolTip text={"View details"}>
-              <p className="bg-slate-300 p-3 rounded-full cursor-pointer hover:text-[#FF6500] transition-all">
+              <p className="bg-slate-300 p-3 rounded-full cursor-pointer hover:bg-[#FF6500] hover:text-white ease-in-out transition-all">
                 <Link to={`/products/${product?.categoryName}/${product?._id}`}>
                   <IoEyeOutline size={25} />
                 </Link>
@@ -159,7 +159,7 @@ const ProductCard = ({ product }) => {
             </ToolTip>
             <ToolTip text={"Add to Cart"}>
               <p
-                className="bg-slate-300 p-3 rounded-full cursor-pointer hover:text-[#FF6500] transition-all"
+                className="bg-slate-300 p-3 rounded-full cursor-pointer hover:bg-[#FF6500] hover:text-white ease-in-out transition-all"
                 onClick={() => handleAddToCart(product?._id)}
               >
                 <BsCart3 size={25} />

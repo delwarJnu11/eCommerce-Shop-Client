@@ -16,7 +16,7 @@ const Home = () => {
   const { dispatch } = useProduct();
   const { api } = useAxios();
   const { fetchCartProducts, cart } = useFetchCartProducts();
-  const { authenticated } = useAuth();
+  const { authenticated, userId } = useAuth();
 
   useEffect(() => {
     if (cart.length) {
@@ -51,7 +51,7 @@ const Home = () => {
       <>
         <Banner />
         {authenticated && <CategoryList />}
-        {authenticated && <TopDeal />}
+        {authenticated && userId && <TopDeal />}
         <OurBrands />
         {authenticated && <NewArrivals />}
         <TopDiscountProducts />

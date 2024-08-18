@@ -72,19 +72,32 @@ const CategoryList = () => {
           : state?.categories && (
               <Swiper
                 ref={swiperRef}
-                spaceBetween={30}
-                slidesPerView={6}
+                spaceBetween={10}
+                slidesPerView={2}
+                breakpoints={{
+                  640: {
+                    slidesPerView: 3,
+                    spaceBetween: 20,
+                  },
+                  768: {
+                    slidesPerView: 4,
+                    spaceBetween: 30,
+                  },
+                  1024: {
+                    slidesPerView: 6,
+                    spaceBetween: 30,
+                  },
+                }}
                 autoplay={{ delay: 7000 }}
                 loop={true}
                 speed={2500}
-                effect="fade"
                 className="mySwiper"
               >
                 {state.categories.map((category) => (
                   <SwiperSlide key={category._id}>
                     <Link
                       to={`/products/category/${category?.categoryName}`}
-                      className="min-w-[190px] flex flex-wrap flex-col items-center space-y-1 group relative cursor-pointer gap-6"
+                      className="min-w-[120px] md:min-w-[190px] flex flex-col items-center space-y-1 group relative cursor-pointer gap-6"
                     >
                       <motion.div
                         className="relative"
@@ -92,11 +105,11 @@ const CategoryList = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ ease: "easeOut", duration: 2 }}
                       >
-                        <div className="w-32 h-32 bg-slate-200 rounded-md">
+                        <div className="w-20 h-20 md:w-32 md:h-32 bg-slate-200 rounded-md">
                           <img
                             src={category.productImages[0]}
                             alt={category.label}
-                            className="w-full h-full object-scale-down rounded-lg mix-blend-multiply p-4"
+                            className="w-full h-full object-scale-down rounded-lg mix-blend-multiply p-2 md:p-4"
                           />
                         </div>
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 flex items-center justify-center rounded-lg transition duration-300">
@@ -106,7 +119,7 @@ const CategoryList = () => {
                           />
                         </div>
                       </motion.div>
-                      <span className="text-sm font-medium capitalize">
+                      <span className="text-xs md:text-sm font-medium capitalize">
                         {category.categoryName}
                       </span>
                     </Link>

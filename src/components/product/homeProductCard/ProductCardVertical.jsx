@@ -104,7 +104,7 @@ const ProductCardVertical = ({ product }) => {
         <div className="flex-col p-4 space-y-4 absolute top-14 right-3 hidden group-hover:flex">
           <ToolTip text={"Add to wishlist"}>
             <button
-              className=" bg-slate-300 p-3 rounded-full cursor-pointer hover:text-[#FF6500] transition-all"
+              className=" bg-slate-300 p-3 rounded-full cursor-pointer hover:bg-[#FF6500] hover:text-white ease-in-out transition-all"
               onClick={handleWishlist}
             >
               {isAddedWishList ? (
@@ -115,7 +115,7 @@ const ProductCardVertical = ({ product }) => {
             </button>
           </ToolTip>
           <ToolTip text="View Details">
-            <p className=" bg-slate-300 p-3 rounded-full cursor-pointer hover:text-[#FF6500] transition-all">
+            <p className=" bg-slate-300 p-3 rounded-full cursor-pointer hover:bg-[#FF6500] hover:text-white ease-in-out transition-all">
               <Link to={`/products/${product?.categoryName}/${product?._id}`}>
                 <IoEyeOutline size={25} />
               </Link>
@@ -124,7 +124,7 @@ const ProductCardVertical = ({ product }) => {
 
           <ToolTip text="Add to Cart">
             <button
-              className="bg-slate-300 p-3 rounded-full cursor-pointer hover:text-[#FF6500] transition-all"
+              className="bg-slate-300 p-3 rounded-full cursor-pointer hover:bg-[#FF6500] hover:text-white ease-in-out transition-all"
               onClick={() => handleAddToCart(product?._id)}
             >
               <BsCart3 size={25} />

@@ -1,10 +1,13 @@
 import { useForm } from "react-hook-form";
 import useAxios from "../../hooks/useAxios";
+import { useCart } from "../../hooks/useCart";
 import { useTheme } from "../../hooks/useTheme";
 import Button from "../shared/Button";
 import Field from "../shared/Field";
 
-const CheckOutForm = ({ cart, user }) => {
+const CheckOutForm = ({ cart }) => {
+  const { state } = useCart();
+  const user = state?.cart?.length && state?.cart[0].userId;
   const {
     register,
     handleSubmit,

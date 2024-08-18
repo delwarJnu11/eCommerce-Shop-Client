@@ -26,7 +26,7 @@ const LoginForm = () => {
     formState: { errors },
     setError,
   } = useForm();
-  //https:e-commerce-shop-backend.vercel.app
+
   axios.defaults.withCredentials = true;
   //handle user login
   const handleLogin = async (formData) => {
@@ -36,7 +36,7 @@ const LoginForm = () => {
     };
     try {
       const response = await axios.post(
-        "https://e-commerce-shop-backend.vercel.app/api/auth/login",
+        "https:e-commerce-shop-backend.vercel.app/api/auth/login",
         loginData
       );
       if (response.data.success) {
