@@ -36,7 +36,7 @@ const LoginForm = () => {
     };
     try {
       const response = await axios.post(
-        "https:e-commerce-shop-backend.vercel.app/api/auth/login",
+        "https://e-commerce-shop-backend.vercel.app/api/auth/login",
         loginData
       );
       if (response.data.success) {
